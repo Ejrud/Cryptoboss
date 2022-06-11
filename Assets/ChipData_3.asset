@@ -1,0 +1,377 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b0ef169ec2b574ca76159dd8ca409e, type: 3}
+  m_Name: ChipData_3
+  m_EditorClassIdentifier: 
+  Id: 2
+  ChipTexture: {fileID: 2800000, guid: 427ac1cfe7db35d428a07f0c7325f2fb, type: 3}
+  CardDeck:
+  - Guid: 4172
+    Version: 1
+    Name: RandomCardName(385)
+    EnergyDamage: 37
+    CapitalDamage: 32
+    EnergyHealth: 5
+    CapitalEarnings: 5
+    DamageResistance: 1
+    CardCost: 28
+  - Guid: 7298
+    Version: 1
+    Name: RandomCardName(877)
+    EnergyDamage: 18
+    CapitalDamage: 40
+    EnergyHealth: 5
+    CapitalEarnings: 9
+    DamageResistance: 3
+    CardCost: 47
+  - Guid: 2643
+    Version: 1
+    Name: RandomCardName(104)
+    EnergyDamage: 42
+    CapitalDamage: 48
+    EnergyHealth: 1
+    CapitalEarnings: 5
+    DamageResistance: 9
+    CardCost: 12
+  - Guid: 8012
+    Version: 1
+    Name: RandomCardName(203)
+    EnergyDamage: 43
+    CapitalDamage: 45
+    EnergyHealth: 7
+    CapitalEarnings: 5
+    DamageResistance: 2
+    CardCost: 36
+  - Guid: 1125
+    Version: 1
+    Name: RandomCardName(254)
+    EnergyDamage: 27
+    CapitalDamage: 40
+    EnergyHealth: 9
+    CapitalEarnings: 2
+    DamageResistance: 9
+    CardCost: 34
+  - Guid: 5130
+    Version: 1
+    Name: RandomCardName(9)
+    EnergyDamage: 21
+    CapitalDamage: 20
+    EnergyHealth: 3
+    CapitalEarnings: 6
+    DamageResistance: 4
+    CardCost: 20
+  - Guid: 6159
+    Version: 1
+    Name: RandomCardName(728)
+    EnergyDamage: 25
+    CapitalDamage: 46
+    EnergyHealth: 3
+    CapitalEarnings: 5
+    DamageResistance: 4
+    CardCost: 36
+  - Guid: 6972
+    Version: 1
+    Name: RandomCardName(206)
+    EnergyDamage: 14
+    CapitalDamage: 25
+    EnergyHealth: 8
+    CapitalEarnings: 1
+    DamageResistance: 5
+    CardCost: 49
+  - Guid: 5053
+    Version: 1
+    Name: RandomCardName(72)
+    EnergyDamage: 31
+    CapitalDamage: 13
+    EnergyHealth: 4
+    CapitalEarnings: 8
+    DamageResistance: 3
+    CardCost: 39
+  - Guid: 6336
+    Version: 1
+    Name: RandomCardName(94)
+    EnergyDamage: 12
+    CapitalDamage: 42
+    EnergyHealth: 3
+    CapitalEarnings: 1
+    DamageResistance: 4
+    CardCost: 45
+  - Guid: 8329
+    Version: 1
+    Name: RandomCardName(908)
+    EnergyDamage: 14
+    CapitalDamage: 16
+    EnergyHealth: 1
+    CapitalEarnings: 6
+    DamageResistance: 9
+    CardCost: 44
+  - Guid: 7234
+    Version: 1
+    Name: RandomCardName(274)
+    EnergyDamage: 26
+    CapitalDamage: 34
+    EnergyHealth: 1
+    CapitalEarnings: 6
+    DamageResistance: 1
+    CardCost: 45
+  - Guid: 6446
+    Version: 1
+    Name: RandomCardName(894)
+    EnergyDamage: 48
+    CapitalDamage: 37
+    EnergyHealth: 8
+    CapitalEarnings: 3
+    DamageResistance: 6
+    CardCost: 30
+  - Guid: 2743
+    Version: 1
+    Name: RandomCardName(786)
+    EnergyDamage: 39
+    CapitalDamage: 34
+    EnergyHealth: 7
+    CapitalEarnings: 5
+    DamageResistance: 9
+    CardCost: 12
+  - Guid: 1594
+    Version: 1
+    Name: RandomCardName(467)
+    EnergyDamage: 29
+    CapitalDamage: 26
+    EnergyHealth: 4
+    CapitalEarnings: 4
+    DamageResistance: 1
+    CardCost: 36
+  - Guid: 2333
+    Version: 1
+    Name: RandomCardName(112)
+    EnergyDamage: 47
+    CapitalDamage: 18
+    EnergyHealth: 5
+    CapitalEarnings: 6
+    DamageResistance: 6
+    CardCost: 33
+  - Guid: 9216
+    Version: 1
+    Name: RandomCardName(477)
+    EnergyDamage: 28
+    CapitalDamage: 38
+    EnergyHealth: 9
+    CapitalEarnings: 3
+    DamageResistance: 8
+    CardCost: 46
+  - Guid: 2607
+    Version: 1
+    Name: RandomCardName(466)
+    EnergyDamage: 27
+    CapitalDamage: 36
+    EnergyHealth: 4
+    CapitalEarnings: 9
+    DamageResistance: 8
+    CardCost: 25
+  - Guid: 5739
+    Version: 1
+    Name: RandomCardName(948)
+    EnergyDamage: 33
+    CapitalDamage: 37
+    EnergyHealth: 8
+    CapitalEarnings: 2
+    DamageResistance: 8
+    CardCost: 34
+  - Guid: 7262
+    Version: 1
+    Name: RandomCardName(433)
+    EnergyDamage: 19
+    CapitalDamage: 40
+    EnergyHealth: 8
+    CapitalEarnings: 5
+    DamageResistance: 6
+    CardCost: 27
+  - Guid: 8331
+    Version: 1
+    Name: RandomCardName(0)
+    EnergyDamage: 29
+    CapitalDamage: 35
+    EnergyHealth: 5
+    CapitalEarnings: 2
+    DamageResistance: 4
+    CardCost: 27
+  - Guid: 6972
+    Version: 1
+    Name: RandomCardName(321)
+    EnergyDamage: 19
+    CapitalDamage: 47
+    EnergyHealth: 9
+    CapitalEarnings: 2
+    DamageResistance: 9
+    CardCost: 27
+  - Guid: 1370
+    Version: 1
+    Name: RandomCardName(530)
+    EnergyDamage: 22
+    CapitalDamage: 46
+    EnergyHealth: 7
+    CapitalEarnings: 6
+    DamageResistance: 8
+    CardCost: 16
+  - Guid: 2720
+    Version: 1
+    Name: RandomCardName(368)
+    EnergyDamage: 11
+    CapitalDamage: 34
+    EnergyHealth: 8
+    CapitalEarnings: 7
+    DamageResistance: 7
+    CardCost: 36
+  - Guid: 1145
+    Version: 1
+    Name: RandomCardName(682)
+    EnergyDamage: 10
+    CapitalDamage: 45
+    EnergyHealth: 4
+    CapitalEarnings: 9
+    DamageResistance: 3
+    CardCost: 44
+  - Guid: 2644
+    Version: 1
+    Name: RandomCardName(185)
+    EnergyDamage: 15
+    CapitalDamage: 46
+    EnergyHealth: 3
+    CapitalEarnings: 7
+    DamageResistance: 1
+    CardCost: 18
+  - Guid: 4048
+    Version: 1
+    Name: RandomCardName(989)
+    EnergyDamage: 42
+    CapitalDamage: 16
+    EnergyHealth: 4
+    CapitalEarnings: 8
+    DamageResistance: 1
+    CardCost: 17
+  - Guid: 5105
+    Version: 1
+    Name: RandomCardName(348)
+    EnergyDamage: 15
+    CapitalDamage: 28
+    EnergyHealth: 7
+    CapitalEarnings: 4
+    DamageResistance: 7
+    CardCost: 12
+  - Guid: 7711
+    Version: 1
+    Name: RandomCardName(87)
+    EnergyDamage: 12
+    CapitalDamage: 42
+    EnergyHealth: 1
+    CapitalEarnings: 9
+    DamageResistance: 5
+    CardCost: 22
+  - Guid: 1845
+    Version: 1
+    Name: RandomCardName(230)
+    EnergyDamage: 31
+    CapitalDamage: 22
+    EnergyHealth: 9
+    CapitalEarnings: 9
+    DamageResistance: 7
+    CardCost: 15
+  - Guid: 1069
+    Version: 1
+    Name: RandomCardName(912)
+    EnergyDamage: 48
+    CapitalDamage: 45
+    EnergyHealth: 3
+    CapitalEarnings: 3
+    DamageResistance: 5
+    CardCost: 17
+  - Guid: 6425
+    Version: 1
+    Name: RandomCardName(858)
+    EnergyDamage: 47
+    CapitalDamage: 13
+    EnergyHealth: 5
+    CapitalEarnings: 2
+    DamageResistance: 5
+    CardCost: 32
+  - Guid: 1085
+    Version: 1
+    Name: RandomCardName(425)
+    EnergyDamage: 49
+    CapitalDamage: 34
+    EnergyHealth: 6
+    CapitalEarnings: 4
+    DamageResistance: 4
+    CardCost: 13
+  - Guid: 5356
+    Version: 1
+    Name: RandomCardName(568)
+    EnergyDamage: 10
+    CapitalDamage: 48
+    EnergyHealth: 2
+    CapitalEarnings: 5
+    DamageResistance: 1
+    CardCost: 29
+  - Guid: 1961
+    Version: 1
+    Name: RandomCardName(392)
+    EnergyDamage: 30
+    CapitalDamage: 29
+    EnergyHealth: 3
+    CapitalEarnings: 8
+    DamageResistance: 4
+    CardCost: 35
+  - Guid: 6646
+    Version: 1
+    Name: RandomCardName(902)
+    EnergyDamage: 23
+    CapitalDamage: 27
+    EnergyHealth: 1
+    CapitalEarnings: 4
+    DamageResistance: 5
+    CardCost: 45
+  - Guid: 3540
+    Version: 1
+    Name: RandomCardName(826)
+    EnergyDamage: 14
+    CapitalDamage: 25
+    EnergyHealth: 3
+    CapitalEarnings: 8
+    DamageResistance: 1
+    CardCost: 18
+  - Guid: 9739
+    Version: 1
+    Name: RandomCardName(689)
+    EnergyDamage: 42
+    CapitalDamage: 44
+    EnergyHealth: 7
+    CapitalEarnings: 9
+    DamageResistance: 4
+    CardCost: 18
+  - Guid: 9573
+    Version: 1
+    Name: RandomCardName(635)
+    EnergyDamage: 17
+    CapitalDamage: 37
+    EnergyHealth: 9
+    CapitalEarnings: 9
+    DamageResistance: 6
+    CardCost: 43
+  - Guid: 1702
+    Version: 1
+    Name: RandomCardName(809)
+    EnergyDamage: 35
+    CapitalDamage: 29
+    EnergyHealth: 2
+    CapitalEarnings: 2
+    DamageResistance: 9
+    CardCost: 14

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6e3095620fffc54ead840a56eacbe57, type: 3}
+  m_Name: DefaultChip_1
+  m_EditorClassIdentifier: 
+  ChipImage: {fileID: 2800000, guid: b1fc1db76c393da4c854da3cf3b55f74, type: 3}
+  Name: Chip1
+  Description: asdsopadpofd
+  Cards:
+  - {fileID: 11400000, guid: 54486659f9582ce43b2b52a27adcdb01, type: 2}
+  - {fileID: 11400000, guid: 42ccb8a861b38af46b9ecdf73cd7096c, type: 2}
+  - {fileID: 11400000, guid: dfbd9da9c8a0b1d418ddf68e13d9fd63, type: 2}
+  - {fileID: 11400000, guid: 54486659f9582ce43b2b52a27adcdb01, type: 2}
+  - {fileID: 11400000, guid: dfbd9da9c8a0b1d418ddf68e13d9fd63, type: 2}
+  - {fileID: 11400000, guid: 42ccb8a861b38af46b9ecdf73cd7096c, type: 2}
+  - {fileID: 11400000, guid: 54486659f9582ce43b2b52a27adcdb01, type: 2}
+  - {fileID: 11400000, guid: dfbd9da9c8a0b1d418ddf68e13d9fd63, type: 2}
+  - {fileID: 11400000, guid: 42ccb8a861b38af46b9ecdf73cd7096c, type: 2}
+  - {fileID: 11400000, guid: 54486659f9582ce43b2b52a27adcdb01, type: 2}

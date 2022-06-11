@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b0ef169ec2b574ca76159dd8ca409e, type: 3}
+  m_Name: ChipData_2
+  m_EditorClassIdentifier: 
+  Id: 572
+  ChipName: Cryptoboss #572
+  ChipTexture: {fileID: 0}
+  CardDeck:
+  - Guid: 1
+    Version: 1
+    Name: Successful negotiations
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 1
+    CapitalEarnings: 0
+    DamageResistance: 40
+    CardCost: 1
+  - Guid: 2
+    Version: 1
+    Name: Interest rates fall
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 1
+    CapitalEarnings: 0
+    DamageResistance: 20
+    CardCost: 1
+  - Guid: 3
+    Version: 1
+    Name: Successful negotiations
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 1
+    CapitalEarnings: 0
+    DamageResistance: 10
+    CardCost: 1
+  - Guid: 4
+    Version: 1
+    Name: Interest rates fall
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 1
+    CapitalEarnings: 0
+    DamageResistance: 10
+    CardCost: 1
+  - Guid: 5
+    Version: 1
+    Name: Stock growth
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 75
+    CardCost: 2
+  - Guid: 6
+    Version: 1
+    Name: Cryptocurrency growth
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 75
+    CardCost: 1
+  - Guid: 7
+    Version: 1
+    Name: Passive income
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 75
+    CardCost: 1
+  - Guid: 8
+    Version: 1
+    Name: Pension accruals
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 75
+    CardCost: 1
+  - Guid: 9
+    Version: 1
+    Name: Stock growth
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 75
+    CardCost: 1
+  - Guid: 10
+    Version: 1
+    Name: Cryptocurrency growth
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 75
+    DamageResistance: 50
+    CardCost: 1
