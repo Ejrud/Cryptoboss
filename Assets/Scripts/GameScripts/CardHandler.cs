@@ -7,7 +7,7 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 {
     [Header("Settings")]
     [SerializeField] private float deadZone = 1f;
-    [SerializeField] private bool active = true;
+    [SerializeField] private bool active = true; // Активна ли карта для взаимодействия
 
     [Header("Links")]
     public Vector3 CardDisplacement;
@@ -47,8 +47,9 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (active)
+        if (active && !cardManager.CardSelected)
         {
+            cardManager.CardSelected = true;
             Vector2 pointerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             offset = pointerPos - new Vector2(selfTransform.position.x, selfTransform.position.y);
             acceptMove = true;
@@ -60,6 +61,7 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         Vector3 pos = rectTransform.position;
 
         acceptMove = false;
+        cardManager.CardSelected = false;
 
         if (pos.x > CardDisplacement.x + deadZone || pos.x < CardDisplacement.x - deadZone || pos.y > CardDisplacement.y + deadZone || pos.y < CardDisplacement.y - deadZone)
         {

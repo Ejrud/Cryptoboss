@@ -26,8 +26,8 @@ public class CardManager : NetworkBehaviour
 
     [Header("Server components")]
     [SerializeField] private PlayerNet playerNet;
-
     private bool animate = false;
+    public bool CardSelected = false;
 
     private void Start()
     {

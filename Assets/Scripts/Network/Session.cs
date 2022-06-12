@@ -28,6 +28,9 @@ public class Session : MonoBehaviour
     private bool debugMode;
     private bool gameStarted = false;
     private bool chipIdRecieved;
+
+    [Header("Settings")]
+    [SerializeField] private float energyRecovery = 0.5f;
     
     // Инициализирование характеристик игрока
     public void Init(PlayerNet[] players, GameProcessManagement manager, bool debugMode = false) 
@@ -73,6 +76,14 @@ public class Session : MonoBehaviour
                 timer.isStoped = true;
                 Ready = true;
             }
+            else if (PlayerNets[PlayerIndexQueue].Morale < 1) // Проверка на количество энергии
+            {
+                PlayerNets[PlayerIndexQueue].Morale += energyRecovery;
+                SetNextIndexQueue();
+                
+                PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[0].MaxEnergy);
+                PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[1].MaxEnergy);
+            }
         }
         // Если сессия закончена, то она удаляется
         else
@@ -85,32 +96,11 @@ public class Session : MonoBehaviour
     }
 
     // Генерация 4 рандомных карт из колоды игрока (Вызывается в BattleManager)
-    public void PrepareNextRound(bool correction = false)
+    public void PrepareNextRound(bool correction = false) // correction тип крты позволяющий сделать повторный ход
     {
-        if (!correction)
-        {
-            // Выбирается след. игрок
-            PlayerIndexQueue++;
-            if (PlayerIndexQueue >= PlayerNets.Length)
-            {
-                PlayerIndexQueue = 0;
-            }
-        }
+        SetNextIndexQueue(correction);
+
         
-
-        for(int i = 0; i < PlayerNets.Length; i++)
-        {
-            if (i == PlayerIndexQueue)
-            {
-                PlayerNets[i].MyTurn = true;
-            }
-            else
-            {
-                PlayerNets[i].MyTurn = false;
-            }
-
-            PlayerNets[i].SetTurn(PlayerNets[i].MyTurn);
-        }
 
         // Проверка на кол-во карт у игроков (если меньше или равно 2, то добавляются еще 3 карты)
         for (int i = 0; i < PlayerNets.Length; i++)
@@ -214,6 +204,33 @@ public class Session : MonoBehaviour
         // Подбор характеристик карт по id'шникам (RoundCards в своих индексах содежит индексы карт)
         CardData cards = PlayerNets[playerIndex].HandCards[PlayerNets[playerIndex].SelectedCardId];
         return cards;
+    }
+
+    private void SetNextIndexQueue(bool correction = false)
+    {
+        if (!correction)
+        {
+            // Выбирается след. игрок
+            PlayerIndexQueue++;
+            if (PlayerIndexQueue >= PlayerNets.Length)
+            {
+                PlayerIndexQueue = 0;
+            }
+        }
+
+        for(int i = 0; i < PlayerNets.Length; i++)
+        {
+            if (i == PlayerIndexQueue)
+            {
+                PlayerNets[i].MyTurn = true;
+            }
+            else
+            {
+                PlayerNets[i].MyTurn = false;
+            }
+
+            PlayerNets[i].SetTurn(PlayerNets[i].MyTurn);
+        }
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -20,10 +20,11 @@ public class PlayerNet : NetworkBehaviour
 
     public int MaxHealth;
     public int Capital;                   // Hp
-    public int Morale;                    // Energy
-    public int OriginMorale;
+    public float Morale;                    // Energy
+    public float OriginMorale;
     public int EnemyCapital;
-    public int EnemyEnergy;
+    public float EnemyEnergy;
+    public float MaxEnergy;
     public bool Win = false;
     public bool MyTurn = false;
     public bool CardSelected;
@@ -43,6 +44,10 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private Text raitingText;
     [SerializeField] private Image healthImage;
     [SerializeField] private Image energyImage;
+    [SerializeField] private RawImage ChipImage;
+    [SerializeField] private RawImage RivalChipImage;
+
+
     [SerializeField] private GameObject playersWaitingObj;
     [SerializeField] private GameObject representationScreen;
     [SerializeField] private GameObject backToLobbyWindow;
@@ -62,7 +67,6 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private Texture lastTexture;
     [SerializeField] private AudioSource audioSource;
     private Texture2D rivalChipTexture;
-    private float maxEnergy;
 
     #endregion
 
@@ -122,16 +126,16 @@ public class PlayerNet : NetworkBehaviour
     }
 
     // Показатели обновляются при первом запуске и при завершении вычисления карт игроков
-    public void UpdatePlayerCharacteristic(int Capital, int Morale, int EnemyCapitale, int EnemyEnergy, int maxEnergy)
+    public void UpdatePlayerCharacteristic(int Capital, float Morale, int EnemyCapitale, float EnemyEnergy, float maxEnergy)
     {
         this.Capital = Capital;
         this.Morale = Morale;
         this.EnemyCapital = EnemyCapitale;
         this.EnemyEnergy = EnemyEnergy;
         this.OriginMorale = Morale;
-        this.maxEnergy = maxEnergy;
+        this.MaxEnergy = maxEnergy;
 
-        UpdateClientParameters(this.Capital, this.Morale, this.EnemyCapital, this.EnemyEnergy, this.maxEnergy);
+        UpdateClientParameters(this.Capital, this.Morale, this.EnemyCapital, this.EnemyEnergy, this.MaxEnergy);
     }
 
     // Обновляет карты в руке (Переносить остальные карты в изначчальные положения)
@@ -153,7 +157,7 @@ public class PlayerNet : NetworkBehaviour
         float floatCapital = Convert.ToSingle(Capital);
         healthImage.fillAmount = floatCapital / 1000;
         float floatMorale = Convert.ToSingle(Morale);
-        energyImage.fillAmount = floatMorale / maxEnergy;
+        energyImage.fillAmount = floatMorale / MaxEnergy;
 
         // Debug.Log("Capital = " + Capital + " healthImage.fillAmount = " + Capital * 0.1f);
         healthText.text = Capital.ToString();
@@ -163,7 +167,7 @@ public class PlayerNet : NetworkBehaviour
         enemyHealthImage.fillAmount = floatCapEnemy / 1000;
         float floatEnergy = Convert.ToSingle(EnemyEnergy);
         
-        enemyEnergyImage.fillAmount = floatEnergy / maxEnergy; // / maxEnergy
+        enemyEnergyImage.fillAmount = floatEnergy / MaxEnergy; // / maxEnergy
         enemyhealthText.text = EnemyCapital.ToString();
         enemyEnergyText.text = EnemyEnergy.ToString();
     }
@@ -202,7 +206,21 @@ public class PlayerNet : NetworkBehaviour
     [ClientRpc]
     public void SetTurn(bool turn)
     {
-        MyTurn = turn;
+        if (hasAuthority)
+        {
+            MyTurn = turn;
+
+            if (MyTurn)
+            {
+                ChipImage.color = Color.white;
+                RivalChipImage.color = Color.gray;
+            }
+            else
+            {
+                ChipImage.color = Color.gray;
+                RivalChipImage.color = Color.white;
+            }
+        }
     }
 
     [ClientRpc]
@@ -254,14 +272,14 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void UpdateClientParameters(int Capital, int Morale, int EnemyCapital, int EnemyEnergy, float maxEnergy)
+    public void UpdateClientParameters(int Capital, float Morale, int EnemyCapital, float EnemyEnergy, float maxEnergy)
     {
         this.Morale = Morale;
         this.Capital = Capital;
         this.EnemyCapital = EnemyCapital;
         this.EnemyEnergy = EnemyEnergy;
         this.OriginMorale = Morale;
-        this.maxEnergy = maxEnergy;
+        this.MaxEnergy = maxEnergy;
 
         Debug.Log("Player characteristics: capital = " + this.Capital + ", morale = " + this.Morale);
 
@@ -293,7 +311,7 @@ public class PlayerNet : NetworkBehaviour
         {
             Debug.Log("Load textures...");
 
-            string newImgUri = "https://cryptoboss.win/game/back/images/" + rivalChipId + ".png";
+            string newImgUri = "http://a0664627.xsph.ru/cryptoboss_back/images/" + rivalChipId + ".png";
 
             // fetch image and display in game
             UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(newImgUri); // imageUri

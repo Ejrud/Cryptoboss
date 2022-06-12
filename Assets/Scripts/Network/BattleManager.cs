@@ -22,7 +22,7 @@ public class BattleManager : NetworkBehaviour
             #region Players stats
             // 
             int queueCapital = session.PlayerNets[playerQueueIndex].Capital;
-            int queueEnergy = session.PlayerNets[playerQueueIndex].Morale;
+            float queueEnergy = session.PlayerNets[playerQueueIndex].Morale;
 
             // 
             int cardId = session.PlayerNets[playerQueueIndex].SelectedCardId;
@@ -46,72 +46,72 @@ public class BattleManager : NetworkBehaviour
 
             // 
             int otherCapital = session.PlayerNets[rivalIndex].Capital;
-            int otherEnergy = session.PlayerNets[rivalIndex].Morale;
+            float otherEnergy = session.PlayerNets[rivalIndex].Morale;
 
             #endregion
 
             // 
             switch (session.PlayerNets[playerQueueIndex].HandCards[cardId].Type)
             {
-                case "turn around":
-                    if (session.Turn_around)
-                    {
-                        // 
-                        queueCapital += capHealth;
-                        queueEnergy -= cardCost;
-                        queueEnergy += engHealth;
-                        queueCapital -= capAttack;
-                        session.Turn_around = false;
-                    }
-                    else
-                    {
-                        // 
-                        session.Turn_around = true;
-                    }
-                break;
+                // case "turn around":
+                //     if (session.Turn_around)
+                //     {
+                //         // 
+                //         queueCapital += capHealth;
+                //         queueEnergy -= cardCost;
+                //         queueEnergy += engHealth;
+                //         queueCapital -= capAttack;
+                //         session.Turn_around = false;
+                //     }
+                //     else
+                //     {
+                //         // 
+                //         session.Turn_around = true;
+                //     }
+                // break;
 
-                case "liquidation": // Отмена карты соперника
-                    if (session.PlayerNets[rivalIndex].PreviousCard == null) break;
-                    queueCapital += session.PlayerNets[rivalIndex].PreviousCard.CapitalDamage;
-                    // 
-                break;
+                // case "liquidation": // Отмена карты соперника
+                //     if (session.PlayerNets[rivalIndex].PreviousCard == null) break;
+                //     queueCapital += session.PlayerNets[rivalIndex].PreviousCard.CapitalDamage;
+                //     // 
+                // break;
 
-                case "correction":
-                    correction = true;
-                break;
+                // case "correction":
+                //     correction = true;
+                // break;
 
-                case "scam": // 
-                    CardData[] cardVar = session.PlayerNets[rivalIndex].HandCards;
-                    for (int i = 0; i < 5; i++)
-                    {
-                        cardVar[i].CapitalDamage /= 2;
-                        cardVar[i].CapitalEarnings /= 2;
-                        cardVar[i].EnergyHealth /= 2;
-                    }
-                    session.PlayerNets[rivalIndex].HandCards = cardVar;
-                    session.PlayerNets[rivalIndex].UpdateUICards(cardVar);
-                break;
+                // case "scam": // 
+                //     CardData[] cardVar = session.PlayerNets[rivalIndex].HandCards;
+                //     for (int i = 0; i < 5; i++)
+                //     {
+                //         cardVar[i].CapitalDamage /= 2;
+                //         cardVar[i].CapitalEarnings /= 2;
+                //         cardVar[i].EnergyHealth /= 2;
+                //     }
+                //     session.PlayerNets[rivalIndex].HandCards = cardVar;
+                //     session.PlayerNets[rivalIndex].UpdateUICards(cardVar);
+                // break;
 
-                case "hedge fund":
-                    // 
-                    session.PlayerNets[playerQueueIndex].HedgeFundCount = 3;
-                    queueCapital += capHealth;
-                    queueEnergy -= cardCost;
-                    queueEnergy += engHealth;
-                    otherCapital -= capAttack;
-                break;
+                // case "hedge fund":
+                //     // 
+                //     session.PlayerNets[playerQueueIndex].HedgeFundCount = 3;
+                //     queueCapital += capHealth;
+                //     queueEnergy -= cardCost;
+                //     queueEnergy += engHealth;
+                //     otherCapital -= capAttack;
+                // break;
 
-                case "audit":
+                // case "audit":
 
-                break;
+                // break;
 
-                case "to the moon":
+                // case "to the moon":
 
-                break;
+                // break;
 
-                case "pump":
+                // case "pump":
 
-                break;
+                // break;
 
                 default:
                     queueCapital += capHealth;
@@ -122,7 +122,7 @@ public class BattleManager : NetworkBehaviour
             }
 
             queueCapital = CutSurplusValue(queueCapital, session.PlayerNets[playerQueueIndex].MaxHealth);
-            queueEnergy = CutSurplusValue(queueEnergy, 20); // 
+            queueEnergy = CutSurplusValueFloat(queueEnergy, 20); // 
 
             if (queueCapital > 0 && otherCapital <= 0)
             {
@@ -173,6 +173,20 @@ public class BattleManager : NetworkBehaviour
 
     // 
     private int CutSurplusValue(int concreteValue, int maxValue)
+    {
+        if (concreteValue > maxValue)
+        {
+            concreteValue = maxValue;
+        }
+        if(concreteValue < 0)
+        {
+            concreteValue = 0;
+        }
+
+        return concreteValue;
+    }
+
+    private float CutSurplusValueFloat(float concreteValue, float maxValue)
     {
         if (concreteValue > maxValue)
         {
