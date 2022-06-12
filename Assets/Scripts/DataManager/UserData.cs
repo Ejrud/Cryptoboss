@@ -78,7 +78,7 @@ public class UserData : MonoBehaviour
             
             if(!user.Authorized)
             {
-                SetCard(i); // Выдача карт фишке
+                SetCard(user.chipDatas[i].ChipName, i); // Выдача карт фишке
             }
 
             // fetch uri from chain
@@ -196,20 +196,38 @@ public class UserData : MonoBehaviour
         return currentLoad;
     }
 
-    private void SetCard(int chipIndex)
+    private void SetCard(string chipIndex, int massive_id)
     {
-        for (int i = 0; i < 10; i++)
-        {
-            int offset = chipIndex * 10;
+        List<CardData> listCards = new List<CardData>();
+        Debug.Log("Присвоение карт");
 
-            user.chipDatas[chipIndex].CardDeck[i].Name = user.cards[i+offset].name;
-            user.chipDatas[chipIndex].CardDeck[i].Type = user.cards[i+offset].type;
-            user.chipDatas[chipIndex].CardDeck[i].EnergyDamage = Convert.ToInt32(user.cards[i+offset].loss_energy);
-            user.chipDatas[chipIndex].CardDeck[i].CapitalDamage = Convert.ToInt32(user.cards[i+offset].loss_capital);
-            user.chipDatas[chipIndex].CardDeck[i].EnergyHealth = Convert.ToInt32(user.cards[i+offset].heal_energy);
-            user.chipDatas[chipIndex].CardDeck[i].CapitalEarnings = Convert.ToInt32(user.cards[i+offset].profit);
-            user.chipDatas[chipIndex].CardDeck[i].DamageResistance = Convert.ToInt32(user.cards[i+offset].armor_of_loss);
-            user.chipDatas[chipIndex].CardDeck[i].CardCost = Convert.ToInt32(user.cards[i+offset].energy_cost);
+        Debug.Log(user.cards[0].guid + "   " + chipIndex);
+
+        for (int i = 0; i < user.cards.Count; i++)
+        {
+            if (user.cards[i].guid == chipIndex)
+            {
+                CardData cards = new CardData();
+                cards.Guid = user.cards[i].card_id;
+                cards.Type = user.cards[i].type;
+                cards.Name = user.cards[i].name;
+                cards.EnergyDamage = Convert.ToInt32(user.cards[i].loss_energy);
+                cards.CapitalDamage = Convert.ToInt32(user.cards[i].loss_capital);
+                cards.EnergyHealth = Convert.ToInt32(user.cards[i].heal_energy);
+                cards.CapitalEarnings = Convert.ToInt32(user.cards[i].profit);
+                cards.DamageResistance = Convert.ToInt32(user.cards[i].armor_of_loss);
+                cards.CardCost = Convert.ToInt32(user.cards[i].energy_cost);
+                cards.ChipId = user.cards[i].guid;
+
+                listCards.Add(cards);
+            }
+        }
+
+        user.chipDatas[massive_id].CardDeck = new CardData[listCards.Count]; 
+
+        for (int i = 0; i < listCards.Count; i++)
+        {
+            user.chipDatas[massive_id].CardDeck[i] = listCards[i];
         }
     }
 }

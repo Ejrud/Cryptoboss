@@ -12,97 +12,391 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b0ef169ec2b574ca76159dd8ca409e, type: 3}
   m_Name: ChipData_2
   m_EditorClassIdentifier: 
-  Id: 572
-  ChipName: Cryptoboss #572
+  Id: 906
+  ChipName: CryptoBoss #906
   ChipTexture: {fileID: 0}
   CardDeck:
-  - Guid: 1
-    Version: 1
-    Name: Successful negotiations
+  - Used: 0
+    Guid: 281
+    Version: 
+    Name: Utility bill
+    Type: damage
     EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 1
-    CapitalEarnings: 0
-    DamageResistance: 40
-    CardCost: 1
-  - Guid: 2
-    Version: 1
-    Name: Interest rates fall
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 1
-    CapitalEarnings: 0
-    DamageResistance: 20
-    CardCost: 1
-  - Guid: 3
-    Version: 1
-    Name: Successful negotiations
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 1
-    CapitalEarnings: 0
-    DamageResistance: 10
-    CardCost: 1
-  - Guid: 4
-    Version: 1
-    Name: Interest rates fall
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 1
-    CapitalEarnings: 0
-    DamageResistance: 10
-    CardCost: 1
-  - Guid: 5
-    Version: 1
-    Name: Stock growth
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 0
-    CapitalEarnings: 100
-    DamageResistance: 75
-    CardCost: 2
-  - Guid: 6
-    Version: 1
-    Name: Cryptocurrency growth
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 0
-    CapitalEarnings: 100
-    DamageResistance: 75
-    CardCost: 1
-  - Guid: 7
-    Version: 1
-    Name: Passive income
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 0
-    CapitalEarnings: 100
-    DamageResistance: 75
-    CardCost: 1
-  - Guid: 8
-    Version: 1
-    Name: Pension accruals
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 0
-    CapitalEarnings: 100
-    DamageResistance: 75
-    CardCost: 1
-  - Guid: 9
-    Version: 1
-    Name: Stock growth
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 0
-    CapitalEarnings: 100
-    DamageResistance: 75
-    CardCost: 1
-  - Guid: 10
-    Version: 1
-    Name: Cryptocurrency growth
-    EnergyDamage: 0
-    CapitalDamage: 0
+    CapitalDamage: 160
     EnergyHealth: 0
     CapitalEarnings: 75
-    DamageResistance: 50
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 2
+  - Used: 0
+    Guid: 282
+    Version: 
+    Name: Interest rate hike
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 160
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
     CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 283
+    Version: 
+    Name: Utility bill
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 150
+    EnergyHealth: 0
+    CapitalEarnings: 75
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 284
+    Version: 
+    Name: Interest rate hike
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 150
+    EnergyHealth: 0
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 285
+    Version: 
+    Name: Utility bill
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 140
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 286
+    Version: 
+    Name: Interest rate hike
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 140
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 287
+    Version: 
+    Name: Utility bill
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 130
+    EnergyHealth: 0
+    CapitalEarnings: 75
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 288
+    Version: 
+    Name: Interest rate hike
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 130
+    EnergyHealth: 0
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 305
+    Version: 
+    Name: Pension accruals
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 150
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 2
+  - Used: 0
+    Guid: 306
+    Version: 
+    Name: Pension accruals
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 100
+    EnergyHealth: 0
+    CapitalEarnings: 135
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 2
+  - Used: 0
+    Guid: 307
+    Version: 
+    Name: Interest rates fall
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 135
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 308
+    Version: 
+    Name: Interest rates fall
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 75
+    EnergyHealth: 0
+    CapitalEarnings: 120
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 309
+    Version: 
+    Name: Insurance
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 120
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 310
+    Version: 
+    Name: Insurance
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 311
+    Version: 
+    Name: Insurance
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 75
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 312
+    Version: 
+    Name: Interest rates fall
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 30
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 273
+    Version: 
+    Name: Audit
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 274
+    Version: 
+    Name: Pivot
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 275
+    Version: 
+    Name: Turn around
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 276
+    Version: 
+    Name: Audit
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 277
+    Version: 
+    Name: Pivot
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 278
+    Version: 
+    Name: Turn around
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 279
+    Version: 
+    Name: Audit
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 280
+    Version: 
+    Name: Pivot
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 257
+    Version: 
+    Name: Tax reduction
+    Type: energy
+    EnergyDamage: 2
+    CapitalDamage: 50
+    EnergyHealth: 3
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 2
+  - Used: 0
+    Guid: 258
+    Version: 
+    Name: Holiday
+    Type: energy
+    EnergyDamage: 2
+    CapitalDamage: 50
+    EnergyHealth: 2
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 2
+  - Used: 0
+    Guid: 259
+    Version: 
+    Name: Opening new branches
+    Type: energy
+    EnergyDamage: 1
+    CapitalDamage: 50
+    EnergyHealth: 2
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 260
+    Version: 
+    Name: Increased demand for your product
+    Type: energy
+    EnergyDamage: 1
+    CapitalDamage: 50
+    EnergyHealth: 1
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 261
+    Version: 
+    Name: Holiday
+    Type: energy
+    EnergyDamage: 1
+    CapitalDamage: 50
+    EnergyHealth: 1
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 262
+    Version: 
+    Name: Opening new branches
+    Type: energy
+    EnergyDamage: 1
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 263
+    Version: 
+    Name: Increased demand for your product
+    Type: energy
+    EnergyDamage: 1
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2
+  - Used: 0
+    Guid: 264
+    Version: 
+    Name: Tax reduction
+    Type: energy
+    EnergyDamage: 1
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 2

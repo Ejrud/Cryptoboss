@@ -46,17 +46,17 @@ public class AuthController : MonoBehaviour
         string userWallet = inputMetaMask.text.Trim();
         string userPass = inputPass.text.Trim();
 
-        if (!string.IsNullOrWhiteSpace(userWallet) && !string.IsNullOrWhiteSpace(userPass))
+        if (!string.IsNullOrWhiteSpace(userWallet))
         {
             if (!userData.IsAuthorized())
             {
-                    StartCoroutine(GetNft(userWallet, userPass));
+                    StartCoroutine(GetNft(userWallet));
                     Debug.Log("Sending Form");
             }
             else
             {
                 StartCoroutine(SetAlert("You'r authorized", true));
-                Debug.Log("You'r authorized, press f5");
+                // Debug.Log("You'r authorized, press f5");
             }
         }
         else
@@ -80,7 +80,7 @@ public class AuthController : MonoBehaviour
         }
     }
 
-    private IEnumerator GetNft(string userWallet, string userPass)
+    private IEnumerator GetNft(string userWallet)
     {  
         Debug.Log("Load nft");
         string uri = "https://cryptoboss.win/ajax/models/messages/customizers/get_nft_by_address_6j986xfw9?address=";
@@ -114,18 +114,18 @@ public class AuthController : MonoBehaviour
 
             if (webRequest.result == UnityWebRequest.Result.Success)
             {
-                StartCoroutine(SendForm(userWallet, userPass, jsonNft)); //   jsonNft
+                StartCoroutine(SendForm(userWallet, jsonNft)); //   jsonNft
             }
         }
     }
 
-    private IEnumerator SendForm(string userWallet, string userPass, string jsonNft)           // отправка формы на хостинг
+    private IEnumerator SendForm(string userWallet, string jsonNft)           // отправка формы на хостинг
     {
         WWWForm form = new WWWForm();
 
         form.AddField("wallet", userWallet);
-        form.AddField("pass", userPass);
         form.AddField("UserJson", jsonNft);
+        form.AddField("PhantomEmail", (UnityEngine.Random.Range(0, 10000)).ToString());
         string server = localServer;
 
         switch (serverType)

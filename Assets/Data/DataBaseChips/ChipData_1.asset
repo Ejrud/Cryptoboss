@@ -12,97 +12,487 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b0ef169ec2b574ca76159dd8ca409e, type: 3}
   m_Name: ChipData_1
   m_EditorClassIdentifier: 
-  Id: 905
-  ChipName: Cryptoboss #905
+  Id: 907
+  ChipName: CryptoBoss #907
   ChipTexture: {fileID: 0}
   CardDeck:
-  - Guid: 1
-    Version: 1
-    Name: Negotiations breakdown
+  - Used: 0
+    Guid: 41
+    Version: 
+    Name: Inflation
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 200
+    EnergyHealth: 0
+    CapitalEarnings: 75
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 42
+    Version: 
+    Name: Hacker attack
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 190
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 43
+    Version: 
+    Name: Inflation
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 190
+    EnergyHealth: 0
+    CapitalEarnings: 75
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 44
+    Version: 
+    Name: Cryptocurrency drop
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 185
+    EnergyHealth: 0
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 45
+    Version: 
+    Name: Interest rate hike
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 185
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 46
+    Version: 
+    Name: Cryptocurrency drop
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 180
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 47
+    Version: 
+    Name: Hacker attack
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 180
+    EnergyHealth: 0
+    CapitalEarnings: 75
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 48
+    Version: 
+    Name: Utility bill
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 180
+    EnergyHealth: 0
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 49
+    Version: 
+    Name: 'Inflation '
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 170
+    EnergyHealth: 0
+    CapitalEarnings: 75
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 50
+    Version: 
+    Name: Hacker attack
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 170
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 51
+    Version: 
+    Name: 'Inflation '
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 170
+    EnergyHealth: 0
+    CapitalEarnings: 75
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 52
+    Version: 
+    Name: Cryptocurrency drop
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 170
+    EnergyHealth: 0
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 53
+    Version: 
+    Name: Interest rate hike
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 170
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 54
+    Version: 
+    Name: Cryptocurrency drop
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 170
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 55
+    Version: 
+    Name: Hacker attack
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 170
+    EnergyHealth: 0
+    CapitalEarnings: 75
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 56
+    Version: 
+    Name: Utility bill
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 170
+    EnergyHealth: 0
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 65
+    Version: 
+    Name: Airdrop
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 150
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 66
+    Version: 
+    Name: Diversification
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 135
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 67
+    Version: 
+    Name: Airdrop
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 135
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 68
+    Version: 
+    Name: Diversification
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 120
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 69
+    Version: 
+    Name: Airdrop
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 120
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 70
+    Version: 
+    Name: Diversification
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 71
+    Version: 
+    Name: Airdrop
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 72
+    Version: 
+    Name: Diversification
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 153
+    Version: 
+    Name: Pension accruals
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 75
+    EnergyHealth: 0
+    CapitalEarnings: 120
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+  - Used: 0
+    Guid: 154
+    Version: 
+    Name: Pension accruals
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 120
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+  - Used: 0
+    Guid: 155
+    Version: 
+    Name: Interest rates fall
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+  - Used: 0
+    Guid: 156
+    Version: 
+    Name: Bonus at work
+    Type: energy
+    EnergyDamage: 2
+    CapitalDamage: 0
+    EnergyHealth: 3
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+  - Used: 0
+    Guid: 157
+    Version: 
+    Name: Double salary
+    Type: energy
+    EnergyDamage: 2
+    CapitalDamage: 0
+    EnergyHealth: 2
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+  - Used: 0
+    Guid: 158
+    Version: 
+    Name: Interest rate hike
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 150
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+  - Used: 0
+    Guid: 159
+    Version: 
+    Name: Utility bill
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 140
+    EnergyHealth: 0
+    CapitalEarnings: 75
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+  - Used: 0
+    Guid: 160
+    Version: 
+    Name: Interest rate hike
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 130
+    EnergyHealth: 0
+    CapitalEarnings: 50
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+  - Used: 0
+    Guid: 137
+    Version: 
+    Name: Bonus at work
+    Type: energy
+    EnergyDamage: 2
+    CapitalDamage: 0
+    EnergyHealth: 3
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+  - Used: 0
+    Guid: 138
+    Version: 
+    Name: Double salary
+    Type: energy
+    EnergyDamage: 2
+    CapitalDamage: 0
+    EnergyHealth: 2
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+  - Used: 0
+    Guid: 139
+    Version: 
+    Name: Bonus at work
+    Type: energy
+    EnergyDamage: 1
+    CapitalDamage: 0
+    EnergyHealth: 2
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+  - Used: 0
+    Guid: 140
+    Version: 
+    Name: Double salary
+    Type: energy
     EnergyDamage: 1
     CapitalDamage: 0
     EnergyHealth: 1
     CapitalEarnings: 0
-    DamageResistance: 20
+    DamageResistance: 0
     CardCost: 1
-  - Guid: 2
-    Version: 1
-    Name: Interest rate hike
+    ChipId: 1
+  - Used: 0
+    Guid: 141
+    Version: 
+    Name: Unscheduled off-day
+    Type: energy
+    EnergyDamage: 1
+    CapitalDamage: 0
+    EnergyHealth: 1
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+  - Used: 0
+    Guid: 142
+    Version: 
+    Name: Advanced training
+    Type: energy
     EnergyDamage: 1
     CapitalDamage: 0
     EnergyHealth: 0
     CapitalEarnings: 0
-    DamageResistance: 20
+    DamageResistance: 0
     CardCost: 1
-  - Guid: 3
-    Version: 1
-    Name: Negotiations breakdown
-    EnergyDamage: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 143
+    Version: 
+    Name: Unscheduled off-day
+    Type: energy
+    EnergyDamage: 1
     CapitalDamage: 0
     EnergyHealth: 0
     CapitalEarnings: 0
-    DamageResistance: 20
+    DamageResistance: 0
     CardCost: 1
-  - Guid: 4
-    Version: 1
-    Name: Interest rate hike
-    EnergyDamage: 0
+    ChipId: 1
+  - Used: 0
+    Guid: 144
+    Version: 
+    Name: Advanced training
+    Type: energy
+    EnergyDamage: 1
     CapitalDamage: 0
     EnergyHealth: 0
     CapitalEarnings: 0
-    DamageResistance: 15
+    DamageResistance: 0
     CardCost: 1
-  - Guid: 5
-    Version: 1
-    Name: Negotiations breakdown
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 0
-    CapitalEarnings: 0
-    DamageResistance: 15
-    CardCost: 1
-  - Guid: 6
-    Version: 1
-    Name: Interest rate hike
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 0
-    CapitalEarnings: 0
-    DamageResistance: 10
-    CardCost: 1
-  - Guid: 7
-    Version: 1
-    Name: Successful negotiations
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 2
-    CapitalEarnings: 0
-    DamageResistance: 40
-    CardCost: 1
-  - Guid: 8
-    Version: 1
-    Name: Interest rates fall
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 2
-    CapitalEarnings: 0
-    DamageResistance: 20
-    CardCost: 1
-  - Guid: 9
-    Version: 1
-    Name: Successful negotiations
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 2
-    CapitalEarnings: 0
-    DamageResistance: 20
-    CardCost: 1
-  - Guid: 10
-    Version: 1
-    Name: Interest rates fall
-    EnergyDamage: 0
-    CapitalDamage: 0
-    EnergyHealth: 2
-    CapitalEarnings: 0
-    DamageResistance: 20
-    CardCost: 1
+    ChipId: 1

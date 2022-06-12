@@ -320,11 +320,11 @@ public class Session : MonoBehaviour
         for (int i = 0; i < PlayerNets.Length; i++)
         {
             // Отправка запроса на сервер
-            WWWForm form = new WWWForm();
-            form.AddField("guid", "CryptoBoss #" + PlayerNets[i].ChipId);
+            WWWForm form = new WWWForm();                                  //https://cryptoboss.win/game/back/get_cards.php
+            form.AddField("guid", "CryptoBoss #" + PlayerNets[i].ChipId); // a0664627.xsph.ru/cryptoboss_back/get_cards.php
 
             // Загрузка карт
-            using (UnityWebRequest www = UnityWebRequest.Post("https://cryptoboss.win/game/back/get_cards.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post("a0664627.xsph.ru/cryptoboss_back/get_cards.php", form))
             { 
                 yield return www.SendWebRequest();
 

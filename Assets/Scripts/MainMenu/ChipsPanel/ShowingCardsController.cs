@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class ShowingCardsController : MonoBehaviour
 {
+    [SerializeField] private User user;
+
     [Header("Prefabs")]
     [SerializeField] private GameObject _cardFrame;
 
     [Header("Cards")]
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private Transform contentContainer;
-    [SerializeField] private CardParameters[] cardParameters = new CardParameters[10]; // Оболочка карт. Хранит данные карты (атаку, оборону, описание)
+    [SerializeField] private CardParameters[] cardParameters; // Оболочка карт. Хранит данные карты (атаку, оборону, описание)
 
 
     private void Start()
@@ -22,12 +24,10 @@ public class ShowingCardsController : MonoBehaviour
 
     private void UpdateWindow(CardData[] cardDatas)                         // ChipFrameData являются "наблюдаемыми" объектами.
     {
-        if (!cardParameters[0].gameObject.activeInHierarchy)
-        { 
-            ShowCards();
-        }
+        PutAwayCards();
+        ShowCards(cardDatas.Length);
 
-        for (int i = 0; i < 10; i++)                                        // у каждой фишки 10 карт
+        for (int i = 0; i < cardDatas.Length; i++)                                        
         {
             cardParameters[i].SetCardEffects(cardDatas[i], i);
         } 
@@ -35,9 +35,15 @@ public class ShowingCardsController : MonoBehaviour
 
     private void PrepareCards()                                             // Убрать карты
     {
-        cardParameters = new CardParameters[10];
+        int count = 0;
+        for (int i = 0; i < user.chipDatas.Length; i++)
+        {
+            count += user.chipDatas[i].CardDeck.Length;
+        }
 
-        for (int i = 0; i < 10; i++)
+        cardParameters = new CardParameters[count];
+
+        for (int i = 0; i < cardParameters.Length; i++)
         { 
             Transform cardTransform = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity).GetComponent<Transform>();
             cardTransform.SetParent(contentContainer);
@@ -57,11 +63,11 @@ public class ShowingCardsController : MonoBehaviour
         }
     }
 
-    private void ShowCards()                                                // Показать карты
+    private void ShowCards(int cardCount)                                                // Показать карты
     {
-        foreach (CardParameters card in cardParameters)
+        for (int i = 0; i < cardCount; i++)
         {
-            card.gameObject.SetActive(true); // card
+            cardParameters[i].gameObject.SetActive(true);
         }
     }
 
