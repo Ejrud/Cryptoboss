@@ -324,7 +324,7 @@ public class Session : MonoBehaviour
             form.AddField("guid", "CryptoBoss #" + PlayerNets[i].ChipId); // a0664627.xsph.ru/cryptoboss_back/get_cards.php
 
             // Загрузка карт
-            using (UnityWebRequest www = UnityWebRequest.Post("a0664627.xsph.ru/cryptoboss_back/get_cards.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post("https://cryptoboss.win/game/back/get_cards.php", form))
             { 
                 yield return www.SendWebRequest();
 

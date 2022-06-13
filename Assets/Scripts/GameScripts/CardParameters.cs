@@ -14,6 +14,9 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     [Header("Links")]
     // [SerializeField] private CardImage cardImage;
     [SerializeField] private Image cardImage;
+    [SerializeField] private GameObject bossyObj;
+    [SerializeField] private GameObject energyObj;
+
 
     [Header("Values")]
     [SerializeField] private Text cardName;
@@ -44,6 +47,9 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
     private void UpdateUI()
     {
+        bossyObj.gameObject.SetActive(true);
+        energyObj.gameObject.SetActive(true);
+        
         switch (Card.Type)
         {
             case "damage":
@@ -53,34 +59,19 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
                 cardImage.sprite = typeSprites[1];
             break;
             case "energy":
-                cardImage.sprite = typeSprites[3];
+                cardImage.sprite = typeSprites[2];
             break;
-            case "turn around":
-                cardImage.sprite = typeSprites[4];
-            break;
-            case "liquidation":
-                cardImage.sprite = typeSprites[5];
-            break;
-            case "correction":
-                cardImage.sprite = typeSprites[6];
-            break;
-            case "pivot":
-                cardImage.sprite = typeSprites[7];
-            break;
-            case "scam":
-                cardImage.sprite = typeSprites[9];
-            break;
-            case "hedge fund":
-                cardImage.sprite = typeSprites[10];
-            break;
-            case "audit":
-                cardImage.sprite = typeSprites[11];
-            break;
-            case "to the moon":
-                cardImage.sprite = typeSprites[12];
-            break;
-            case "pump":
-                cardImage.sprite = typeSprites[13];
+            case "joker":
+                for (int i = 0; i < typeSprites.Length; i++)
+                {
+                    if (typeSprites[i].name == Card.Name)
+                    {
+                        cardImage.sprite = typeSprites[i];
+                        bossyObj.gameObject.SetActive(false);
+                        energyObj.gameObject.SetActive(false);
+                        break;
+                    }
+                }
             break;
         }
 

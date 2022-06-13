@@ -929,13 +929,15 @@ MonoBehaviour:
     CardCost: 0
     ChipId: 
   cardImage: {fileID: 2035265864123630530}
+  bossyObj: {fileID: 3958466185982352213}
+  energyObj: {fileID: 472316493516942626}
   cardName: {fileID: 2674330234881794408}
   capitalDamage: {fileID: 7170926474609941486}
   capitalHealth: {fileID: 523031396789590493}
   energyCost: {fileID: 5147333319795549603}
   energyHealth: {fileID: 7269629295236066125}
   typeSprites:
-  - {fileID: 21300000, guid: f9c7f54dbb4123b4d8d026415695a3af, type: 3}
+  - {fileID: 21300000, guid: 3b3f47d8e5157a04fa9965fc5bce249b, type: 3}
   - {fileID: 21300000, guid: 1ea28a223f908f64f8d3fdcd203ba9c7, type: 3}
   - {fileID: 21300000, guid: 43117cd2c7033cd4b8b349d268f358b9, type: 3}
   - {fileID: 21300000, guid: 15a93dd497a465c458b34692ae674094, type: 3}

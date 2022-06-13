@@ -218,6 +218,7 @@ public class UserData : MonoBehaviour
                 cards.DamageResistance = Convert.ToInt32(user.cards[i].armor_of_loss);
                 cards.CardCost = Convert.ToInt32(user.cards[i].energy_cost);
                 cards.ChipId = user.cards[i].guid;
+                cards.Description = user.cards[i].description;
 
                 listCards.Add(cards);
             }

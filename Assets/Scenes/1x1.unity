@@ -2193,7 +2193,7 @@ PrefabInstance:
       objectReference: {fileID: 798378997}
     - target: {fileID: 2729208454843092320, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: serverMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092320, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: fieldObject

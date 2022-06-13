@@ -14,4 +14,5 @@ public class DbCards
         public string energy_cost { get; set; }
         public string card_id { get; set; }
         public string guid { get; set; }
+        public string description { get; set; }
     }

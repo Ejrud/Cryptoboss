@@ -17,4 +17,5 @@ public class CardData
     public int DamageResistance;    // Защита от урона по капиталу
     public int CardCost;            // Потребление энергии
     public string ChipId;
+    public string Description;
 }
