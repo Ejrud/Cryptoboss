@@ -1,107 +1,127 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+using Newtonsoft.Json;
+using System;
+using Org.BouncyCastle.Bcpg;
 
 public class Leaders : MonoBehaviour
 {
     [Header("Chips")]
-    [SerializeField] private Image[] chipImage = new Image[3];
+    [SerializeField] private RawImage[] chipImage = new RawImage[3];
 
     [Header("Leaders table")]
     [SerializeField] private Text[] nameRows = new Text[10];
     [SerializeField] private Text[] scoreRows = new Text[10];
+    [SerializeField] private GameObject[] _rows = new GameObject[10];
 
-    //// Вместо этого использовать данные из бд Altrp! ////
-    private string[] randomNames = { "John", "Adam", "Andrew", "Carl", "Clifford", "Dirk", "Earl", "Eric", "Lan" };
-    private string[] randomSdNames = { "Williams", "Peters", "Gibson", "Martin", "Jordan", "Jackson", "Grant", "Davis", "Collins" };
-    private Color[] randomColors = { Color.black, Color.green, Color.blue, Color.gray, Color.magenta, Color.cyan };
-    // 
+    [SerializeField] private Text[] _chipNames = new Text[3];
 
-    // Со стороны сервера на 7 дней записывается весь прогресс пользователей, по окончаню сбрасывается. Так же и с сезоном.
-
-    // Массив имен за неделю (С сервера берется object или json и вместо этих массивов записываются данные с сервера)
-    private string[] namesOfWeek = new string[10];
-    private int[] scoreOfWeek = new int[10];
-    private Color[] chipColorWeek = new Color[10]; // фишка конкретного игрока (узнать какая именно фишка будет видна другими пользователями!)
-
-    // Массив имен за сезон
-    private string[] namesOfSeason = new string[10];
-    private int[] scoreOfSeason = new int[10];
-    ////
+    private List<LeadersDb> _leaders = new List<LeadersDb>();
+    private string[] _chipIds;
+    
+    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/      // https://cryptoboss.win/game/back/images/
 
     private void Start()
     {
-        for (int i = 0; i < 10; i++)
+        foreach (RawImage image in chipImage)
         {
-            namesOfWeek[i] = randomNames[Random.Range(0, 9)] + " " + randomSdNames[Random.Range(0, 9)];
-            scoreOfWeek[i] = Random.Range(0, 1000);
-            chipColorWeek[i] = randomColors[Random.Range(0, randomColors.Length)];
+            image.gameObject.SetActive(false);
         }
 
-        for (int i = 0; i < 10; i++)
+        foreach (Text txt in _chipNames)
         {
-            namesOfSeason[i] = randomNames[Random.Range(0, 9)] + " " + randomSdNames[Random.Range(0, 9)];
-            scoreOfSeason[i] = Random.Range(0, 1000);
+            txt.gameObject.SetActive(false);
         }
 
-        BubleSort();
-        SetLeadersOfWeek();
+        UpdateLeaderBoard();
+        StartCoroutine(GetLeaders());
+    }
+    // Загрузка лидеров
+    private IEnumerator GetLeaders()
+    {
+        WWWForm form = new WWWForm();
+        
+        using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_leaders.php", form))
+        { 
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                string json = www.downloadHandler.text;
+
+                _leaders = JsonConvert.DeserializeObject<List<LeadersDb>>(json);
+
+                GetImages();
+                UpdateLeaderBoard();
+            }
+            else
+            { 
+                Debug.Log("Incorrect data");
+                Debug.Log(www.error);
+            }
+        }
+
+        yield return null;
+    }
+    // Загрузка изображений
+    private async void GetImages()
+    {
+        char[] delimiters = {'c', 'h', 'i', 'p', '"', 'C', 'r', 'y', 'p', 't', 'b', 'o', 's', ' ', '#', '}', ',', '{', 'B', ':', '[', ']'};   /// "https://cryptoboss.win/game/back/images/" + chipIndex[0] + ".png"
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (i < _leaders.Count)
+            {
+                string[] chipIndex = _leaders[i].guid.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture("https://cryptoboss.win/game/back/images/" + chipIndex[0] + ".png");
+                await textureRequest.SendWebRequest();
+                Texture2D nft = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
+                
+                chipImage[i].gameObject.SetActive(true);
+                _chipNames[i].gameObject.SetActive(true);
+
+                chipImage[i].texture = nft;
+                _chipNames[i].text = _leaders[i].guid;
+            }
+            else
+            {
+                chipImage[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     public void SetLeadersOfWeek() // Вызывается кнопками "Сезон" "Неделя"
     {
-        UpdateLeaderBoard(namesOfWeek, scoreOfWeek);
+        // UpdateLeaderBoard(namesOfWeek, scoreOfWeek);
     }
 
     public void SetLeadersOfSeason()
     {
-        UpdateLeaderBoard(namesOfSeason, scoreOfSeason);
+        // UpdateLeaderBoard(namesOfSeason, scoreOfSeason);
     }
-
-    private void BubleSort()  // Сортировка по возрастанию
+    
+    private void UpdateLeaderBoard()
     {
-        for (int i = 0; i < scoreOfWeek.Length; i++)
+        for (int i = 0; i < nameRows.Length; i++)
         {
-            for (int j = 0; j < scoreOfWeek.Length - 1; j++)
-            {
-                if (scoreOfWeek[j] < scoreOfWeek[j + 1])
-                {
-                    int saveScore = scoreOfWeek[j];
-                    scoreOfWeek[j] = scoreOfWeek[j + 1];
-                    scoreOfWeek[j + 1] = saveScore;
-
-                    string saveName = namesOfWeek[j];
-                    namesOfWeek[j] = namesOfWeek[j + 1];
-                    namesOfWeek[j + 1] = saveName;
-                }
-            }
+            _rows[i].SetActive(false);
         }
 
-        for (int i = 0; i < scoreOfSeason.Length; i++)
+        for (int i = 0; i < _leaders.Count; i++)
         {
-            for (int j = 0; j < scoreOfSeason.Length - 1; j++)
-            {
-                if (scoreOfSeason[j] < scoreOfSeason[j + 1])
-                {
-                    int saveScore = scoreOfSeason[j];
-                    scoreOfSeason[j] = scoreOfSeason[j + 1];
-                    scoreOfSeason[j + 1] = saveScore;
-
-                    string saveName = namesOfSeason[j];
-                    namesOfSeason[j] = namesOfSeason[j + 1];
-                    namesOfSeason[j + 1] = saveName;
-                }
-            }
+            _rows[i].SetActive(true);
+            
+            nameRows[i].text = _leaders[i].guid;
+            scoreRows[i].text = _leaders[i].rating;
         }
     }
-
-    private void UpdateLeaderBoard(string[] names, int[] scores)
+    
+    public class LeadersDb
     {
-        for (int i = 0; i < names.Length; i++)
-        {
-            nameRows[i].text = names[i];
-            scoreRows[i].text = scores[i].ToString();
-        }
+        public string guid { get; set; }
+        public string rating { get; set; }
     }
 }

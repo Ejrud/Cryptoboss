@@ -32,6 +32,7 @@ public class UserData : MonoBehaviour
     // private List<DbCards> nullCards;
     private string pathToSave;
     private string saveFileName = "Data";
+    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/images/ // https://cryptoboss.win/game/back/
 
     private void Start()
     {
@@ -97,7 +98,7 @@ public class UserData : MonoBehaviour
             // parse json to get image uri
             string imageUri = data.image;
 
-            string newImgUri = "https://cryptoboss.win/game/back/images/" + tokenIds[i] + ".png"; // http://a0664627.xsph.ru/cryptoboss_back/images/ // https://cryptoboss.win/game/back/images/
+            string newImgUri = seUrl + "images/" + tokenIds[i] + ".png"; // 
 
             // fetch image and display in game
             UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(newImgUri); // imageUri

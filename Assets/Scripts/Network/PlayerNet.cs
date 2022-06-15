@@ -33,6 +33,8 @@ public class PlayerNet : NetworkBehaviour
     public bool AnimationComplete;
     public int SelectedCardId;       // Âûחûגאועסÿ םא סונגונו
     public int UsedCount;
+    
+    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/images/  // https://cryptoboss.win/game/back/images/
 
     #region UI elements
     [Header("player UI")]
@@ -305,13 +307,13 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public async void LoadRivalChip(int rivalChipId) // http://a0664627.xsph.ru/cryptoboss_back/images/  // https://cryptoboss.win/game/back/images/
+    public async void LoadRivalChip(int rivalChipId) // 
     {
         if(hasAuthority)
         {
             Debug.Log("Load textures...");
 
-            string newImgUri = "https://cryptoboss.win/game/back/images/" + rivalChipId + ".png";
+            string newImgUri = seUrl + "images/" + rivalChipId + ".png";
 
             // fetch image and display in game
             UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(newImgUri); // imageUri

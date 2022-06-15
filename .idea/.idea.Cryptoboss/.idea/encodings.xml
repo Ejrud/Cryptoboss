@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/Assets/Scripts/DataManager/AuthController.cs" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/Assets/Scripts/DataManager/UserData.cs" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/MainMenu/ChipsPanel/ShowingCardsController.cs" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/MainMenu/LeadersPanel/Leaders.cs" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/Assets/Scripts/Network/BattleManager.cs" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/Assets/Scripts/Network/PlayerNet.cs" charset="windows-1251" />
     <file url="file://$PROJECT_DIR$/Assets/Scripts/Network/Session.cs" charset="windows-1251" />

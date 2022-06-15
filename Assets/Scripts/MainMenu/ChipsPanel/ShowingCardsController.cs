@@ -6,9 +6,6 @@ public class ShowingCardsController : MonoBehaviour
 {
     [SerializeField] private User user;
 
-    [Header("Prefabs")]
-    [SerializeField] private GameObject _cardFrame;
-
     [Header("Cards")]
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private Transform contentContainer;

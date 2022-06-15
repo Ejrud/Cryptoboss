@@ -32,10 +32,10 @@ RectTransform:
   m_Father: {fileID: 2453538686665633675}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: 0}
-  m_SizeDelta: {x: -11.5337, y: 0}
+  m_AnchorMin: {x: 0.046648405, y: 0.10300001}
+  m_AnchorMax: {x: 0.93929684, y: 1}
+  m_AnchoredPosition: {x: 0.000076293945, y: 0}
+  m_SizeDelta: {x: 11.7731, y: 11.7498}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5690710907594860445
 CanvasRenderer:
@@ -69,16 +69,16 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: fdb2927537eadd84faa93e932728036b, type: 3}
     m_FontSize: 24
     m_FontStyle: 0
-    m_BestFit: 1
-    m_MinSize: 16
+    m_BestFit: 0
+    m_MinSize: 14
     m_MaxSize: 48
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 0.5
-  m_Text: Tax reduction
+    m_LineSpacing: 0.56
+  m_Text: Card
 --- !u!1 &472316493516942626
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,8 +188,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.26000002}
   m_AnchorMax: {x: 0.37600002, y: 0.41200003}
-  m_AnchoredPosition: {x: -0.49365234, y: -0.09100342}
-  m_SizeDelta: {x: -0.9873047, y: -1.2798996}
+  m_AnchoredPosition: {x: 1.5734024, y: -0.09100342}
+  m_SizeDelta: {x: -5.1212, y: -1.2799}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3635689081668084968
 CanvasRenderer:
@@ -397,8 +397,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.61882204, y: 0.64000005}
   m_AnchorMax: {x: 0.98964405, y: 0.79300004}
-  m_AnchoredPosition: {x: 0.024600983, y: 0.18914032}
-  m_SizeDelta: {x: 0.012700081, y: -1.2798996}
+  m_AnchoredPosition: {x: -2.7940025, y: 0.18914032}
+  m_SizeDelta: {x: -5.6244, y: -1.2799}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &660020165054385545
 CanvasRenderer:
@@ -455,7 +455,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32.15
+  m_fontSize: 29.6
   m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -748,8 +748,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.61364406, y: 0.26000002}
   m_AnchorMax: {x: 0.98964405, y: 0.41200003}
-  m_AnchoredPosition: {x: 0.02999878, y: 0.63995004}
-  m_SizeDelta: {x: -0.9873047, y: -1.2798996}
+  m_AnchoredPosition: {x: -2.5413, y: 0.63995004}
+  m_SizeDelta: {x: -6.1298, y: -1.2799}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5139956623251688259
 CanvasRenderer:
@@ -806,7 +806,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32.15
+  m_fontSize: 29.85
   m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -928,6 +928,7 @@ MonoBehaviour:
     DamageResistance: 0
     CardCost: 0
     ChipId: 
+    Description: 
   cardImage: {fileID: 2035265864123630530}
   bossyObj: {fileID: 3958466185982352213}
   energyObj: {fileID: 472316493516942626}
@@ -1107,8 +1108,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.64000005}
   m_AnchorMax: {x: 0.37600002, y: 0.79300004}
-  m_AnchoredPosition: {x: -0.49365234, y: 0.18914032}
-  m_SizeDelta: {x: -0.9873047, y: -1.2798996}
+  m_AnchoredPosition: {x: 1.5734024, y: 0.18914032}
+  m_SizeDelta: {x: -5.1212, y: -1.2799}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &105418180637055263
 CanvasRenderer:
