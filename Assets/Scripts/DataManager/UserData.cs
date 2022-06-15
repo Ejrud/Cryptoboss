@@ -97,7 +97,7 @@ public class UserData : MonoBehaviour
             // parse json to get image uri
             string imageUri = data.image;
 
-            string newImgUri = "http://a0664627.xsph.ru/cryptoboss_back/images/" + tokenIds[i] + ".png"; // http://a0664627.xsph.ru/cryptoboss_back/images/ // https://cryptoboss.win/game/back/images/
+            string newImgUri = "https://cryptoboss.win/game/back/images/" + tokenIds[i] + ".png"; // http://a0664627.xsph.ru/cryptoboss_back/images/ // https://cryptoboss.win/game/back/images/
 
             // fetch image and display in game
             UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(newImgUri); // imageUri

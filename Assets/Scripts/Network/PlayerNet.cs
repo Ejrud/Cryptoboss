@@ -287,12 +287,12 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void EndGame(string text, string charIncrement, int bossy, int raiting)
+    public void EndGame(string text, string charIncrement, float bossy, string raiting)
     {
         backToLobbyWindow.SetActive(true);
         exitWindowText.text = text;
-        bossyText.text = charIncrement + bossy.ToString();
-        raitingText.text = charIncrement + raiting.ToString();
+        bossyText.text = charIncrement + bossy;
+        raitingText.text = charIncrement + raiting;
     }
 
     [ClientRpc]
@@ -311,7 +311,7 @@ public class PlayerNet : NetworkBehaviour
         {
             Debug.Log("Load textures...");
 
-            string newImgUri = "http://a0664627.xsph.ru/cryptoboss_back/images/" + rivalChipId + ".png";
+            string newImgUri = "https://cryptoboss.win/game/back/images/" + rivalChipId + ".png";
 
             // fetch image and display in game
             UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(newImgUri); // imageUri

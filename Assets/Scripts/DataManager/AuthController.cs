@@ -37,9 +37,8 @@ public class AuthController : MonoBehaviour
         defaultColor = alertText.color;
         alertColor = Color.red;
 
-        UpdateMetaState();
+        // UpdateMetaState();
     }
-
     
     public void PrepareAuth()
     {
@@ -66,7 +65,7 @@ public class AuthController : MonoBehaviour
         }
     }
 
-    public void UpdateMetaState()
+    public void UDpdateMetaState()
     {
         if (PlayerPrefs.GetString("Account") != "")
         {

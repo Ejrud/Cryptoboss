@@ -18403,7 +18403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4138c10488f4161419c6a90e649c3021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverType: 1
+  serverType: 0
   userData: {fileID: 1059100640}
   inputMetaMask: {fileID: 1804687770}
   inputPass: {fileID: 192211168}

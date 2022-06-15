@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Mirror;
 using System;
+using System.Security.Permissions;
 using Newtonsoft.Json;
 
 public class Session : MonoBehaviour
@@ -28,6 +29,8 @@ public class Session : MonoBehaviour
     private bool debugMode;
     private bool gameStarted = false;
     private bool chipIdRecieved;
+
+    private string seUrl = "https://cryptoboss.win/game/back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
 
     [Header("Settings")]
     [SerializeField] private float energyRecovery = 0.5f;
@@ -167,30 +170,84 @@ public class Session : MonoBehaviour
             player.SetTimerText(time);
         }
     }
+    
     public void FinishTheGame(bool playerWin_1, bool playerWin_2, bool playerDisconnected = false)
     {
         Ready = false;
         Finished = true;
+        
+        // Кто выиграл, а кто проиграл
+        PlayerNets[0].Win = playerWin_1;
+        PlayerNets[1].Win = playerWin_2;
 
-        if (playerDisconnected)
+        string winnerWallet = "";
+        string winnerGuid = "";
+        string looseGuid = ""; 
+        string mode = "one";
+        
+        if (PlayerNets[0].Win)
         {
-            PlayerNets[0].EndGame("Other player disconnected", "", 0, 0);
-            PlayerNets[1].EndGame("Other player disconnected", "", 0, 0);
+            winnerWallet = PlayerNets[0].Wallet;
+            winnerGuid = "CryptoBoss #" + PlayerNets[0].ChipId;
+            looseGuid = "CryptoBoss #" + PlayerNets[1].ChipId;
+
         }
-        else if (!playerWin_1 && !playerWin_2)
+        else if (PlayerNets[1].Win)
         {
-            PlayerNets[0].EndGame("Draw", "", 0, 0);
-            PlayerNets[1].EndGame("Draw", "", 0, 0);
+            winnerWallet = PlayerNets[1].Wallet;
+            winnerGuid = "CryptoBoss #" + PlayerNets[1].ChipId;
+            looseGuid = "CryptoBoss #" + PlayerNets[0].ChipId;
         }
-        else if (playerWin_1)
-        {
-            PlayerNets[0].EndGame("You win", "+", 10, 12); // Брать из бд
-            PlayerNets[1].EndGame("You lose", "-", 0, 0);
-        }
-        else if (playerWin_2)
-        {
-            PlayerNets[0].EndGame("You lose", "-", 0, 0);
-            PlayerNets[1].EndGame("You win", "+", 10, 12); // Брать из бд
+
+        StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode));
+    }
+
+    private IEnumerator SetReward(string winnerWallet, string winnerGuid, string looseGuid, string mode)
+    {
+        WWWForm form = new WWWForm();
+        
+        form.AddField("WinGuid", winnerGuid);
+        form.AddField("WinWallet", winnerWallet);
+        form.AddField("LooseGuid", looseGuid);
+        form.AddField("Mode", mode);
+
+        // Загрузка карт
+        using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "accural.php", form))
+        { 
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                DataBaseResult results = JsonConvert.DeserializeObject<DataBaseResult>(www.downloadHandler.text);
+
+                if (PlayerNets[0].Win && !PlayerNets[1].Win)
+                {
+                    PlayerNets[0].EndGame("You have won!", "+", results.bossy, results.rating);
+                    PlayerNets[1].EndGame("You loose", "-", 0f, results.decrement);
+                }
+                else if (!PlayerNets[0].Win && PlayerNets[1].Win)
+                {
+                    PlayerNets[1].EndGame("You have won!", "+", results.bossy, results.rating);
+                    PlayerNets[0].EndGame("You loose", "-", 0f ,results.decrement);
+                }
+                else if (!PlayerNets[0].Win && !PlayerNets[1].Win)
+                {
+                    PlayerNets[0].EndGame("Draw", "", 0f, "0");
+                    PlayerNets[1].EndGame("Draw", "", 0f, "0");
+                }
+                else
+                {
+                    PlayerNets[0].EndGame("Draw", "", 0f, "0");
+                    PlayerNets[1].EndGame("Draw", "", 0f, "0");
+                }
+
+                Debug.Log("Reward = " + results.bossy);
+            }
+            else
+            { 
+                Debug.Log("Incorrect data");
+                Debug.Log(www.error);
+            }
         }
     }
 
@@ -198,7 +255,7 @@ public class Session : MonoBehaviour
     {   
         PrepareNextRound();
     }
-
+    
     private CardData GetSelectedCards(int playerIndex)
     {
         // Подбор характеристик карт по id'шникам (RoundCards в своих индексах содежит индексы карт)
@@ -320,11 +377,11 @@ public class Session : MonoBehaviour
         for (int i = 0; i < PlayerNets.Length; i++)
         {
             // Отправка запроса на сервер
-            WWWForm form = new WWWForm();                                  //https://cryptoboss.win/game/back/get_cards.php
-            form.AddField("guid", "CryptoBoss #" + PlayerNets[i].ChipId); // a0664627.xsph.ru/cryptoboss_back/get_cards.php
+            WWWForm form = new WWWForm();
+            form.AddField("guid", "CryptoBoss #" + PlayerNets[i].ChipId); // 
 
             // Загрузка карт
-            using (UnityWebRequest www = UnityWebRequest.Post("https://cryptoboss.win/game/back/get_cards.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_cards.php", form))
             { 
                 yield return www.SendWebRequest();
 
@@ -346,7 +403,7 @@ public class Session : MonoBehaviour
             }
 
             // Загрузка здоровья
-            using (UnityWebRequest www = UnityWebRequest.Post("https://cryptoboss.win/game/back/get_health.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_health.php", form))
             { 
                 yield return www.SendWebRequest();
 
@@ -444,6 +501,12 @@ public class Session : MonoBehaviour
     public class UserHealth
     {
         public string capital_max { get; set; }
+    }
+    public class DataBaseResult
+    {
+        public string rating { get; set; }
+        public string decrement { get; set; }
+        public float bossy { get; set; }
     }
 
     #endregion

@@ -127,7 +127,6 @@ public class BattleManager : NetworkBehaviour
             if (queueCapital > 0 && otherCapital <= 0)
             {
                 Debug.Log($"Player {playerQueueIndex + 1} Win");
-                SetRevard(session.PlayerNets[playerQueueIndex].Wallet, "10");
                 session.PlayerNets[playerQueueIndex].Win = true;
 
                 for (int i = 0; i < session.PlayerNets.Length; i++)
@@ -142,7 +141,6 @@ public class BattleManager : NetworkBehaviour
             else if (queueCapital <= 0 && otherCapital > 0)
             {
                 Debug.Log($"Player {rivalIndex + 1} Win");
-                SetRevard(session.PlayerNets[rivalIndex].Wallet, "10");
                 session.PlayerNets[rivalIndex].Win = true;
 
                 for (int i = 0; i < session.PlayerNets.Length; i++)
@@ -200,22 +198,22 @@ public class BattleManager : NetworkBehaviour
         return concreteValue;
     }
 
-    private async void SetRevard(string wallet, string amount)
-    {
-        string uri = "https://cryptoboss.win/ajax/models/messages/customizers/mint_token1_xy8q554qo?address=" + wallet + "&amount=" + amount;
-        UnityWebRequest webRequest = UnityWebRequest.Get(uri);
-        await webRequest.SendWebRequest();
-
-        if (webRequest.result == UnityWebRequest.Result.Success)
-        {
-            Debug.Log("Player rewaded");
-        }
-        else
-        {
-            Debug.Log(webRequest.error);
-        }
-
-    }
+    // private async void SetRevard(string wallet, string amount)
+    // {
+    //     string uri = "https://cryptoboss.win/ajax/models/messages/customizers/mint_token1_xy8q554qo?address=" + wallet + "&amount=" + amount;
+    //     UnityWebRequest webRequest = UnityWebRequest.Get(uri);
+    //     await webRequest.SendWebRequest();
+    //
+    //     if (webRequest.result == UnityWebRequest.Result.Success)
+    //     {
+    //         Debug.Log("Player rewaded");
+    //     }
+    //     else
+    //     {
+    //         Debug.Log(webRequest.error);
+    //     }
+    //
+    // }
 
     private void TurnAround()
     {
