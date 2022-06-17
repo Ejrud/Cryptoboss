@@ -18,6 +18,8 @@ public class PlayerNet : NetworkBehaviour
     public CardData RivalCard;
     public int HedgeFundCount = 0;
 
+    public Impact PlayerImpact = new Impact();
+
     public int MaxHealth;
     public int Capital;                   // Hp
     public float Morale;                    // Energy
@@ -197,6 +199,19 @@ public class PlayerNet : NetworkBehaviour
         SelectedCardId = selectedCardId;
         HandCards[SelectedCardId].Used = true;
         UsedCount--;
+
+        PlayerImpact.CapitalDamage = HandCards[selectedCardId].CapitalDamage;
+        PlayerImpact.CapitalHealth = HandCards[selectedCardId].CapitalEarnings;
+        PlayerImpact.JokerName = HandCards[selectedCardId].Name;
+        
+        if (HandCards[selectedCardId].Type == "joker")
+        {
+            PlayerImpact.Joker = true;
+        }
+        else
+        {
+            PlayerImpact.Joker = false;
+        }
     }
     [ClientRpc]
     public void UpdateUICards(CardData[] cardData)
@@ -340,5 +355,15 @@ public class PlayerNet : NetworkBehaviour
     public class Response 
     {
         public string image;
+    }
+    
+    // Impact отвечает за сохранение действия игрока и над игроком
+    public class Impact
+    {
+        public string JokerName;
+        public int CapitalDamage;
+        public int CapitalHealth;
+        public bool Joker;
+        // public int EnergyHealth;
     }
 }

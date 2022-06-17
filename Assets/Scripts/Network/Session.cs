@@ -26,11 +26,12 @@ public class Session : MonoBehaviour
     [Header("TypeStage")]
     public bool Turn_around = false;
     public bool Scam;
+    public bool ToTheMoon;
     private bool debugMode;
     private bool gameStarted = false;
     private bool chipIdRecieved;
 
-    private string seUrl = "https://cryptoboss.win/game/back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
+    private string seUrl = "a0664627.xsph.ru/cryptoboss_back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
 
     [Header("Settings")]
     [SerializeField] private float energyRecovery = 0.5f;
@@ -59,6 +60,7 @@ public class Session : MonoBehaviour
             {
                 FinishTheGame(false, false, true);
             }
+            
 
             // Если игрок выбрал карту для игры, то сесия готова к вычислениям
             else if (PlayerNets[PlayerIndexQueue].CardSelected)
@@ -175,31 +177,41 @@ public class Session : MonoBehaviour
     {
         Ready = false;
         Finished = true;
-        
-        // Кто выиграл, а кто проиграл
-        PlayerNets[0].Win = playerWin_1;
-        PlayerNets[1].Win = playerWin_2;
 
-        string winnerWallet = "";
-        string winnerGuid = "";
-        string looseGuid = ""; 
-        string mode = "one";
-        
-        if (PlayerNets[0].Win)
+        if (!playerDisconnected)
         {
-            winnerWallet = PlayerNets[0].Wallet;
-            winnerGuid = "CryptoBoss #" + PlayerNets[0].ChipId;
-            looseGuid = "CryptoBoss #" + PlayerNets[1].ChipId;
+            // Кто выиграл, а кто проиграл
+            PlayerNets[0].Win = playerWin_1;
+            PlayerNets[1].Win = playerWin_2;
 
+            string winnerWallet = "";
+            string winnerGuid = "";
+            string looseGuid = ""; 
+            string mode = "one";
+        
+            if (PlayerNets[0].Win)
+            {
+                winnerWallet = PlayerNets[0].Wallet;
+                winnerGuid = "CryptoBoss #" + PlayerNets[0].ChipId;
+                looseGuid = "CryptoBoss #" + PlayerNets[1].ChipId;
+
+            }
+            else if (PlayerNets[1].Win)
+            {
+                winnerWallet = PlayerNets[1].Wallet;
+                winnerGuid = "CryptoBoss #" + PlayerNets[1].ChipId;
+                looseGuid = "CryptoBoss #" + PlayerNets[0].ChipId;
+            }
+
+            StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode));
         }
-        else if (PlayerNets[1].Win)
+        else
         {
-            winnerWallet = PlayerNets[1].Wallet;
-            winnerGuid = "CryptoBoss #" + PlayerNets[1].ChipId;
-            looseGuid = "CryptoBoss #" + PlayerNets[0].ChipId;
+            PlayerNets[0].EndGame("Other player disconnected", "", 0f, "0");
+            PlayerNets[1].EndGame("Other player disconnected", "", 0f, "0");
         }
 
-        StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode));
+        
     }
 
     private IEnumerator SetReward(string winnerWallet, string winnerGuid, string looseGuid, string mode)

@@ -20,6 +20,7 @@ public class BattleManager : NetworkBehaviour
             int playerQueueIndex = session.PlayerIndexQueue;
 
             #region Players stats
+
             // 
             int queueCapital = session.PlayerNets[playerQueueIndex].Capital;
             float queueEnergy = session.PlayerNets[playerQueueIndex].Morale;
@@ -35,7 +36,7 @@ public class BattleManager : NetworkBehaviour
 
             // 
             int rivalIndex = 0;
-            
+
             for (int i = 0; i < session.PlayerNets.Length; i++)
             {
                 if (i != session.PlayerIndexQueue)
@@ -48,78 +49,105 @@ public class BattleManager : NetworkBehaviour
             int otherCapital = session.PlayerNets[rivalIndex].Capital;
             float otherEnergy = session.PlayerNets[rivalIndex].Morale;
 
-            #endregion
-
-            // 
-            switch (session.PlayerNets[playerQueueIndex].HandCards[cardId].Type)
+            for (int i = 0; i < session.PlayerNets.Length; i++)
             {
-                // case "turn around":
-                //     if (session.Turn_around)
-                //     {
-                //         // 
-                //         queueCapital += capHealth;
-                //         queueEnergy -= cardCost;
-                //         queueEnergy += engHealth;
-                //         queueCapital -= capAttack;
-                //         session.Turn_around = false;
-                //     }
-                //     else
-                //     {
-                //         // 
-                //         session.Turn_around = true;
-                //     }
-                // break;
-
-                // case "liquidation": // Отмена карты соперника
-                //     if (session.PlayerNets[rivalIndex].PreviousCard == null) break;
-                //     queueCapital += session.PlayerNets[rivalIndex].PreviousCard.CapitalDamage;
-                //     // 
-                // break;
-
-                // case "correction":
-                //     correction = true;
-                // break;
-
-                // case "scam": // 
-                //     CardData[] cardVar = session.PlayerNets[rivalIndex].HandCards;
-                //     for (int i = 0; i < 5; i++)
-                //     {
-                //         cardVar[i].CapitalDamage /= 2;
-                //         cardVar[i].CapitalEarnings /= 2;
-                //         cardVar[i].EnergyHealth /= 2;
-                //     }
-                //     session.PlayerNets[rivalIndex].HandCards = cardVar;
-                //     session.PlayerNets[rivalIndex].UpdateUICards(cardVar);
-                // break;
-
-                // case "hedge fund":
-                //     // 
-                //     session.PlayerNets[playerQueueIndex].HedgeFundCount = 3;
-                //     queueCapital += capHealth;
-                //     queueEnergy -= cardCost;
-                //     queueEnergy += engHealth;
-                //     otherCapital -= capAttack;
-                // break;
-
-                // case "audit":
-
-                // break;
-
-                // case "to the moon":
-
-                // break;
-
-                // case "pump":
-
-                // break;
-
-                default:
-                    queueCapital += capHealth;
-                    queueEnergy -= cardCost;
-                    queueEnergy += engHealth;
-                    otherCapital -= capAttack;
-                break;
+                if (session.PlayerNets[i].HedgeFundCount > 0)
+                {
+                    session.PlayerNets[i].HedgeFundCount--;
+                }
             }
+
+            if (session.ToTheMoon)
+            {
+                cardCost *= 2;
+            }
+
+            #endregion
+            
+            // Если у игрока не была выбрана карта HedgeFund, то выпол
+            if (session.PlayerNets[rivalIndex].HedgeFundCount < 0)
+            {
+                switch (session.PlayerNets[playerQueueIndex].HandCards[cardId].Name)
+                {
+                    case "Turn around": // Отрицательные эффекты прошлой карты накладываются на самого игрока (у текущего востанавливаются до изначального значения)
+                        PlayerNet current = session.PlayerNets[playerQueueIndex];
+                        PlayerNet other = session.PlayerNets[rivalIndex];
+                        
+                        queueCapital += other.PlayerImpact.CapitalDamage;
+                        otherCapital -= other.PlayerImpact.CapitalDamage;
+
+                        current.PlayerImpact.JokerName = "Turn around";
+                        current.PlayerImpact.CapitalDamage = other.PlayerImpact.CapitalDamage;
+                        break;
+
+                    case "Liquidation": // Нейтрализация последней карты соперника
+                        queueCapital += session.PlayerNets[rivalIndex].PlayerImpact.CapitalDamage;
+                        session.PlayerNets[playerQueueIndex].PlayerImpact.CapitalHealth = session.PlayerNets[rivalIndex].PlayerImpact.CapitalDamage;
+                        break;
+
+                    case "Correction": // Блокирует оппонента класть карту на стол
+                        correction = true;
+                        break;
+
+                    case "Scam": // В половину урезает характеристики
+                        CardData[] otherCards = session.PlayerNets[rivalIndex].HandCards;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            otherCards[i].CapitalDamage /= 2;
+                            otherCards[i].CapitalEarnings /= 2;
+                            otherCards[i].EnergyHealth /= 2;
+                        }
+                        session.PlayerNets[rivalIndex].HandCards = otherCards;
+                        session.PlayerNets[rivalIndex].UpdateUICards(otherCards);
+                        session.PlayerNets[playerQueueIndex].PlayerImpact.Joker = true;
+                        session.PlayerNets[playerQueueIndex].PlayerImpact.JokerName = "Scam";
+                        break;
+
+                    case "Hedge fund": // Блок от джокера в течении 3 ходов
+                        session.PlayerNets[playerQueueIndex].HedgeFundCount = 3;
+                        queueCapital += capHealth;
+                        queueEnergy -= cardCost;
+                        queueEnergy += engHealth;
+                        otherCapital -= capAttack;
+                        break;
+
+                    case "Audit": // Видимость характеристик карт соперника
+                        
+                        break;
+
+                    case "To the moon": // След карта потребует в 2 раза больше энергии
+                        session.ToTheMoon = true;
+                        break;
+
+                    case "Pump": // Увеличивает характеристики карты в 2 раза
+                        queueCapital += capHealth * 2;
+                        queueEnergy -= cardCost * 2;
+                        queueEnergy += engHealth * 2;
+                        otherCapital -= capAttack * 2;
+
+                        PlayerNet player = session.PlayerNets[playerQueueIndex];
+
+                        player.PlayerImpact.Joker = true;
+                        player.PlayerImpact.JokerName = "Pump";
+                        player.PlayerImpact.CapitalDamage = capAttack * 2; 
+                        break;
+
+                    default:
+                        queueCapital += capHealth;
+                        queueEnergy -= cardCost;
+                        queueEnergy += engHealth;
+                        otherCapital -= capAttack;
+                        break;
+                }
+            }
+            else
+            {
+                queueCapital += capHealth;
+                queueEnergy -= cardCost;
+                queueEnergy += engHealth;
+                otherCapital -= capAttack;
+            }
+            
 
             queueCapital = CutSurplusValue(queueCapital, session.PlayerNets[playerQueueIndex].MaxHealth);
             queueEnergy = CutSurplusValueFloat(queueEnergy, 20); // 
@@ -196,27 +224,5 @@ public class BattleManager : NetworkBehaviour
         }
 
         return concreteValue;
-    }
-
-    // private async void SetRevard(string wallet, string amount)
-    // {
-    //     string uri = "https://cryptoboss.win/ajax/models/messages/customizers/mint_token1_xy8q554qo?address=" + wallet + "&amount=" + amount;
-    //     UnityWebRequest webRequest = UnityWebRequest.Get(uri);
-    //     await webRequest.SendWebRequest();
-    //
-    //     if (webRequest.result == UnityWebRequest.Result.Success)
-    //     {
-    //         Debug.Log("Player rewaded");
-    //     }
-    //     else
-    //     {
-    //         Debug.Log(webRequest.error);
-    //     }
-    //
-    // }
-
-    private void TurnAround()
-    {
-        
     }
 }

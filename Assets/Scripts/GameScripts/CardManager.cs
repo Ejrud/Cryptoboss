@@ -33,7 +33,7 @@ public class CardManager : NetworkBehaviour
     {
         canvas.worldCamera = Camera.main;
 
-        // При старте скрывать все карты на столе
+        // РџСЂРё СЃС‚Р°СЂС‚Рµ СЃРєСЂС‹РІР°С‚СЊ РІСЃРµ РєР°СЂС‚С‹ РЅР° СЃС‚РѕР»Рµ
         foreach (Transform stk in stack)
         {
             stk.gameObject.SetActive(false);
@@ -64,7 +64,7 @@ public class CardManager : NetworkBehaviour
         }
     }
 
-    // Метод нажатия на карту (Кнопка передает конкретную карту)
+    // РњРµС‚РѕРґ РЅР°Р¶Р°С‚РёСЏ РЅР° РєР°СЂС‚Сѓ (РљРЅРѕРїРєР° РїРµСЂРµРґР°РµС‚ РєРѕРЅРєСЂРµС‚РЅСѓСЋ РєР°СЂС‚Сѓ)
     public void OnCardSelect(RectTransform card)
     {
         StartCoroutine(CardSelectIE(card)); 
@@ -82,10 +82,10 @@ public class CardManager : NetworkBehaviour
             {
                 cardParameters.Selected = true;
                 cardParameters.Card.Used = true;
-                // Перемещение карт
+                // РџРµСЂРµРјРµС‰РµРЅРёРµ РєР°СЂС‚
                 StartCoroutine(CardTransition(card, card.transform.position, tablePosition.transform.position));
 
-                // Инициализация новых позиций
+                // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РЅРѕРІС‹С… РїРѕР·РёС†РёР№
                 int selectedCount = 0;
                 for (int i = 0; i < playerCards.Length; i++)
                 {
@@ -195,7 +195,7 @@ public class CardManager : NetworkBehaviour
         }
     }
 
-    // Перемещение карты
+    // РџРµСЂРµРјРµС‰РµРЅРёРµ РєР°СЂС‚С‹
     private IEnumerator CardTransition(Transform currentTransform, Vector3 startPos, Vector3 endPos, bool reverse = false)
     {
         Vector3 BezierPos = new Vector3(startPos.x, endPos.y, endPos.z);
@@ -223,7 +223,7 @@ public class CardManager : NetworkBehaviour
             yield return new WaitForUpdate();
         }
 
-        // Возвращать карту к фишке и когда у игрока будет 2 карты, вернуть их обратно
+        // Р’РѕР·РІСЂР°С‰Р°С‚СЊ РєР°СЂС‚Сѓ Рє С„РёС€РєРµ Рё РєРѕРіРґР° Сѓ РёРіСЂРѕРєР° Р±СѓРґРµС‚ 2 РєР°СЂС‚С‹, РІРµСЂРЅСѓС‚СЊ РёС… РѕР±СЂР°С‚РЅРѕ
         currentTransform.gameObject.SetActive(false);
 
         UpdateStack(currentTransform.GetComponent<CardParameters>().Card);
@@ -239,7 +239,7 @@ public class CardManager : NetworkBehaviour
         {
             if (!stack[i].gameObject.activeInHierarchy)
             {
-                // Передать в этот элемент стопки характеристики выбранной карты
+                // РџРµСЂРµРґР°С‚СЊ РІ СЌС‚РѕС‚ СЌР»РµРјРµРЅС‚ СЃС‚РѕРїРєРё С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё РІС‹Р±СЂР°РЅРЅРѕР№ РєР°СЂС‚С‹
                 stack[i].gameObject.SetActive(true);
                 SetStackUnit(stackUnits[i], card);
 
@@ -247,7 +247,7 @@ public class CardManager : NetworkBehaviour
             }
         }
 
-        // Если все стопки активны, то они смещаются (+ смещение массива стопки)
+        // Р•СЃР»Рё РІСЃРµ СЃС‚РѕРїРєРё Р°РєС‚РёРІРЅС‹, С‚Рѕ РѕРЅРё СЃРјРµС‰Р°СЋС‚СЃСЏ (+ СЃРјРµС‰РµРЅРёРµ РјР°СЃСЃРёРІР° СЃС‚РѕРїРєРё)
         Transform[] varStackUnits = new Transform[stackUnits.Length];
 
         for (int i = stack.Length-1; i >= 0 ; i--)
@@ -257,14 +257,14 @@ public class CardManager : NetworkBehaviour
                 stackUnits[i].SetParent(stack[i-1]);
                 varStackUnits[i-1] = stackUnits[i];
             }
-            else // Если последний элемент, то смещать в начало цикла
+            else // Р•СЃР»Рё РїРѕСЃР»РµРґРЅРёР№ СЌР»РµРјРµРЅС‚, С‚Рѕ СЃРјРµС‰Р°С‚СЊ РІ РЅР°С‡Р°Р»Рѕ С†РёРєР»Р°
             {
                 stackUnits[i].SetParent(stack[stack.Length-1]);
                 varStackUnits[stack.Length-1] = stackUnits[i];
             }
         }
 
-        // Передать в этот элемент стопки характеристики выбранной карты
+        // РџРµСЂРµРґР°С‚СЊ РІ СЌС‚РѕС‚ СЌР»РµРјРµРЅС‚ СЃС‚РѕРїРєРё С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё РІС‹Р±СЂР°РЅРЅРѕР№ РєР°СЂС‚С‹
         stackUnits = varStackUnits;
         SetStackUnit(stackUnits[stack.Length - 1], card);
     }
@@ -275,12 +275,12 @@ public class CardManager : NetworkBehaviour
 
         if (cardParam)
         {
-            cardParam.SetCardEffects(playerCard, 0); // 0 - задается индекс карты (для стопки необязательный параметр)
+            cardParam.SetCardEffects(playerCard, 0); // 0 - Р·Р°РґР°РµС‚СЃСЏ РёРЅРґРµРєСЃ РєР°СЂС‚С‹ (РґР»СЏ СЃС‚РѕРїРєРё РЅРµРѕР±СЏР·Р°С‚РµР»СЊРЅС‹Р№ РїР°СЂР°РјРµС‚СЂ)
         }
     }
 
     public void SelectRandomCard()
     {
-        // Выбор рандомной карты (если таймер дойдет до 0)
+        // Р’С‹Р±РѕСЂ СЂР°РЅРґРѕРјРЅРѕР№ РєР°СЂС‚С‹ (РµСЃР»Рё С‚Р°Р№РјРµСЂ РґРѕР№РґРµС‚ РґРѕ 0)
     }
 }
