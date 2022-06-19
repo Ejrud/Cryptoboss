@@ -19,6 +19,10 @@ public class PlayerNet : NetworkBehaviour
     public int HedgeFundCount = 0;
 
     public Impact PlayerImpact = new Impact();
+    public bool TurnAround;
+    public bool Scam;
+    public bool ToTheMoon;
+    public bool Pump;
 
     public int MaxHealth;
     public int Capital;                   // Hp
@@ -204,14 +208,6 @@ public class PlayerNet : NetworkBehaviour
         PlayerImpact.CapitalHealth = HandCards[selectedCardId].CapitalEarnings;
         PlayerImpact.JokerName = HandCards[selectedCardId].Name;
         
-        if (HandCards[selectedCardId].Type == "joker")
-        {
-            PlayerImpact.Joker = true;
-        }
-        else
-        {
-            PlayerImpact.Joker = false;
-        }
     }
     [ClientRpc]
     public void UpdateUICards(CardData[] cardData)
@@ -363,7 +359,8 @@ public class PlayerNet : NetworkBehaviour
         public string JokerName;
         public int CapitalDamage;
         public int CapitalHealth;
-        public bool Joker;
-        // public int EnergyHealth;
+        
+        public bool Increased;
+        public bool Decreased;
     }
 }

@@ -14,7 +14,9 @@ public class Session : MonoBehaviour
     // Если сессия полностью завершена, то GameProcessManagment перестанет к нему обращаться          
     public bool Finished;
     // Если все кошельки собраны, то в GameProcessManagment происходит подбор карт (отправляется запрос к серверу)              
-    public bool WalletsRecieved;   
+    public bool WalletsRecieved;
+
+    public bool Correction;
     // Какой игрок идет    
     public int PlayerIndexQueue;             
     // Сетевой объект игрока (Хранит в себе характеристики игрока)
@@ -24,9 +26,6 @@ public class Session : MonoBehaviour
     private SessionTimer timer;
 
     [Header("TypeStage")]
-    public bool Turn_around = false;
-    public bool Scam;
-    public bool ToTheMoon;
     private bool debugMode;
     private bool gameStarted = false;
     private bool chipIdRecieved;
