@@ -15,6 +15,7 @@ public class CardManager : NetworkBehaviour
     [Header("Card transition setings")]
     [SerializeField] private Transform[] playerCardPositions;
     [SerializeField] private Transform[] rivalCardPositions;
+    [SerializeField] private Transform[] auditPositions;
 
     [Header("Card table")]
     [SerializeField] private Transform tablePosition;
@@ -26,11 +27,15 @@ public class CardManager : NetworkBehaviour
 
     [Header("Server components")]
     [SerializeField] private PlayerNet playerNet;
-    private bool animate = false;
+    public bool Animate = false;
     public bool CardSelected = false;
+
+    private Vector2 _screenSize;
 
     private void Start()
     {
+        _screenSize = new Vector2(Screen.width, Screen.height);
+        
         canvas.worldCamera = Camera.main;
 
         // При старте скрывать все карты на столе
@@ -44,15 +49,18 @@ public class CardManager : NetworkBehaviour
             card.Card.Used = true;
         }
 
-        for (int i = 0; i < playerCards.Length; i++)
-        {
-            CardHandler cardHand = playerCards[i].GetComponent<CardHandler>();
-            cardHand.CardDisplacement = playerCardPositions[i].transform.position;
-            cardHand.ReturnCard();
+        StartCoroutine(UpdateCardPositions(true, true));
+    }
 
-            cardHand = rivalCards[i].GetComponent<CardHandler>();
-            cardHand.CardDisplacement = rivalCardPositions[i].transform.position;
-            cardHand.ReturnCard();
+    private void LateUpdate()
+    {
+        if (new Vector2(Screen.width, Screen.height) != _screenSize)
+        {
+            _screenSize = new Vector2(Screen.width, Screen.height);
+            
+            // Обновление позиций карт
+            StartCoroutine(UpdateCardPositions(true));
+            Debug.Log("Screen was resized");
         }
     }
 
@@ -74,7 +82,7 @@ public class CardManager : NetworkBehaviour
     {
         card.TryGetComponent<CardParameters>(out CardParameters cardParameters);    
 
-        if (cardParameters && !animate)
+        if (cardParameters && !Animate)
         {            
             int cardID = cardParameters.GetCardId();
 
@@ -96,6 +104,7 @@ public class CardManager : NetworkBehaviour
                             if (j + 1 == playerCards.Length) continue;
 
                             playerCards[j + 1].GetComponent<CardHandler>().CardDisplacement = playerCardPositions[j - selectedCount].position;
+                            playerCards[j + 1].GetComponent<CardHandler>().IndexPosition = j - selectedCount;
                         }
                         selectedCount++;
                     }
@@ -109,9 +118,9 @@ public class CardManager : NetworkBehaviour
                     }
                 }
 
-                animate = true;
+                Animate = true;
 
-                while (animate)
+                while (Animate)
                 {
                     yield return null;
                 }
@@ -145,9 +154,9 @@ public class CardManager : NetworkBehaviour
     {
         rivalCards[index].SetCardEffects(card, index);
         StartCoroutine(CardTransition(rivalCards[index].transform, rivalCards[index].transform.position, tablePosition.position));
-        animate = true;
+        Animate = true;
 
-        while (animate)
+        while (Animate)
         {
             yield return null;
         }
@@ -192,6 +201,7 @@ public class CardManager : NetworkBehaviour
 
             playerCards[i].SetCardEffects(playerNet.HandCards[i], i);
             playerCards[i].GetComponent<CardHandler>().ReturnCard();
+            playerCards[i].GetComponent<CardHandler>().IndexPosition = i;
         }
     }
 
@@ -228,7 +238,7 @@ public class CardManager : NetworkBehaviour
 
         UpdateStack(currentTransform.GetComponent<CardParameters>().Card);
 
-        animate = false;
+        Animate = false;
 
         yield return null;
     }
@@ -282,5 +292,49 @@ public class CardManager : NetworkBehaviour
     public void SelectRandomCard()
     {
         // Выбор рандомной карты (если таймер дойдет до 0)
+    }
+
+    private IEnumerator UpdateCardPositions(bool audit = false, bool reset = false)
+    {
+        Transform[] rivalPositions = new Transform[0];
+        yield return new WaitForSeconds(.1f); // ГОвнокод
+
+        if (reset)
+        {
+            for (int i = 0; i < playerCardPositions.Length; i++)
+            {
+                playerCards[i].GetComponent<CardHandler>().IndexPosition = i;
+            }
+        }
+
+        if (audit)
+        {
+            rivalPositions = auditPositions;
+        }
+        else
+        {
+            rivalPositions = rivalCardPositions;
+        }
+            
+        for (int i = 0; i < playerCards.Length; i++)
+        {
+            CardHandler cardHand = playerCards[i].GetComponent<CardHandler>();
+            cardHand.CardDisplacement = playerCardPositions[cardHand.IndexPosition].transform.position;
+            
+            if (!playerCards[i].Selected)
+            {
+                cardHand.ReturnCard();
+            }
+
+            cardHand = rivalCards[i].GetComponent<CardHandler>();
+            cardHand.CardDisplacement = rivalPositions[i].transform.position;
+            
+            if (!rivalCards[i].Selected)
+            {
+                cardHand.ReturnCard();
+            }
+        }
+
+        yield return null;
     }
 }

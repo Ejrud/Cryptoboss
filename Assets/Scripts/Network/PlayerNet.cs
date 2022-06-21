@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using Mirror;
 using System;
+using TMPro;
+
 public class PlayerNet : NetworkBehaviour
 {
     [Header("Player parameters")]
@@ -47,7 +49,7 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private Text timerText;
     [SerializeField] private Text healthText;
     [SerializeField] private Text energyText;
-    [SerializeField] private Text exitWindowText;
+    [SerializeField] private TMP_Text exitWindowText;
     [SerializeField] private Text bossyText;
     [SerializeField] private Text raitingText;
     [SerializeField] private Image healthImage;
@@ -209,6 +211,16 @@ public class PlayerNet : NetworkBehaviour
         PlayerImpact.JokerName = HandCards[selectedCardId].Name;
         
     }
+
+    [ClientRpc]
+    public void Audit()
+    {
+        if (hasAuthority)
+        {
+            // Показать карты соперника
+        }
+    }
+
     [ClientRpc]
     public void UpdateUICards(CardData[] cardData)
     {

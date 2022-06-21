@@ -1,0 +1,278 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b0ef169ec2b574ca76159dd8ca409e, type: 3}
+  m_Name: DebugData
+  m_EditorClassIdentifier: 
+  Id: 907
+  ChipName: CryptoBoss #907
+  ChipTexture: {fileID: 0}
+  CardDeck:
+  - Used: 0
+    Guid: 160
+    Version: 
+    Name: Liquidation
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 142
+    Version: 
+    Name: Pump
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 157
+    Version: 
+    Name: Double salary
+    Type: damage
+    EnergyDamage: 1
+    CapitalDamage: 200
+    EnergyHealth: 0
+    CapitalEarnings: 20
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+    Description: 
+  - Used: 0
+    Guid: 138
+    Version: 
+    Name: Scam
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 0
+    Guid: 141
+    Version: 
+    Name: To the moon
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 158
+    Version: 
+    Name: Interest rate hike
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 150
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+    Description: 
+  - Used: 0
+    Guid: 139
+    Version: 
+    Name: Hedge fund
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 0
+    Guid: 140
+    Version: 
+    Name: Audit
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 0
+    Guid: 137
+    Version: 
+    Name: Correction
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 159
+    Version: 
+    Name: Turn around
+    Type: joker
+    EnergyDamage: 0
+    CapitalDamage: 0
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 144
+    Version: 
+    Name: Advanced training
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 154
+    Version: 
+    Name: Pension accruals
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 120
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 143
+    Version: 
+    Name: Unscheduled off-day
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 120
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 155
+    Version: 
+    Name: Interest rates fall
+    Type: heal
+    EnergyDamage: 0
+    CapitalDamage: 50
+    EnergyHealth: 0
+    CapitalEarnings: 100
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 156
+    Version: 
+    Name: Bonus at work
+    Type: energy
+    EnergyDamage: 2
+    CapitalDamage: 0
+    EnergyHealth: 3
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 2
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 156
+    Version: 
+    Name: Bonus at work
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 120
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 156
+    Version: 
+    Name: Bonus at work
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 100
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 156
+    Version: 
+    Name: Bonus at work
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 100
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 156
+    Version: 
+    Name: Bonus at work
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 100
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 
+  - Used: 1
+    Guid: 156
+    Version: 
+    Name: Bonus at work
+    Type: damage
+    EnergyDamage: 0
+    CapitalDamage: 100
+    EnergyHealth: 0
+    CapitalEarnings: 0
+    DamageResistance: 0
+    CardCost: 1
+    ChipId: 1
+    Description: 

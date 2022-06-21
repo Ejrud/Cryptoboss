@@ -32,7 +32,7 @@ public class UserData : MonoBehaviour
     // private List<DbCards> nullCards;
     private string pathToSave;
     private string saveFileName = "Data";
-    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/images/ // https://cryptoboss.win/game/back/
+    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/ // https://cryptoboss.win/game/back/
 
     private void Start()
     {
@@ -89,7 +89,7 @@ public class UserData : MonoBehaviour
             await webRequest.SendWebRequest();
             if(webRequest.error != null)
             {
-                Debug.Log("Repeat load");
+                Debug.Log("Repeat load nft uri");
                 LoadTextures(tokenIds, currentLoad, i);
                 return;
             }
@@ -105,7 +105,7 @@ public class UserData : MonoBehaviour
             await textureRequest.SendWebRequest();
             if(textureRequest.error != null)
             {
-                Debug.Log("Repeat load");
+                Debug.Log(textureRequest.error + " Repeat load image");
                 LoadTextures(tokenIds, currentLoad, i);
                 return;
             }
@@ -200,9 +200,9 @@ public class UserData : MonoBehaviour
     private void SetCard(string chipIndex, int massive_id)
     {
         List<CardData> listCards = new List<CardData>();
-        Debug.Log("Присвоение карт");
+        // Debug.Log("Присвоение карт");
 
-        Debug.Log(user.cards[0].guid + "   " + chipIndex);
+        // Debug.Log(user.cards[0].guid + "   " + chipIndex);
 
         for (int i = 0; i < user.cards.Count; i++)
         {

@@ -27,10 +27,12 @@ public class Session : MonoBehaviour
 
     [Header("TypeStage")]
     private bool debugMode;
+
+    [SerializeField] private ChipData debugData;
     private bool gameStarted = false;
     private bool chipIdRecieved;
 
-    private string seUrl = "a0664627.xsph.ru/cryptoboss_back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
+    private string seUrl = "https://cryptoboss.win/game/back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
 
     [Header("Settings")]
     [SerializeField] private float energyRecovery = 0.5f;
@@ -103,9 +105,7 @@ public class Session : MonoBehaviour
     public void PrepareNextRound(bool correction = false) // correction тип крты позволяющий сделать повторный ход
     {
         SetNextIndexQueue(correction);
-
         
-
         // Проверка на кол-во карт у игроков (если меньше или равно 2, то добавляются еще 3 карты)
         for (int i = 0; i < PlayerNets.Length; i++)
         {
@@ -223,7 +223,7 @@ public class Session : MonoBehaviour
         form.AddField("Mode", mode);
 
         // Загрузка карт
-        using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "accural.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "accrual.php", form))
         { 
             yield return www.SendWebRequest();
 
@@ -233,23 +233,23 @@ public class Session : MonoBehaviour
 
                 if (PlayerNets[0].Win && !PlayerNets[1].Win)
                 {
-                    PlayerNets[0].EndGame("You have won!", "+", results.bossy, results.rating);
-                    PlayerNets[1].EndGame("You loose", "-", 0f, results.decrement);
+                    PlayerNets[0].EndGame("YOU HAVE WON!", "+", results.bossy, results.rating);
+                    PlayerNets[1].EndGame("YOU LOOSE", "-", 0f, results.decrement);
                 }
                 else if (!PlayerNets[0].Win && PlayerNets[1].Win)
                 {
-                    PlayerNets[1].EndGame("You have won!", "+", results.bossy, results.rating);
-                    PlayerNets[0].EndGame("You loose", "-", 0f ,results.decrement);
+                    PlayerNets[1].EndGame("YOU HAVE WON!", "+", results.bossy, results.rating);
+                    PlayerNets[0].EndGame("YOU LOOSE", "-", 0f ,results.decrement);
                 }
                 else if (!PlayerNets[0].Win && !PlayerNets[1].Win)
                 {
-                    PlayerNets[0].EndGame("Draw", "", 0f, "0");
-                    PlayerNets[1].EndGame("Draw", "", 0f, "0");
+                    PlayerNets[0].EndGame("DRAW", "", 0f, "0");
+                    PlayerNets[1].EndGame("DRAW", "", 0f, "0");
                 }
                 else
                 {
-                    PlayerNets[0].EndGame("Draw", "", 0f, "0");
-                    PlayerNets[1].EndGame("Draw", "", 0f, "0");
+                    PlayerNets[0].EndGame("DRAW", "", 0f, "0");
+                    PlayerNets[1].EndGame("DRAW", "", 0f, "0");
                 }
 
                 Debug.Log("Reward = " + results.bossy);
@@ -404,7 +404,14 @@ public class Session : MonoBehaviour
                     Debug.Log(json);
                     List<Cards> dbCard = JsonConvert.DeserializeObject<List<Cards>>(json);
 
-                    PlayerNets[i].CardCollection = GetCardDeck(dbCard);
+                    if (!debugMode)
+                    {
+                        PlayerNets[i].CardCollection = GetCardDeck(dbCard);
+                    }
+                    else
+                    {
+                        PlayerNets[i].CardCollection = debugData.CardDeck;
+                    }
                 }
                 else
                 { 

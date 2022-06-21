@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Mirror;
-using Org.BouncyCastle.Asn1.Esf;
-using Unity.PlasticSCM.Editor.WebApi;
+// using Org.BouncyCastle.Asn1.Esf;
+// using Unity.PlasticSCM.Editor.WebApi;
 
 public class BattleManager : NetworkBehaviour
 {   
@@ -50,16 +50,7 @@ public class BattleManager : NetworkBehaviour
             // Капитал и энегрия другого игрока
             int otherCapital = session.PlayerNets[rivalIndex].Capital;
             float otherEnergy = session.PlayerNets[rivalIndex].Morale;
-            
-            // Если у игрока была выбрана карта с типом Hedge fund
-            for (int i = 0; i < session.PlayerNets.Length; i++)
-            {
-                if (session.PlayerNets[i].HedgeFundCount > 0)
-                {
-                    session.PlayerNets[i].HedgeFundCount--;
-                }
-            }
-            
+
             // доп. параметры
             if (session.PlayerNets[playerQueueIndex].ToTheMoon)
             {
@@ -78,7 +69,7 @@ public class BattleManager : NetworkBehaviour
             #endregion
             
             // Если у игрока не была выбрана карта HedgeFund, то выпол
-            if (session.PlayerNets[rivalIndex].HedgeFundCount < 0)
+            if (session.PlayerNets[rivalIndex].HedgeFundCount <= 0)
             {
                 PlayerNet currentPlayer = session.PlayerNets[playerQueueIndex];
                 PlayerNet otherPlayer = session.PlayerNets[rivalIndex];
@@ -181,6 +172,13 @@ public class BattleManager : NetworkBehaviour
                         {
                             queueCapital += otherPlayer.PlayerImpact.CapitalDamage;
                         }
+                        else
+                        {
+                            queueCapital += otherPlayer.PlayerImpact.CapitalDamage;
+                        
+                            // Сохранение действий конкретного игрока
+                            currentPlayer.PlayerImpact.CapitalHealth = otherPlayer.PlayerImpact.CapitalDamage; 
+                        }
                        break;
 
                     case "Correction":  // Блокирует оппонента класть 1 карту на стол
@@ -277,7 +275,7 @@ public class BattleManager : NetworkBehaviour
             }
             else
             {   
-                if (session.PlayerNets[playerQueueIndex].HedgeFundCount >= 0) session.PlayerNets[playerQueueIndex].HedgeFundCount--;
+                if (session.PlayerNets[playerQueueIndex].HedgeFundCount > 0) session.PlayerNets[playerQueueIndex].HedgeFundCount--;
                 
                 session.PlayerNets[playerQueueIndex].UpdatePlayerCharacteristic(queueCapital, queueEnergy, otherCapital, otherEnergy, queueEnergy);
                 session.PlayerNets[rivalIndex].UpdatePlayerCharacteristic(otherCapital, otherEnergy, queueCapital, queueEnergy, otherEnergy);

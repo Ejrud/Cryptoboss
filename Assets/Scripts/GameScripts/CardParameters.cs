@@ -7,8 +7,8 @@ using TMPro;
 
 public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public bool Selected = false; // Необходим для игрового процесса (Если карта выбрана, то ее нельзя повторно выбрать)
-    public bool Session = true; // Если карта используется не в игровой сессии, то показываются ее характеристики  главном меню
+    public bool Selected = false; // РќРµРѕР±С…РѕРґРёРј РґР»СЏ РёРіСЂРѕРІРѕРіРѕ РїСЂРѕС†РµСЃСЃР° (Р•СЃР»Рё РєР°СЂС‚Р° РІС‹Р±СЂР°РЅР°, С‚Рѕ РµРµ РЅРµР»СЊР·СЏ РїРѕРІС‚РѕСЂРЅРѕ РІС‹Р±СЂР°С‚СЊ)
+    public bool Session = true; // Р•СЃР»Рё РєР°СЂС‚Р° РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РЅРµ РІ РёРіСЂРѕРІРѕР№ СЃРµСЃСЃРёРё, С‚Рѕ РїРѕРєР°Р·С‹РІР°СЋС‚СЃСЏ РµРµ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё  РіР»Р°РІРЅРѕРј РјРµРЅСЋ
     public CardData Card = new CardData();
     private int cardId;
     [Header("Links")]
@@ -30,12 +30,12 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
     private Vector2 startPos;
 
-    public void SetCardEffects(CardData card, int cardId)   // При каждом раунде в каждой карте меняются характеристики + изображение для визуализации(добавить позже!!)
+    public void SetCardEffects(CardData card, int cardId)   // РџСЂРё РєР°Р¶РґРѕРј СЂР°СѓРЅРґРµ РІ РєР°Р¶РґРѕР№ РєР°СЂС‚Рµ РјРµРЅСЏСЋС‚СЃСЏ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё + РёР·РѕР±СЂР°Р¶РµРЅРёРµ РґР»СЏ РІРёР·СѓР°Р»РёР·Р°С†РёРё(РґРѕР±Р°РІРёС‚СЊ РїРѕР·Р¶Рµ!!)
     {
         this.cardId = cardId;
         Card = card;
         
-        GetComponent<CardAnimationController>().UpdateStats(card); // Возможно не используется
+        GetComponent<CardAnimationController>().UpdateStats(card); // Р’РѕР·РјРѕР¶РЅРѕ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ
 
         UpdateUI();
     }
@@ -102,7 +102,7 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        // Если главное меню, то показывать характеристики карт в отдельном окне
+        // Р•СЃР»Рё РіР»Р°РІРЅРѕРµ РјРµРЅСЋ, С‚Рѕ РїРѕРєР°Р·С‹РІР°С‚СЊ С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРєРё РєР°СЂС‚ РІ РѕС‚РґРµР»СЊРЅРѕРј РѕРєРЅРµ
         if (!Session && startPos == eventData.position)
         {
             GlobalEventManager.SendSingleCard(Card);

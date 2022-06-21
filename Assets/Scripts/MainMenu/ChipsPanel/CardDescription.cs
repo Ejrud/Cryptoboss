@@ -34,46 +34,11 @@ public class CardDescription : MonoBehaviour, IPointerDownHandler
 
         cardParams.SetCardEffects(data, 0);
 
-        // ¬ card data передавать тип карты и от нее делать границу
-        // if (data.Type == "damage") 
-        // {
-        //     typeIndex = 0;
-        //     value = data.CapitalDamage;
-        //     borderImage.sprite = colors[0];
-        // }
-        // else if (data.Type == "heal")
-        // {
-        //     typeIndex = 1;
-        //     value = data.CapitalEarnings;
-        //     borderImage.sprite = colors[1];
-        // } 
-        // else if (data.Type == "energy")
-        // {
-        //     typeIndex = 2;
-        //     value = data.EnergyHealth;
-        //     borderImage.sprite = colors[2];
-        // }
-        // else if (data.Type == "defense")
-        // {
-        //     typeIndex = 3;
-        //     value = data.DamageResistance;
-        //     borderImage.sprite = colors[3];
-        // }
-
         UpdateUI(value, typeIndex, data.Name, "Not found");
     }
 
     private void UpdateUI(int typeValue, int typeIndex, string cardName, string description)
     {
-        // cardsImage.OnSetCard(cardName);
-        // this.cardName.text = cardName;
-        // typeImage.sprite = typeImages[typeIndex];
-
-        // for (int i = 0; i < types.Length; i++)
-        // {
-        //     types[i].SetActive(false);
-        // }
-        // types[typeIndex].SetActive(true);
         this.description.text = description;
         this.typeValue.text = typeValue.ToString();
     }

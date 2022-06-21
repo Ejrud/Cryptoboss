@@ -380,6 +380,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   battle: {fileID: 213690376}
+  debugMode: 0
   allSessions: {fileID: 1075347955}
   sessionObject: {fileID: 811711018392014507, guid: 3d7a405262e9f9449bda34f86c1aad04, type: 3}
   chipData: []

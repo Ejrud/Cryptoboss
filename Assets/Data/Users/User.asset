@@ -12,15 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb3a154b585cee46be0682efa9f7ad8, type: 3}
   m_Name: User
   m_EditorClassIdentifier: 
-  Authorized: 1
-  UserID: 1
-  UserName: Ejrud
-  Email: none
-  Wallet: 0xD2522633650Ac225eB410D92Eb15Bf82847B0220
+  Authorized: 0
+  UserID: 0
+  UserName: 
+  Email: 
+  Wallet: 
   Score: 
-  chipDatas:
-  - {fileID: 11400000, guid: fb5f5d1f2d70a464084d44f72e42d838, type: 2}
-  - {fileID: 11400000, guid: 9610e72333312004a993253e2d3b03a1, type: 2}
-  nftTokens:
-  - 907
-  - 906
+  chipDatas: []
+  nftTokens: []

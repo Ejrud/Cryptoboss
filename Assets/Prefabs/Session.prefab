@@ -48,8 +48,12 @@ MonoBehaviour:
   Ready: 0
   Finished: 0
   WalletsRecieved: 0
+  Correction: 0
   PlayerIndexQueue: 0
   PlayerNets: []
+  debugMode: 1
+  debugData: {fileID: 11400000, guid: fc7bae53b5a7db94f80e56abaf5dd3ae, type: 2}
+  energyRecovery: 0.5
 --- !u!114 &5253637135719586527
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,7 +6,9 @@ using Mirror;
 public class GameProcessManagement : NetworkBehaviour
 {
     [Header("Server functional")]
-    [SerializeField] private BattleManager battle;          // ¬ыполн€етс€ логика сложени€/вычитани€ карт
+    [SerializeField] private BattleManager battle;          // ¬ыполн€етс€ логика сложени€/вычитани€ карт\
+
+    [SerializeField] private bool debugMode;
 
     [Header("Server objects")]
     [SerializeField] private Transform allSessions;         // Transform хран€щий все сессии
@@ -60,7 +62,7 @@ public class GameProcessManagement : NetworkBehaviour
                 players[i].transform.SetParent(session.transform);
             }
 
-            session.Init(playerNets, this);
+            session.Init(playerNets, this, debugMode);
             sessions.Add(session);
         }
     }

@@ -11,6 +11,7 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
     [Header("Links")]
     public Vector3 CardDisplacement;
+    public int IndexPosition;
     [SerializeField] private CardManager cardManager; 
     [SerializeField] private RectTransform rectTransform;
     private CardParameters parameters;
@@ -47,7 +48,7 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (active && !cardManager.CardSelected)
+        if (active && !cardManager.CardSelected && !cardManager.Animate)
         {
             cardManager.CardSelected = true;
             Vector2 pointerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
