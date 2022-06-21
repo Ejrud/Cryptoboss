@@ -49,7 +49,7 @@ public class CardManager : NetworkBehaviour
             card.Card.Used = true;
         }
 
-        StartCoroutine(UpdateCardPositions(true, true));
+        StartCoroutine(UpdateCardPositions(false, true));
     }
 
     private void LateUpdate()
@@ -59,7 +59,7 @@ public class CardManager : NetworkBehaviour
             _screenSize = new Vector2(Screen.width, Screen.height);
             
             // Обновление позиций карт
-            StartCoroutine(UpdateCardPositions(true));
+            StartCoroutine(UpdateCardPositions());
             Debug.Log("Screen was resized");
         }
     }
@@ -144,6 +144,29 @@ public class CardManager : NetworkBehaviour
         yield return null;
     }
 
+    public void AuditRivalCards(CardData[] rivalHand)
+    {
+        for (int i = 0; i < rivalCards.Length; i++)
+        {
+            if (rivalCards[i].Selected) continue;
+            
+            rivalCards[i].SetCardEffects(rivalHand[i], i);
+            rivalCards[i].OpenCard();
+        }
+
+        StartCoroutine(UpdateCardPositions(true));
+    }
+
+    public void DisableAudit()
+    {
+        for (int i = 0; i < rivalCards.Length; i++)
+        {
+            if (rivalCards[i].Selected) continue;
+            
+            rivalCards[i].CloseCard();
+        }
+    }
+
     public void RivalCardSelect(int index, CardData card)
     {
         rivalCards[index].Selected = true;
@@ -174,6 +197,7 @@ public class CardManager : NetworkBehaviour
 
         if (counter <= 2)
         {
+
             foreach(CardParameters cardParams in rivalCards)
             {
                 if(cardParams.Selected)
@@ -181,8 +205,11 @@ public class CardManager : NetworkBehaviour
                     cardParams.gameObject.SetActive(true);
                     cardParams.GetComponent<CardHandler>().ReturnCard();
                     cardParams.Selected = false;
+                    cardParams.CloseCard(); // Скрыть карту если она изначально была показана аудитом
                 }
             }
+
+
         }
 
         yield return null;

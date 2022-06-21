@@ -562,7 +562,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f9c7f54dbb4123b4d8d026415695a3af, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 36b22542c2119c0468950bbc84997e1b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -932,6 +932,7 @@ MonoBehaviour:
   cardImage: {fileID: 2035265864123630530}
   bossyObj: {fileID: 3958466185982352213}
   energyObj: {fileID: 472316493516942626}
+  cardBackplate: {fileID: 3510600674991403452}
   cardName: {fileID: 2674330234881794408}
   capitalDamage: {fileID: 7170926474609941486}
   capitalHealth: {fileID: 523031396789590493}
@@ -1022,6 +1023,7 @@ MonoBehaviour:
   deadZone: 0.5
   active: 1
   CardDisplacement: {x: 0, y: 0, z: 0}
+  IndexPosition: 0
   cardManager: {fileID: 0}
   rectTransform: {fileID: 130163297028281712}
 --- !u!114 &2035265864123630530

@@ -209,8 +209,6 @@ public class Session : MonoBehaviour
             PlayerNets[0].EndGame("Other player disconnected", "", 0f, "0");
             PlayerNets[1].EndGame("Other player disconnected", "", 0f, "0");
         }
-
-        
     }
 
     private IEnumerator SetReward(string winnerWallet, string winnerGuid, string looseGuid, string mode)

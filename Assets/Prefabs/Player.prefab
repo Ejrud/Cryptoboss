@@ -4666,7 +4666,7 @@ MonoBehaviour:
   timerText: {fileID: 4509116767699476373}
   healthText: {fileID: 679946156961733100}
   energyText: {fileID: 5533783551642399174}
-  exitWindowText: {fileID: 0}
+  exitWindowText: {fileID: 2503618318985173685}
   bossyText: {fileID: 9042820035652823035}
   raitingText: {fileID: 3149194125120566486}
   healthImage: {fileID: 4509116767947057972}

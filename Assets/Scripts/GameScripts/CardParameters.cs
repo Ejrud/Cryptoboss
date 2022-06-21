@@ -16,7 +16,7 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     [SerializeField] private Image cardImage;
     [SerializeField] private GameObject bossyObj;
     [SerializeField] private GameObject energyObj;
-
+    [SerializeField] private GameObject cardBackplate;
 
     [Header("Values")]
     [SerializeField] private Text cardName;
@@ -45,6 +45,14 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         return cardId;
     }
 
+    public void OpenCard()
+    {
+        cardBackplate.SetActive(false);
+    }
+    public void CloseCard()
+    {
+        cardBackplate.SetActive(true);
+    }
     private void UpdateUI()
     {
         bossyObj.gameObject.SetActive(true);

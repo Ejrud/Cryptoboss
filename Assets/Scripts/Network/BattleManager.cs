@@ -108,6 +108,8 @@ public class BattleManager : NetworkBehaviour
                         else if (otherPlayer.PlayerImpact.JokerName == "Audit") ///////
                         {
                             // Отображать карты соперника, а свои спрятать
+                            currentPlayer.SetAudit(otherPlayer.HandCards);
+                            otherPlayer.ResetAudit();
                             currentPlayer.PlayerImpact.JokerName = "Audit";
                         }
                         else if (otherPlayer.PlayerImpact.JokerName == "To the moon")
@@ -156,7 +158,7 @@ public class BattleManager : NetworkBehaviour
                         }
                         else if (otherPlayer.PlayerImpact.JokerName == "Audit") ///////
                         {
-                            
+                            otherPlayer.ResetAudit();
                         }
                         else if (otherPlayer.PlayerImpact.JokerName == "To the moon")
                         {
@@ -206,7 +208,7 @@ public class BattleManager : NetworkBehaviour
                         break;
 
                     case "Audit":       // Видимость характеристик карт соперника
-                        
+                        currentPlayer.SetAudit(otherPlayer.HandCards);
                         break;
 
                     case "To the moon": // След противника карта потребует в 2 раза больше энергии

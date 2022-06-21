@@ -213,11 +213,21 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void Audit()
+    public void SetAudit(CardData[] handCards)
     {
         if (hasAuthority)
         {
             // Показать карты соперника
+            cardManager.AuditRivalCards(handCards);
+        }
+    }
+
+    public void ResetAudit()
+    {
+        if (hasAuthority)
+        {
+            // Скрыть карты игрока
+            cardManager.DisableAudit();
         }
     }
 
