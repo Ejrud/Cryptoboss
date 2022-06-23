@@ -33,6 +33,7 @@ public class BattleManager : NetworkBehaviour
             int cardCost = session.PlayerNets[playerQueueIndex].HandCards[cardId].CardCost;
             int capHealth = session.PlayerNets[playerQueueIndex].HandCards[cardId].CapitalEarnings;
             int engHealth = session.PlayerNets[playerQueueIndex].HandCards[cardId].EnergyHealth;
+            int engDamage = session.PlayerNets[playerQueueIndex].HandCards[cardId].EnergyDamage;
             int Resistance = session.PlayerNets[playerQueueIndex].HandCards[cardId].DamageResistance;
             bool correction = false; // 
 
@@ -174,6 +175,11 @@ public class BattleManager : NetworkBehaviour
                         {
                             queueCapital += otherPlayer.PlayerImpact.CapitalDamage;
                         }
+                        else if (otherPlayer.PlayerImpact.JokerName == "Pivot")
+                        {
+                            otherCapital -= otherPlayer.PlayerImpact.CapitalDamage;
+                            otherEnergy -= otherPlayer.PlayerImpact.Energy;
+                        }
                         else
                         {
                             queueCapital += otherPlayer.PlayerImpact.CapitalDamage;
@@ -219,6 +225,28 @@ public class BattleManager : NetworkBehaviour
                     case "Pump":        // Увеличивает след. карту игрока в 2 раза
                         currentPlayer.PlayerImpact.JokerName = "Pump";
                         currentPlayer.Pump = true;
+                        break;
+                    
+                    case "Pivot":
+                        if (capAttack != 0) // В данном случае лечение капитала - лечение энергии
+                        {
+                            queueCapital -= capAttack;
+                            queueEnergy += capHealth;
+                            cardCost = 0;
+
+                            currentPlayer.PlayerImpact.CapitalDamage = -capAttack;
+                            currentPlayer.PlayerImpact.Energy = capHealth;
+                        }
+                        else if (capAttack == 0)
+                        {
+                            queueCapital += capHealth;
+                            queueEnergy -= engDamage;
+                            cardCost = 0;
+                            
+                            currentPlayer.PlayerImpact.CapitalDamage = capAttack;
+                            currentPlayer.PlayerImpact.Energy = -engDamage;
+                        }
+
                         break;
 
                     default:

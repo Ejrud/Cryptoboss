@@ -13,12 +13,12 @@ public class SessionTimer : NetworkBehaviour
     public bool isRunning = false;  // Переклячатель для таймера
     public bool isStoped = false;
     public float RoundTimer;        // Время для раунда
-    private float originalTime;     // Используется при запуске нового раунда
+    public float OriginalTime;     // Используется при запуске нового раунда
     private string timerString;     // Текст времени для вывода на UI игрока
 
     private void Start()
     {
-        originalTime = RoundTimer;
+        OriginalTime = RoundTimer;
     }
 
     // Таймер конкретного раунда (Выполняется только на сервере и отправляется всем клиентам)
@@ -59,7 +59,7 @@ public class SessionTimer : NetworkBehaviour
     public void ResetTimer()
     {
         // Сброс таймера до изначального значения
-        RoundTimer = originalTime;
+        RoundTimer = OriginalTime;
         isRunning = true;
         isStoped = false;
     }

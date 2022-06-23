@@ -1,6 +1,7 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
@@ -151,6 +152,7 @@ public class CardManager : NetworkBehaviour
             if (rivalCards[i].Selected) continue;
             
             rivalCards[i].SetCardEffects(rivalHand[i], i);
+            rivalCards[i].Audited = true;
             rivalCards[i].OpenCard();
         }
 
@@ -161,6 +163,7 @@ public class CardManager : NetworkBehaviour
     {
         for (int i = 0; i < rivalCards.Length; i++)
         {
+            rivalCards[i].Audited = false;
             if (rivalCards[i].Selected) continue;
             
             rivalCards[i].CloseCard();
@@ -170,6 +173,7 @@ public class CardManager : NetworkBehaviour
     public void RivalCardSelect(int index, CardData card)
     {
         rivalCards[index].Selected = true;
+        rivalCards[index].Audited = false;
         StartCoroutine(RivalSelectIE(index, card));
     }
 
@@ -209,7 +213,17 @@ public class CardManager : NetworkBehaviour
                 }
             }
 
+            int selectedCount = rivalCards.Length;
+            for (int i = 0; i < rivalCards.Length; i++)
+            {
+                if (!rivalCards[i].Audited) selectedCount--;
+            }
 
+            if (selectedCount <= 0)
+            {
+                Debug.Log("Почему");
+                StartCoroutine(UpdateCardPositions(false, false, true));
+            }
         }
 
         yield return null;
@@ -321,7 +335,7 @@ public class CardManager : NetworkBehaviour
         // Выбор рандомной карты (если таймер дойдет до 0)
     }
 
-    private IEnumerator UpdateCardPositions(bool audit = false, bool reset = false)
+    private IEnumerator UpdateCardPositions(bool audit = false, bool reset = false, bool dontPlayer = false)
     {
         Transform[] rivalPositions = new Transform[0];
         yield return new WaitForSeconds(.1f); // ГОвнокод
@@ -346,11 +360,15 @@ public class CardManager : NetworkBehaviour
         for (int i = 0; i < playerCards.Length; i++)
         {
             CardHandler cardHand = playerCards[i].GetComponent<CardHandler>();
-            cardHand.CardDisplacement = playerCardPositions[cardHand.IndexPosition].transform.position;
-            
-            if (!playerCards[i].Selected)
+
+            if (!dontPlayer)
             {
-                cardHand.ReturnCard();
+                cardHand.CardDisplacement = playerCardPositions[cardHand.IndexPosition].transform.position;
+            
+                if (!playerCards[i].Selected)
+                {
+                    cardHand.ReturnCard();
+                }
             }
 
             cardHand = rivalCards[i].GetComponent<CardHandler>();

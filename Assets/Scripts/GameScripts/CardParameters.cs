@@ -9,6 +9,7 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 {
     public bool Selected = false; // Необходим для игрового процесса (Если карта выбрана, то ее нельзя повторно выбрать)
     public bool Session = true; // Если карта используется не в игровой сессии, то показываются ее характеристики  главном меню
+    public bool Audited = false; // 
     public CardData Card = new CardData();
     private int cardId;
     [Header("Links")]
@@ -26,7 +27,7 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     [SerializeField] private TMP_Text energyHealth;
 
     [Header("Sprites")]
-    [SerializeField] private Sprite[] typeSprites; // 0 - damage, 1 - heal, 3 - energy, 4 - turn, 5-lique, 6-corr, 7-piv, 8-piv, 9-scam, 10-hedg fund 11- audit, 12, to moon, 13-pump
+    [SerializeField] private Sprite[] typeSprites; // 0 - damage, 1 - heal, 3 - energy, 4 - turn, 5-lique, 6-corr, 7-piv (eng), 8-piv (capit), 9-scam, 10-hedg fund 11- audit, 12, to moon, 13-pump
 
     private Vector2 startPos;
 
@@ -75,6 +76,16 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
                     if (typeSprites[i].name == Card.Name)
                     {
                         cardImage.sprite = typeSprites[i];
+                        
+                        if (Card.Name == "Pivot" && Card.CapitalDamage != 0)
+                        {
+                            cardImage.sprite = typeSprites[6]; // energy health
+                        }
+                        else if (Card.Name == "Pivot" && Card.CapitalDamage == 0)
+                        {
+                            cardImage.sprite = typeSprites[7]; // capital health
+                        }
+                        
                         bossyObj.gameObject.SetActive(false);
                         energyObj.gameObject.SetActive(false);
                         break;

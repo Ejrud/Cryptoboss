@@ -440,6 +440,28 @@ public class Session : MonoBehaviour
                     Debug.Log(www.error);
                 }
             }
+            
+            // Загрузка длительности сессии
+            using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "game_params.php", form)) // "a0664627.xsph.ru/cryptoboss_back/"
+            { 
+                yield return www.SendWebRequest();
+
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    string json = www.downloadHandler.text;
+                    
+                    List<GameParams> gameParams = JsonConvert.DeserializeObject<List<GameParams>>(json);
+                    timer.RoundTimer = Convert.ToInt32(gameParams[0].timer);
+                    timer.OriginalTime = timer.RoundTimer;
+                    Debug.Log("Session timer = " + timer.RoundTimer);
+                }
+                else
+                { 
+                    timer.RoundTimer = 10;
+                    Debug.Log("Incorrect data");
+                    Debug.Log(www.error);
+                }
+            }
                         
             yield return null; 
         }
@@ -523,6 +545,11 @@ public class Session : MonoBehaviour
         public string rating { get; set; }
         public string decrement { get; set; }
         public float bossy { get; set; }
+    }
+
+    public class GameParams
+    {
+        public string timer { get; set; }
     }
 
     #endregion

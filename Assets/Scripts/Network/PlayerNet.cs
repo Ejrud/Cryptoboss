@@ -145,7 +145,7 @@ public class PlayerNet : NetworkBehaviour
         this.OriginMorale = Morale;
         this.MaxEnergy = maxEnergy;
 
-        UpdateClientParameters(this.Capital, this.Morale, this.EnemyCapital, this.EnemyEnergy, this.MaxEnergy);
+        UpdateClientParameters(this.Capital, this.Morale, this.EnemyCapital, this.EnemyEnergy, this.MaxEnergy, this.MaxHealth);
     }
 
     // Обновляет карты в руке (Переносить остальные карты в изначчальные положения)
@@ -165,7 +165,7 @@ public class PlayerNet : NetworkBehaviour
     public void UpdateUI()
     {
         float floatCapital = Convert.ToSingle(Capital);
-        healthImage.fillAmount = floatCapital / 1000;
+        healthImage.fillAmount = floatCapital / MaxHealth;
         float floatMorale = Convert.ToSingle(Morale);
         energyImage.fillAmount = floatMorale / MaxEnergy;
 
@@ -174,7 +174,7 @@ public class PlayerNet : NetworkBehaviour
         energyText.text = Morale.ToString();
 
         float floatCapEnemy = Convert.ToSingle(EnemyCapital);
-        enemyHealthImage.fillAmount = floatCapEnemy / 1000;
+        enemyHealthImage.fillAmount = floatCapEnemy / MaxHealth;
         float floatEnergy = Convert.ToSingle(EnemyEnergy);
         
         enemyEnergyImage.fillAmount = floatEnergy / MaxEnergy; // / maxEnergy
@@ -307,7 +307,7 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void UpdateClientParameters(int Capital, float Morale, int EnemyCapital, float EnemyEnergy, float maxEnergy)
+    public void UpdateClientParameters(int Capital, float Morale, int EnemyCapital, float EnemyEnergy, float maxEnergy, int MaxCapital)
     {
         this.Morale = Morale;
         this.Capital = Capital;
@@ -315,6 +315,7 @@ public class PlayerNet : NetworkBehaviour
         this.EnemyEnergy = EnemyEnergy;
         this.OriginMorale = Morale;
         this.MaxEnergy = maxEnergy;
+        this.MaxHealth = MaxCapital;
 
         Debug.Log("Player characteristics: capital = " + this.Capital + ", morale = " + this.Morale);
 
@@ -381,6 +382,7 @@ public class PlayerNet : NetworkBehaviour
         public string JokerName;
         public int CapitalDamage;
         public int CapitalHealth;
+        public int Energy;
         
         public bool Increased;
         public bool Decreased;

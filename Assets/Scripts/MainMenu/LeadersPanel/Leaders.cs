@@ -76,7 +76,7 @@ public class Leaders : MonoBehaviour
             if (i < _leaders.Count)
             {
                 string[] chipIndex = _leaders[i].guid.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture("https://cryptoboss.win/game/back/images/" + chipIndex[0] + ".png");
+                UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(seUrl + "images/" + chipIndex[0] + ".png");
                 await textureRequest.SendWebRequest();
                 Texture2D nft = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
                 
