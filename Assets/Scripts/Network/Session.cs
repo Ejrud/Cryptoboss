@@ -401,15 +401,8 @@ public class Session : MonoBehaviour
                     string json = www.downloadHandler.text;
                     Debug.Log(json);
                     List<Cards> dbCard = JsonConvert.DeserializeObject<List<Cards>>(json);
-
-                    if (!debugMode)
-                    {
-                        PlayerNets[i].CardCollection = GetCardDeck(dbCard);
-                    }
-                    else
-                    {
-                        PlayerNets[i].CardCollection = debugData.CardDeck;
-                    }
+                    
+                    PlayerNets[i].CardCollection = GetCardDeck(dbCard);
                 }
                 else
                 { 

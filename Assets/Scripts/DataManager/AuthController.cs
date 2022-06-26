@@ -164,11 +164,6 @@ public class AuthController : MonoBehaviour
                 char[] delimiters = {'c', 'h', 'i', 'p', '"', 'C', 'r', 'y', 'p', 't', 'b', 'o', 's', ' ', '#', '}', ',', '{', 'B', ':', '[', ']'};
                 string[] chipIds = array[1].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
-                foreach (string id in chipIds)
-                {
-                    Debug.Log(id);
-                }
-
                 // Создание массива карт для одной фишки
                 char[] delimiters2 = {'[', ']'};
                 string[] cardJson = array[2].Split(delimiters2, StringSplitOptions.RemoveEmptyEntries);
@@ -178,7 +173,7 @@ public class AuthController : MonoBehaviour
                 {
                     newJson += str;
                 }
-                Debug.Log(newJson);
+                // Debug.Log(newJson);
                 List<DbCards> card = JsonConvert.DeserializeObject<List<DbCards>>("[" + newJson + "]"); // Dictionary<string, string>
 
                 userData.SetUser(userParam.id, userParam.name, userParam.email, userParam.metamask_wallet, userParam.raiting, chipIds, card);

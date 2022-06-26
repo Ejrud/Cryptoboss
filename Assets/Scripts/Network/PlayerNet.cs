@@ -106,12 +106,12 @@ public class PlayerNet : NetworkBehaviour
             Texture chipTexture = lastTexture;
 
             // Подгрузка фишки пользователя (из локальных данных этого пользователя)
-            for (int i = 0; i < user.chipDatas.Length; i++)
+            for (int i = 0; i < user.ChipParam.Count; i++)
             {
 
-                if (ChipId == user.chipDatas[i].Id)
+                if (ChipId == user.ChipParam[i].Id)
                 {
-                    chipTexture = user.chipDatas[i].ChipTexture;
+                    chipTexture = user.ChipParam[i].ChipTexture;
 
                     foreach(RawImage chipImage in userChipImage) // Обновление всех фишек на экране
                     {
@@ -124,7 +124,7 @@ public class PlayerNet : NetworkBehaviour
                 {
                     Debug.Log("ChipId not found. prefab id = " +  ChipId);
 
-                    chipTexture = user.chipDatas[UnityEngine.Random.Range(0, user.chipDatas.Length - 1)].ChipTexture;
+                    chipTexture = user.ChipParam[UnityEngine.Random.Range(0, user.ChipParam.Count - 1)].ChipTexture;
 
                     foreach(RawImage chipImage in userChipImage) // Обновление всех фишек на экране
                     {

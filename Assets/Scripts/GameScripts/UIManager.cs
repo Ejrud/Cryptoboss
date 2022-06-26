@@ -44,12 +44,12 @@ public class UIManager : MonoBehaviour
 
         if (!chipLoaded)
         {
-            for (int i = 0; i < user.chipDatas.Length; i++)
+            for (int i = 0; i < user.ChipParam.Count; i++)
             {
                 GameObject chipFrame = Instantiate(chipFramePrefab, new Vector3(0, 0, 0), Quaternion.identity);
 
                 chipFrame.transform.SetParent(chipWindowTransform.transform);
-                chipFrame.GetComponent<ChipFrameData>().Init(user.chipDatas[i], true);
+                chipFrame.GetComponent<ChipFrameData>().Init(user.ChipParam[i], true);
                 chipFrame.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             }
 

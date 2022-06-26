@@ -19,12 +19,12 @@ public class ShowingChipsController : MonoBehaviour
 
     public void ShowChips(User user)
     {
-        for (int i = 0; i < user.chipDatas.Length; i++)
+        for (int i = 0; i < user.ChipParam.Count; i++)
         {
             GameObject chipFrame = Instantiate(this.chipFrame, new Vector3(0, 0, 0), Quaternion.identity);
 
             chipFrame.transform.SetParent(chipsViewportContent.transform);
-            chipFrame.GetComponent<ChipFrameData>().Init(user.chipDatas[i], false);
+            chipFrame.GetComponent<ChipFrameData>().Init(user.ChipParam[i], false);
             chipFrame.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
         }
     }

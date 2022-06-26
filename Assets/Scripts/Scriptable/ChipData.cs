@@ -6,11 +6,6 @@ using UnityEngine;
 
 public class ChipData : ScriptableObject
 {
-    public int Id;
-    public string ChipName;
-    // Изображение фишки
-    public Texture ChipTexture;
-    // Карты фишки
-    public CardData[] CardDeck;
+    
 }
 

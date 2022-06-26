@@ -11,7 +11,6 @@ public class ShowingCardsController : MonoBehaviour
     [SerializeField] private Transform contentContainer;
     [SerializeField] private CardParameters[] cardParameters; // Оболочка карт. Хранит данные карты (атаку, оборону, описание)
 
-
     private void Start()
     {
         GlobalEventManager.OnSelectCards.AddListener(UpdateWindow);         // Если игрок нажмет на фишку, то обновится окно с картами
@@ -33,9 +32,9 @@ public class ShowingCardsController : MonoBehaviour
     private void PrepareCards()                                             // Убрать карты
     {
         int count = 0;
-        for (int i = 0; i < user.chipDatas.Length; i++)
+        for (int i = 0; i < user.ChipParam.Count; i++)
         {
-            count += user.chipDatas[i].CardDeck.Length;
+            count += user.ChipParam[i].CardDeck.Length;
         }
 
         cardParameters = new CardParameters[count];

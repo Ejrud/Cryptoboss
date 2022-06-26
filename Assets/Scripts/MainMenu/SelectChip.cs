@@ -21,7 +21,7 @@ public class SelectChip : MonoBehaviour
     private int offsetMassive = 0;
 
     // «агрузка всех фишек пользовател€ в главное меню
-    public void Init(ChipData[] chipData)
+    public void Init(List<ChipParameters> chipParam)
     {
         if (selectableChips != null)
         {
@@ -31,9 +31,9 @@ public class SelectChip : MonoBehaviour
             }
         }
 
-        selectableChips = new GameObject[chipData.Length];
+        selectableChips = new GameObject[chipParam.Count];
 
-        currentIdPos = new int[chipData.Length];
+        currentIdPos = new int[chipParam.Count];
 
         if(currentIdPos.Length > 3)
         {
@@ -45,14 +45,14 @@ public class SelectChip : MonoBehaviour
             currentIdPos[i] = i;
         }
 
-        for (int i = 0; i < chipData.Length; i++)
+        for (int i = 0; i < chipParam.Count; i++)
         {
             selectableChips[i] = Instantiate(selectableChipPrefab, Vector3.zero, Quaternion.identity);
 
             selectableChips[i].transform.SetParent(chipContainer);
             selectableChips[i].transform.localScale = new Vector3(1,1,1);
-            selectableChips[i].GetComponent<RawImage>().texture = chipData[i].ChipTexture;
-            selectableChips[i].GetComponent<ChipContainer>().Init(chipData[i].Id, chipData[i].ChipName);
+            selectableChips[i].GetComponent<RawImage>().texture = chipParam[i].ChipTexture;
+            selectableChips[i].GetComponent<ChipContainer>().Init(chipParam[i].Id, chipParam[i].ChipName);
 
             selectableChips[i].SetActive(false);
         }

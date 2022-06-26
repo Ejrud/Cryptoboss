@@ -13,7 +13,7 @@ public class User : ScriptableObject
     public string Score;
 
     // debug zone
-    public ChipData[] chipDatas;
+    public List<ChipParameters> ChipParam;
     public string[] nftTokens;
     public List<DbCards> cards;
 }

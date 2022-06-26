@@ -10,15 +10,15 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler
     [SerializeField] private RawImage chipTexture;
     [SerializeField] private Text chipName;
 
-    private ChipData chipData;
+    private ChipParameters chipData;
     private bool selectable;
 
-    public void Init(ChipData chipData, bool selectable = false)
+    public void Init(ChipParameters chipParam, bool selectable = false)
     {
         this.selectable = selectable;
-        this.chipData = chipData;
+        this.chipData = chipParam;
         this.chipName.text = this.chipData.ChipName;
-        chipTexture.texture = chipData.ChipTexture;
+        chipTexture.texture = chipParam.ChipTexture;
     }
     public void SetChipForGame()
     {

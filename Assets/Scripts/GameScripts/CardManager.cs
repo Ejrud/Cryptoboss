@@ -221,7 +221,6 @@ public class CardManager : NetworkBehaviour
 
             if (selectedCount <= 0)
             {
-                Debug.Log("Почему");
                 StartCoroutine(UpdateCardPositions(false, false, true));
             }
         }

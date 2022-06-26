@@ -51,14 +51,12 @@ public class UserData : MonoBehaviour
 
     private void LoadNfts(string[] tokenIds, float loadProgress = 0, int errorLoop = 0)
     {
-
-        user.chipDatas = new ChipData[tokenIds.Length];
-        user.nftTokens = tokenIds;
-        LoadTextures(tokenIds, loadProgress, errorLoop);
         
+        user.nftTokens = tokenIds;
+        LoadData(tokenIds, loadProgress, errorLoop);
     }
 
-    private async void LoadTextures(string[] tokenIds, float loadProgress = 0, int errorLoop = 0)
+    private async void LoadData(string[] tokenIds, float loadProgress = 0, int errorLoop = 0)
     {
         string chain = "polygon";
         string network = "mainnet";
@@ -68,18 +66,23 @@ public class UserData : MonoBehaviour
         float currentLoad = loadProgress;
         loadBar.fillAmount = currentLoad;
         loadText.text = currentLoad * 100 + " %";
-
         loadScreen.SetActive(true);
 
         for (int i = errorLoop; i < tokenIds.Length; i++)
         {
-            user.chipDatas[i] = chips[i]; // создание ScriptableObject тут можно присвоить новые карты
-            user.chipDatas[i].Id = Convert.ToInt32(user.nftTokens[i]);
-            user.chipDatas[i].ChipName = "CryptoBoss #" + user.chipDatas[i].Id;
+            ChipParameters chip = new ChipParameters();
+
+            if (user.ChipParam.Count != tokenIds.Length)
+            {
+                user.ChipParam.Add(chip);
+            }
+
+            user.ChipParam[i].Id = Convert.ToInt32(user.nftTokens[i]);
+            user.ChipParam[i].ChipName = "CryptoBoss #" + user.ChipParam[i].Id;
             
             if(!user.Authorized)
             {
-                SetCard(user.chipDatas[i].ChipName, i); // Выдача карт фишке
+                SetCard(user.ChipParam[i].ChipName, i); // Выдача карт фишке
             }
 
             // fetch uri from chain
@@ -90,7 +93,7 @@ public class UserData : MonoBehaviour
             if(webRequest.error != null)
             {
                 Debug.Log("Repeat load nft uri");
-                LoadTextures(tokenIds, currentLoad, i);
+                LoadData(tokenIds, currentLoad, i);
                 return;
             }
             Response data = JsonUtility.FromJson<Response>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
@@ -106,18 +109,16 @@ public class UserData : MonoBehaviour
             if(textureRequest.error != null)
             {
                 Debug.Log(textureRequest.error + " Repeat load image");
-                LoadTextures(tokenIds, currentLoad, i);
+                LoadData(tokenIds, currentLoad, i);
                 return;
             }
 
             Texture2D nft = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
 
             // Сохранение текстуры локально
-            user.chipDatas[i].ChipTexture = nft;
+            user.ChipParam[i].ChipTexture = nft;
 
             currentLoad = UpdateLoading(currentLoad, loadStep);
-            
-            // Debug.Log("Load stage: " + currentLoad);
         }
 
         Debug.Log("Load complete");
@@ -153,7 +154,7 @@ public class UserData : MonoBehaviour
         user.Email = null;
         user.Wallet = null;
         user.Score = null;
-        user.chipDatas = new ChipData[0];
+        user.ChipParam = new List<ChipParameters>();
         user.nftTokens = new string[0];
         user.Authorized = false;
         // user.cards = nullCards;
@@ -175,7 +176,7 @@ public class UserData : MonoBehaviour
         pointsTxt.text = user.Score;
         moneyTxt.text = "0";
         energyTxt.text = "10";
-        selectChip.Init(user.chipDatas);
+        selectChip.Init(user.ChipParam);
     }
 
     public bool IsAuthorized()
@@ -225,11 +226,11 @@ public class UserData : MonoBehaviour
             }
         }
 
-        user.chipDatas[massive_id].CardDeck = new CardData[listCards.Count]; 
+        user.ChipParam[massive_id].CardDeck = new CardData[listCards.Count]; 
 
         for (int i = 0; i < listCards.Count; i++)
         {
-            user.chipDatas[massive_id].CardDeck[i] = listCards[i];
+            user.ChipParam[massive_id].CardDeck[i] = listCards[i];
         }
     }
 }
