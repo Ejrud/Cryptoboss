@@ -232,12 +232,12 @@ public class Session : MonoBehaviour
                 if (PlayerNets[0].Win && !PlayerNets[1].Win)
                 {
                     PlayerNets[0].EndGame("YOU HAVE WON!", "+", results.bossy, results.rating);
-                    PlayerNets[1].EndGame("YOU LOOSE", "-", 0f, results.decrement);
+                    PlayerNets[1].EndGame("YOU LOSE", "-", 0f, results.decrement);
                 }
                 else if (!PlayerNets[0].Win && PlayerNets[1].Win)
                 {
                     PlayerNets[1].EndGame("YOU HAVE WON!", "+", results.bossy, results.rating);
-                    PlayerNets[0].EndGame("YOU LOOSE", "-", 0f ,results.decrement);
+                    PlayerNets[0].EndGame("YOU LOSE", "-", 0f ,results.decrement);
                 }
                 else if (!PlayerNets[0].Win && !PlayerNets[1].Win)
                 {

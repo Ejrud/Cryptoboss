@@ -29,6 +29,8 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     [Header("Sprites")]
     [SerializeField] private Sprite[] typeSprites; // 0 - damage, 1 - heal, 3 - energy, 4 - turn, 5-lique, 6-corr, 7-piv (eng), 8-piv (capit), 9-scam, 10-hedg fund 11- audit, 12, to moon, 13-pump
 
+    [SerializeField] private Sprite unknownSprite;
+
     private Vector2 startPos;
 
     public void SetCardEffects(CardData card, int cardId)   // При каждом раунде в каждой карте меняются характеристики + изображение для визуализации(добавить позже!!)
@@ -46,14 +48,17 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         return cardId;
     }
 
+    // rivalCard 
     public void OpenCard()
     {
         cardBackplate.SetActive(false);
     }
     public void CloseCard()
     {
+        cardImage.sprite = unknownSprite;
         cardBackplate.SetActive(true);
     }
+
     private void UpdateUI()
     {
         bossyObj.gameObject.SetActive(true);

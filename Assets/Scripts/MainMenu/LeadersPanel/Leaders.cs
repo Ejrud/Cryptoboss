@@ -39,7 +39,7 @@ public class Leaders : MonoBehaviour
         UpdateLeaderBoard();
         StartCoroutine(GetLeaders());
     }
-    // Загрузка лидеров
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     private IEnumerator GetLeaders()
     {
         WWWForm form = new WWWForm();
@@ -66,10 +66,10 @@ public class Leaders : MonoBehaviour
 
         yield return null;
     }
-    // Загрузка изображений
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     private async void GetImages()
     {
-        char[] delimiters = {'c', 'h', 'i', 'p', '"', 'C', 'r', 'y', 'p', 't', 'b', 'o', 's', ' ', '#', '}', ',', '{', 'B', ':', '[', ']'};   /// "https://cryptoboss.win/game/back/images/" + chipIndex[0] + ".png"
+        char[] delimiters = {'c', 'h', 'i', 'p', '"', 'C', 'r', 'y', 'p', 't', 'b', 'o', 's', ' ', '#', '}', ',', '{', 'B', ':', '[', ']'};
 
         for (int i = 0; i < 3; i++)
         {
@@ -93,7 +93,7 @@ public class Leaders : MonoBehaviour
         }
     }
 
-    public void SetLeadersOfWeek() // Вызывается кнопками "Сезон" "Неделя"
+    public void SetLeadersOfWeek() // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅ" "пїЅпїЅпїЅпїЅпїЅпїЅ"
     {
         // UpdateLeaderBoard(namesOfWeek, scoreOfWeek);
     }

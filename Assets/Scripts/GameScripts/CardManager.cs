@@ -181,6 +181,7 @@ public class CardManager : NetworkBehaviour
     {
         rivalCards[index].SetCardEffects(card, index);
         StartCoroutine(CardTransition(rivalCards[index].transform, rivalCards[index].transform.position, tablePosition.position));
+        Transform[] cellPosition;
         Animate = true;
 
         while (Animate)
@@ -188,11 +189,53 @@ public class CardManager : NetworkBehaviour
             yield return null;
         }
 
+        bool audit = false;
+
+        for (int i = 0; i < rivalCards.Length; i++)
+        {
+            if (rivalCards[i].Audited) audit = true; 
+        } 
+
+        if (audit)
+        {
+            cellPosition = auditPositions;
+        }
+        else
+        {
+            cellPosition = rivalCardPositions;
+        }
+
+        // Смещение карт в пустые ячейки
+        int selectedCount = 0;
+
+        for (int i = 0; i < rivalCards.Length; i++)
+        {
+            if (rivalCards[i].Selected)
+            {
+                for (int j = i; j < rivalCards.Length; j++)
+                {
+                    if (j + 1 == rivalCards.Length) continue;
+
+                    rivalCards[j + 1].GetComponent<CardHandler>().CardDisplacement = cellPosition[j - selectedCount].position;
+                    rivalCards[j + 1].GetComponent<CardHandler>().IndexPosition = j - selectedCount;
+                }
+                selectedCount++;
+            }
+        }
+
+        for (int i = 0; i < rivalCards.Length; i++)
+        {
+            if (!rivalCards[i].Selected)
+            {
+                rivalCards[i].GetComponent<CardHandler>().ReturnCard();
+            }
+        }
+
         rivalCards[index].transform.position = rivalCardTrasform.position;
 
         int counter = rivalCards.Length;
         foreach(CardParameters cardParams in rivalCards)
-        {
+        {   
             if (cardParams.Selected)
             {
                 counter--;
@@ -201,19 +244,25 @@ public class CardManager : NetworkBehaviour
 
         if (counter <= 2)
         {
-
-            foreach(CardParameters cardParams in rivalCards)
+            
+            for (int i = 0; i < rivalCards.Length; i++)
             {
-                if(cardParams.Selected)
+                rivalCards[i].GetComponent<CardHandler>().CardDisplacement = cellPosition[i].position;
+                
+                if(rivalCards[i].Selected)
                 {
-                    cardParams.gameObject.SetActive(true);
-                    cardParams.GetComponent<CardHandler>().ReturnCard();
-                    cardParams.Selected = false;
-                    cardParams.CloseCard(); // Скрыть карту если она изначально была показана аудитом
+                    rivalCards[i].gameObject.SetActive(true);
+                    rivalCards[i].GetComponent<CardHandler>().ReturnCard();
+                    rivalCards[i].Selected = false;
+                    rivalCards[i].CloseCard(); // Скрыть карту если она изначально была показана аудитом
+                }
+                else
+                {
+                    rivalCards[i].GetComponent<CardHandler>().ReturnCard();
                 }
             }
 
-            int selectedCount = rivalCards.Length;
+            selectedCount = rivalCards.Length;
             for (int i = 0; i < rivalCards.Length; i++)
             {
                 if (!rivalCards[i].Audited) selectedCount--;

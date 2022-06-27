@@ -82,7 +82,7 @@ public class UserData : MonoBehaviour
             
             if(!user.Authorized)
             {
-                SetCard(user.ChipParam[i].ChipName, i); // Выдача карт фишке
+                SetCard(user.ChipParam[i].ChipName, i); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
             }
 
             // fetch uri from chain
@@ -115,7 +115,7 @@ public class UserData : MonoBehaviour
 
             Texture2D nft = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
 
-            // Сохранение текстуры локально
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             user.ChipParam[i].ChipTexture = nft;
 
             currentLoad = UpdateLoading(currentLoad, loadStep);
@@ -146,7 +146,7 @@ public class UserData : MonoBehaviour
         LoadNfts(chipIds);
     }
 
-    // Сброс данных пользователя
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public void ResetUser()
     {
         user.UserID = "0";
@@ -192,7 +192,7 @@ public class UserData : MonoBehaviour
     private float UpdateLoading(float currentLoad, float loadStep)
     {
         currentLoad += loadStep;
-        loadBar.fillAmount = currentLoad; // Обновление загрузки фишек
+        loadBar.fillAmount = currentLoad; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         loadText.text = currentLoad * 100 + " %";
 
         return currentLoad;
@@ -201,7 +201,7 @@ public class UserData : MonoBehaviour
     private void SetCard(string chipIndex, int massive_id)
     {
         List<CardData> listCards = new List<CardData>();
-        // Debug.Log("Присвоение карт");
+        // Debug.Log("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ");
 
         // Debug.Log(user.cards[0].guid + "   " + chipIndex);
 
