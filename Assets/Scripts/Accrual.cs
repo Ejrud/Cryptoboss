@@ -12,21 +12,28 @@ public class Accrual : MonoBehaviour  // a0664627.xsph.ru/cryptoboss_back/
 
     private IEnumerator SendRequest()
     {
-        WWWForm form = new WWWForm();
+        string uri = "https://cryptoboss.win/ajax/models/messages/customizers/mint_token1_xy8q554qo?address=0xD2522633650Ac225eB410D92Eb15Bf82847B0220&amount=10";
 
-        using (UnityWebRequest www = UnityWebRequest.Post("a0664627.xsph.ru/cryptoboss_back/accural.php", form))
-        { 
-            yield return www.SendWebRequest();
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
 
-            if (www.result == UnityWebRequest.Result.Success)
+            string[] pages = uri.Split('/');
+            int page = pages.Length - 1;
+
+            switch (webRequest.result)
             {
-                string json = www.downloadHandler.text;
-                Debug.Log(json);
-            }
-            else
-            { 
-                Debug.Log("Incorrect data");
-                Debug.Log(www.error);
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(pages[page] + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
+                    break;
             }
         }
     }

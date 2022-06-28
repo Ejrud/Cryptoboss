@@ -14,26 +14,27 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Transform chipWindowTransform;
     [SerializeField] private User user;
 
-    private int sceneToLoad; // Назввание загружаемой сценны
+    private int sceneToLoad; // РРЅРґРµРєСЃ Р·Р°РіСЂСѓР·РєРё СЃС†РµРЅС‹
 
-    private int Clicks; // Нажатия на стрелочку
+    private int Clicks; // 
 
-    private Vector2 pos; // Вектор для сохранения позиции первой ячейки массива
-    private Vector2 size; // Вектор для сохранения размера первой ячейки массива
+    private Vector2 pos; // 
+    private Vector2 size; // 
 
     private bool chipLoaded;
 
     private void Start()
     {
-        sceneToLoad = 1; // Название стартовой сцены
+        sceneToLoad = 1;
+        PlayerPrefs.SetString("GameMode", "one"); // РњРµРЅСЏС‚СЊ РїСЂРё РІС‹Р±РѕСЂРµ СЃС†РµРЅС‹
     }
 
-    public void PanelActivate(GameObject objectToClose) // Метод активации панелек
+    public void PanelActivate(GameObject objectToClose) // 
     {
         objectToClose.SetActive(!objectToClose.activeSelf);
     }
 
-    public void QuitMethod() // Выход из приложения
+    public void QuitMethod() // 
     {
         Application.Quit();
     }
@@ -63,7 +64,7 @@ public class UIManager : MonoBehaviour
         sceneLoadController.LoadGame(sceneToLoad);
     }
 
-    private void ClicksCounter() // Метод подбирающий сценну в зависимости от количества кликов
+    private void ClicksCounter() // 
     {
         switch (Clicks)
         {
@@ -99,14 +100,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void ArenesMethod(int x, int y) // Метод меняющий позиции и размеры арен
+    private void ArenesMethod(int x, int y) // 
     {
         areas[x].anchoredPosition = areas[y].anchoredPosition;
         areas[x].sizeDelta = areas[y].sizeDelta;
         areas[x] = areas[y];
     }
 
-    public void NextArena(bool Right) // Метод для кнопок
+    public void NextArena(bool Right) // 
     {
         // if (Right)
         // {

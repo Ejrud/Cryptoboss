@@ -12,9 +12,10 @@ public class PlayerNet : NetworkBehaviour
 {
     [Header("Player parameters")]
     public string Wallet;
+    public string GameMode;
     public int ChipId;
-    public CardData[] CardCollection;     // Все карты пользователя (или карты фишки)
-    public CardData[] HandCards;         // Карты в руке
+    public CardData[] CardCollection;     // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ)
+    public CardData[] HandCards;         // пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ
     public CardData[] PreviousCards;
     public CardData PreviousCard;
     public CardData RivalCard;
@@ -39,7 +40,7 @@ public class PlayerNet : NetworkBehaviour
     public bool ChipReceived;
     public bool FirstStart;
     public bool AnimationComplete;
-    public int SelectedCardId;       // Вызывается на сервере
+    public int SelectedCardId;       // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public int UsedCount;
     
     private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/images/  // https://cryptoboss.win/game/back/images/
@@ -80,7 +81,7 @@ public class PlayerNet : NetworkBehaviour
 
     #endregion
 
-    // Отключение видимости игрока от всех и отправка на сервер свой идентификатор
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     private void Start()
     {
         audioSource.volume = PlayerPrefs.GetFloat("musicVolume");
@@ -100,12 +101,13 @@ public class PlayerNet : NetworkBehaviour
 
             Wallet = PlayerPrefs.GetString("Wallet");
             ChipId = PlayerPrefs.GetInt("chipId");
+            GameMode = PlayerPrefs.GetString("GameMode");
             
             CmdSendWalletAndId(Wallet, ChipId, ChipReceived);
 
             Texture chipTexture = lastTexture;
 
-            // Подгрузка фишки пользователя (из локальных данных этого пользователя)
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
             for (int i = 0; i < user.ChipParam.Count; i++)
             {
 
@@ -113,20 +115,20 @@ public class PlayerNet : NetworkBehaviour
                 {
                     chipTexture = user.ChipParam[i].ChipTexture;
 
-                    foreach(RawImage chipImage in userChipImage) // Обновление всех фишек на экране
+                    foreach(RawImage chipImage in userChipImage) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                     {
                         chipImage.texture = chipTexture;
                     }
                     Debug.Log("Chip loaded = " + ChipId);
                     return;
                 }
-                else    // При первом запуске с ParrelSync id фишки не задано пожтому задается рандомная
+                else    // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ParrelSync id пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 {
                     Debug.Log("ChipId not found. prefab id = " +  ChipId);
 
                     chipTexture = user.ChipParam[UnityEngine.Random.Range(0, user.ChipParam.Count - 1)].ChipTexture;
 
-                    foreach(RawImage chipImage in userChipImage) // Обновление всех фишек на экране
+                    foreach(RawImage chipImage in userChipImage) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                     {
                         chipImage.texture = chipTexture;
                     }
@@ -135,7 +137,7 @@ public class PlayerNet : NetworkBehaviour
         }
     }
 
-    // Показатели обновляются при первом запуске и при завершении вычисления карт игроков
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public void UpdatePlayerCharacteristic(int Capital, float Morale, int EnemyCapitale, float EnemyEnergy, float maxEnergy)
     {
         this.Capital = Capital;
@@ -148,7 +150,7 @@ public class PlayerNet : NetworkBehaviour
         UpdateClientParameters(this.Capital, this.Morale, this.EnemyCapital, this.EnemyEnergy, this.MaxEnergy, this.MaxHealth);
     }
 
-    // Обновляет карты в руке (Переносить остальные карты в изначчальные положения)
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
     public void UpdateRoundCards(CardData[] hand)
     {
         HandCards = hand;
@@ -161,7 +163,7 @@ public class PlayerNet : NetworkBehaviour
         SyncRoundCards(HandCards);
     }
 
-    // Обновляет интерфейс игрока
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     public void UpdateUI()
     {
         float floatCapital = Convert.ToSingle(Capital);
@@ -189,8 +191,15 @@ public class PlayerNet : NetworkBehaviour
         Destroy(netObj);
         SceneManager.LoadScene(menuSceneIndex);
     }
+    [Command]
+    public void CmdSendGameMode(string gameMode)
+    {
+        GameMode = gameMode;
+        Debug.Log(GameMode);
+        FindObjectOfType<NetworkController>().SetDistribution(this); // cringe
+    }
 
-    [Command] // На сервер отправляется кошелек конкретного пользователя
+    [Command] // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public void CmdSendWalletAndId(string wallet, int chipId, bool received)
     {
         Wallet = wallet;
@@ -217,7 +226,7 @@ public class PlayerNet : NetworkBehaviour
     {
         if (hasAuthority)
         {
-            // Показать карты соперника
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             cardManager.AuditRivalCards(handCards);
         }
     }
@@ -226,7 +235,7 @@ public class PlayerNet : NetworkBehaviour
     {
         if (hasAuthority)
         {
-            // Скрыть карты игрока
+            // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
             cardManager.DisableAudit();
         }
     }
@@ -261,9 +270,9 @@ public class PlayerNet : NetworkBehaviour
     [ClientRpc]
     public void RecieveRivalCards(int cardId, CardData rivalCard)
     {
-        if (hasAuthority) // без этого на серверном экземпляре и не только будут ошибки
+        if (hasAuthority) // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         {
-            // В анимации прятать все карты и выпускать колличество выбранныых карт соперником]
+            // пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ]
             RivalCard = rivalCard;
             cardManager.RivalCardSelect(cardId, RivalCard);
         }
@@ -334,7 +343,7 @@ public class PlayerNet : NetworkBehaviour
     [ClientRpc]
     public void TimerEnded()
     {
-        if(hasAuthority) // Имитировать кнопку send (OnSendCards подбирает оставшиеся карты)
+        if(hasAuthority) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ send (OnSendCards пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ)
         {
             cardManager.SelectRandomCard();
         }
@@ -354,7 +363,7 @@ public class PlayerNet : NetworkBehaviour
             await textureRequest.SendWebRequest();
             rivalChipTexture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
 
-            if(textureRequest.error != null) // Если не удастся загрузить текстуру, то поизойдет повторная попытка
+            if(textureRequest.error != null) // пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             {
                 LoadRivalChip(rivalChipId);
                 return;
@@ -371,12 +380,32 @@ public class PlayerNet : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    public void GetGameMode()
+    {
+        string gameMode = PlayerPrefs.GetString("GameMode");
+        gameMode = "three";
+        GameMode = gameMode;
+        CmdSendGameMode(gameMode);
+    }
+
+    private void OnDestroy()
+    {
+        if (isServer)
+        {
+            if (GameMode == "two")
+            {
+                FindObjectOfType<NetworkController>().OnPlayerTwoModeDisconnect(this.gameObject);
+            }
+        }
+    }
+
     public class Response 
     {
         public string image;
     }
     
-    // Impact отвечает за сохранение действия игрока и над игроком
+    // Impact пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public class Impact
     {
         public string JokerName;

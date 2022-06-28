@@ -21,12 +21,16 @@ public class NetworkController : NetworkManager
     [SerializeField] private InputField msgField;
     [SerializeField] private GameObject buttons;
     [SerializeField] private GameObject exitWindow;
-    private GameObject[] players = new GameObject[2];
+    private GameObject[] _oneByOne = new GameObject[2];
+    private List<GameObject> _twoByTwo = new List<GameObject>();
+    private GameObject[] _threeByThree = new GameObject[2];
+    
 
     private NetworkConnection connection;
     private bool playerSpawned;
     private bool playerConnected;
-    private int connectedCount = 0;
+    private int connectedCountOne = 0;
+    private int connectedCountThree = 0;
 
     private float serverOff = 5;
     private bool isServer;
@@ -67,18 +71,60 @@ public class NetworkController : NetworkManager
         NetworkServer.RegisterHandler<PosMessage>(OnCreateCharacter); 
     }
     
+    // Спавн игрока и инициализация режима
     public void OnCreateCharacter(NetworkConnectionToClient conn, PosMessage message)                   
     {
         GameObject playerNetObject = Instantiate(playerPrefab, message.vector2, Quaternion.identity);
-
         NetworkServer.AddPlayerForConnection(conn, playerNetObject);
-        players[connectedCount] = playerNetObject;
-        connectedCount++;
+        PlayerNet player = playerNetObject.GetComponent<PlayerNet>();
+        player.GetGameMode();
+    
+    }
 
-        if (numPlayers % 2 == 0)
+    // Когда игрок определит режим игры, про произойдет сортировка
+    public void SetDistribution(PlayerNet player)
+    {
+        switch (player.GameMode)
         {
-            gameProcessManagement.PrepareSession(players);
-            connectedCount = 0;
+            case "one": // Режим один на один
+                _oneByOne[connectedCountOne] = player.gameObject;
+                connectedCountOne++;
+                Debug.Log(connectedCountOne);
+
+                if (connectedCountOne >= 2)
+                {
+                    gameProcessManagement.PrepareSession(_oneByOne, "one");
+                    connectedCountOne = 0;
+                }
+                break;
+
+            case "two": // Режим два игрока на два игрока
+                _twoByTwo.Add(player.gameObject);
+                Debug.Log("Game mode two = " + _twoByTwo.Count + " players");
+
+                if (_twoByTwo.Count >= 4)
+                {
+                    GameObject[] twoByTwoPlayers = new GameObject[4];
+
+                    for (int i = 0; i < _twoByTwo.Count; i++)
+                    {
+                        twoByTwoPlayers[i] = _twoByTwo[i];
+                    }
+
+                    gameProcessManagement.PrepareSession(twoByTwoPlayers, "two");
+                }
+                break;
+
+            case "three": // Режим один на один 3 фишки против 3 фишек соперника
+                _threeByThree[connectedCountThree] = player.gameObject;
+                connectedCountThree++;
+
+                if (connectedCountThree >= 2)
+                {
+                    gameProcessManagement.PrepareSession(_threeByThree, "two");
+                    connectedCountThree = 0;
+                }
+                break;
         }
     }
 
@@ -102,12 +148,23 @@ public class NetworkController : NetworkManager
         base.OnServerDisconnect(conn);
         //connectedCount--;
         
-        if (players[1] == null)
+        if (_oneByOne[1] == null) // 1 фишка против 1 фишки
         {
-            connectedCount = 0;
+            connectedCountOne = 0; 
         }
+        // if (_twoByTwo[1] != null) // 2 игрока против 2 игроков // OnPlayerTwoModeDisconnect + PlayerNet OnDestroy
+        // {
 
-        Debug.Log(connectedCount);
+        // }
+        if (_threeByThree[1] == null) // 2 игрока против 2 игроков
+        {
+            connectedCountThree = 0; 
+        }
+    }
+
+    public void OnPlayerTwoModeDisconnect(GameObject player)
+    {
+        _twoByTwo.Remove(player);
     }
 
     private void Update()

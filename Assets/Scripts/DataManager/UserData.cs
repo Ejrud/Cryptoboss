@@ -85,6 +85,8 @@ public class UserData : MonoBehaviour
                 SetCard(user.ChipParam[i].ChipName, i); // ������ ���� �����
             }
 
+            Debug.Log("CryptoBoss #" + tokenIds[i]);
+            
             // fetch uri from chain
             string uri = await ERC721.URI(chain, network, contract, tokenIds[i]); // change to ERC721
 

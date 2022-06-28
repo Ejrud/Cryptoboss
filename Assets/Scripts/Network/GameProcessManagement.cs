@@ -14,16 +14,7 @@ public class GameProcessManagement : NetworkBehaviour
     [SerializeField] private Transform allSessions;         // Transform хранящий все сессии
     [SerializeField] private GameObject sessionObject;      // экземпляр сессии
 
-    [Header("\"chips data base\"")]
-    public ChipData[] chipData;
     private List<Session> sessions = new List<Session>();   // Список сессий
-
-    // При запуске брать из бд все фишки с их характеристиками
-    private void Start()
-    {
-        // Здесь сделать загрузку всех фишек из базы данных!!!!
-        // ChipData[] chips = new ChipData[allChips]
-    }
 
     // В Update контролируется вся логика сессий
     private void Update()
@@ -46,7 +37,7 @@ public class GameProcessManagement : NetworkBehaviour
     }
 
     // при запуске сессии (Вызывается из NetworkController) Происходит определение пользователей
-    public void PrepareSession(GameObject[] players)
+    public void PrepareSession(GameObject[] players, string gameMode)
     {
         if (isServer)
         {
@@ -71,11 +62,5 @@ public class GameProcessManagement : NetworkBehaviour
     {
         this.sessions.Remove(session);
         Debug.Log("Session removed");
-    }
-
-    // При наличии базы данных выгржать только из нее!!!!!!!! (Вызывается в Session)
-    public ChipData[] GetAllChips()
-    {
-        return chipData;
     }
 }
