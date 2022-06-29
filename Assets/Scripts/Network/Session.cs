@@ -9,17 +9,17 @@ using Newtonsoft.Json;
 
 public class Session : MonoBehaviour
 {
-    // Если пользователи отправили номера своих кошельков на сервер, то сессия готова
+    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     public bool Ready;        
-    // Если сессия полностью завершена, то GameProcessManagment перестанет к нему обращаться          
+    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ GameProcessManagment пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ          
     public bool Finished;
-    // Если все кошельки собраны, то в GameProcessManagment происходит подбор карт (отправляется запрос к серверу)              
+    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅ GameProcessManagment пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)              
     public bool WalletsRecieved;
 
     public bool Correction;
-    // Какой игрок идет    
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ    
     public int PlayerIndexQueue;             
-    // Сетевой объект игрока (Хранит в себе характеристики игрока)
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
     public PlayerNet[] PlayerNets;      
 
     private GameProcessManagement manager;
@@ -37,38 +37,36 @@ public class Session : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float energyRecovery = 0.5f;
     
-    // Инициализирование характеристик игрока
     public void Init(PlayerNet[] players, GameProcessManagement manager, bool debugMode = false) 
     {
+        // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃРµСЃСЃРёРё Рё РїСЂРёСЃРІРѕРµРЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ
         this.debugMode = debugMode;
         this.manager = manager;
         PlayerNets = players;
 
         timer = GetComponent<SessionTimer>();
 
+        // РџРѕРґРіРѕС‚РѕРІРєР° РёРіСЂРѕРєРѕРІ
         StartCoroutine(WalletRecieve());
+
+        // РџРµСЂРІС‹Р№ РєС‚Рѕ РІС‹Р±РёСЂР°РµС‚ РєР°СЂС‚Сѓ
         PlayerIndexQueue = UnityEngine.Random.Range(0, PlayerNets.Length);
     }
 
-    // Обновление сессии. Проверка на готовность игроков к концу раунда
     public void UpdateSession()
     {
-        // Если сессия не закончена, то сессия не удаляется
         if (!Finished)
         {
-            // Если в процессе игры вышел игрок, то сессия заканчивается
             if (PlayerNets[0] == null || PlayerNets[1] == null && gameStarted)
             {
                 FinishTheGame(false, false, true);
             }
             
 
-            // Если игрок выбрал карту для игры, то сесия готова к вычислениям
             else if (PlayerNets[PlayerIndexQueue].CardSelected)
             {
                 PlayerNets[PlayerIndexQueue].CardSelected = false;
 
-                // Копии выбранных карт игроками
                 CardData selectedCard = GetSelectedCards(PlayerIndexQueue);
 
                 for (int i = 0; i < PlayerNets.Length; i++)
@@ -82,7 +80,7 @@ public class Session : MonoBehaviour
                 timer.isStoped = true;
                 Ready = true;
             }
-            else if (PlayerNets[PlayerIndexQueue].Morale < 1) // Проверка на количество энергии
+            else if (PlayerNets[PlayerIndexQueue].Morale < 1) // 
             {
                 PlayerNets[PlayerIndexQueue].Morale += energyRecovery;
                 SetNextIndexQueue();
@@ -91,7 +89,6 @@ public class Session : MonoBehaviour
                 PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[1].MaxEnergy);
             }
         }
-        // Если сессия закончена, то она удаляется
         else
         {
             if (PlayerNets[0] == null && PlayerNets[1] == null)
@@ -101,15 +98,12 @@ public class Session : MonoBehaviour
         }
     }
 
-    // Генерация 4 рандомных карт из колоды игрока (Вызывается в BattleManager)
-    public void PrepareNextRound(bool correction = false) // correction тип крты позволяющий сделать повторный ход
+    public void PrepareNextRound(bool correction = false)
     {
         SetNextIndexQueue(correction);
         
-        // Проверка на кол-во карт у игроков (если меньше или равно 2, то добавляются еще 3 карты)
         for (int i = 0; i < PlayerNets.Length; i++)
         {
-            // Проверка на пустые слоты в руке
             if (PlayerNets[i].UsedCount > 2)
             {
                 continue;
@@ -179,7 +173,6 @@ public class Session : MonoBehaviour
 
         if (!playerDisconnected)
         {
-            // Кто выиграл, а кто проиграл
             PlayerNets[0].Win = playerWin_1;
             PlayerNets[1].Win = playerWin_2;
 
@@ -220,7 +213,7 @@ public class Session : MonoBehaviour
         form.AddField("LooseGuid", looseGuid);
         form.AddField("Mode", mode);
 
-        // Загрузка карт
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
         using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "accrual.php", form))
         { 
             yield return www.SendWebRequest();
@@ -267,7 +260,6 @@ public class Session : MonoBehaviour
     
     private CardData GetSelectedCards(int playerIndex)
     {
-        // Подбор характеристик карт по id'шникам (RoundCards в своих индексах содежит индексы карт)
         CardData cards = PlayerNets[playerIndex].HandCards[PlayerNets[playerIndex].SelectedCardId];
         return cards;
     }
@@ -276,7 +268,6 @@ public class Session : MonoBehaviour
     {
         if (!correction)
         {
-            // Выбирается след. игрок
             PlayerIndexQueue++;
             if (PlayerIndexQueue >= PlayerNets.Length)
             {
@@ -300,11 +291,10 @@ public class Session : MonoBehaviour
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Подготовка игроков ////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////// Р’С‹Р·РІР°РµС‚СЃСЏ РµРґРёРЅРѕР¶РґС‹ ////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     #region Prepairing players (called once)
-    // Подбор и сохранения номеров кошельков игроков (Ниже идет основная логика подготовки игроков к сессии)
     private IEnumerator WalletRecieve()
     {
         while (!WalletsRecieved)
@@ -319,10 +309,9 @@ public class Session : MonoBehaviour
                 }
             }
 
-            // Если были найдены все кошельки пользователей, то они отправляются на сервер
             if (walletRecieved == PlayerNets.Length)
             {
-                StartCoroutine(GetPlayerCards());
+                StartCoroutine(Preparation());
                 WalletsRecieved = true;
             }
 
@@ -332,13 +321,32 @@ public class Session : MonoBehaviour
         yield return null;
     }
 
-    // Загрузка карт из бд (Debug генерирует рандомные карты)(Так же инициализирует параметры игроков)
-    private IEnumerator GetPlayerCards()
+    private IEnumerator Preparation() 
     {
-        // Для других режимов добавить условие на кол-во игроков
-        // Загрузка изображений для фишек
-        PlayerNets[0].LoadRivalChip(PlayerNets[1].ChipId);
-        PlayerNets[1].LoadRivalChip(PlayerNets[0].ChipId);
+        // Р•СЃР»Рё РёРіСЂРѕРєРѕРІ Р±РѕР»РµРµ 2 РЅР° СЃРµСЃСЃРёСЋ, С‚Рѕ РїРѕРјРёРјРѕ Р·Р°РіСЂСѓР·РєРё РёР·РѕР±СЂР°Р¶РµРЅРёР№, РѕРїСЂРµРґРµР»РёС‚СЊ РґСЂСѓР·РµР№. РџРѕСЃР»РµРґРЅРёР№ РёРЅРґРµРєСЃ РјР°СЃСЃРёРІР° - РґСЂСѓРі (0, 2 - РёРіСЂРѕРєРё 1  /vs/  1, 3 - РёРіСЂРѕРєРё 2)
+        if (PlayerNets.Length > 2)
+        {
+            PlayerNets[0].Friend = PlayerNets[2];
+            PlayerNets[1].Friend = PlayerNets[3];
+
+            int[] pId_1 = { PlayerNets[1].ChipId, PlayerNets[3].ChipId, PlayerNets[2].ChipId }; // 0
+            int[] pId_2 = { PlayerNets[0].ChipId, PlayerNets[2].ChipId, PlayerNets[3].ChipId }; // 1
+            int[] pId_3 = { PlayerNets[1].ChipId, PlayerNets[3].ChipId, PlayerNets[0].ChipId }; // 2
+            int[] pId_4 = { PlayerNets[0].ChipId, PlayerNets[2].ChipId, PlayerNets[1].ChipId }; // 3
+
+            PlayerNets[0].LoadRivalChip(pId_1);
+            PlayerNets[1].LoadRivalChip(pId_2);
+            PlayerNets[2].LoadRivalChip(pId_3);
+            PlayerNets[3].LoadRivalChip(pId_4);
+        }
+        else
+        {
+            int[] pId_1 = { PlayerNets[1].ChipId };
+            int[] pId_2 = { PlayerNets[0].ChipId };
+
+            PlayerNets[0].LoadRivalChip(pId_1);
+            PlayerNets[1].LoadRivalChip(pId_2);
+        }
 
         while (!chipIdRecieved)
         {
@@ -368,7 +376,6 @@ public class Session : MonoBehaviour
 
         StartCoroutine(PreparePlayers());
         
-        // Показ фишек игроков перед игрой
         yield return new WaitForSeconds(5f);
 
         PlayerNets[0].RepresentationWindow(false);
@@ -378,18 +385,16 @@ public class Session : MonoBehaviour
         yield return null;
     }
 
-    // Вызывается единожды. Предподготовка игроков к первому раунду (присваивание здоровья, энергии и прочего)
     private IEnumerator PreparePlayers()
     {
         int[] playerHealth = new int[PlayerNets.Length];
 
         for (int i = 0; i < PlayerNets.Length; i++)
         {
-            // Отправка запроса на сервер
             WWWForm form = new WWWForm();
             form.AddField("guid", "CryptoBoss #" + PlayerNets[i].ChipId); // 
 
-            // Загрузка карт
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
             using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_cards.php", form))
             { 
                 yield return www.SendWebRequest();
@@ -411,7 +416,6 @@ public class Session : MonoBehaviour
                 }
             }
 
-            // Загрузка здоровья
             using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_health.php", form))
             { 
                 yield return www.SendWebRequest();
@@ -434,7 +438,6 @@ public class Session : MonoBehaviour
                 }
             }
             
-            // Загрузка длительности сессии
             using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "game_params.php", form)) // "a0664627.xsph.ru/cryptoboss_back/"
             { 
                 yield return www.SendWebRequest();
@@ -459,7 +462,6 @@ public class Session : MonoBehaviour
             yield return null; 
         }
 
-        // здоровье, выносливость, здоровье соперника
         PlayerNets[0].UpdatePlayerCharacteristic(playerHealth[0], 20, playerHealth[1], 20, 20);
         PlayerNets[1].UpdatePlayerCharacteristic(playerHealth[1], 20, playerHealth[0], 20, 20);
 
@@ -470,7 +472,6 @@ public class Session : MonoBehaviour
         yield return null; 
     }
 
-    // Выдача карт под конкретную фишку
     private CardData[] GetCardDeck(List<Cards> dbCards)
     {
         CardData[] cards = new CardData[dbCards.Count];

@@ -21,6 +21,8 @@ public class PlayerNet : NetworkBehaviour
     public CardData RivalCard;
     public int HedgeFundCount = 0;
 
+    public PlayerNet Friend;
+
     public Impact PlayerImpact = new Impact();
     public bool TurnAround;
     public bool Scam;
@@ -39,7 +41,6 @@ public class PlayerNet : NetworkBehaviour
     public bool CardSelected;
     public bool ChipReceived;
     public bool FirstStart;
-    public bool AnimationComplete;
     public int SelectedCardId;       // ���������� �� �������
     public int UsedCount;
     
@@ -73,7 +74,8 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private CardManager cardManager;
     [SerializeField] private int menuSceneIndex = 0;
     [SerializeField] private User user;
-    [SerializeField] private RawImage[] userChipImage;
+    [SerializeField] private RawImage[] userChipImages;
+    [SerializeField] private RawImage[] fiendChipImages;
     [SerializeField] private RawImage[] rivalChipImages;
     [SerializeField] private Texture lastTexture;
     [SerializeField] private AudioSource audioSource;
@@ -81,7 +83,7 @@ public class PlayerNet : NetworkBehaviour
 
     #endregion
 
-    // ���������� ��������� ������ �� ���� � �������� �� ������ ���� �������������
+    // 
     private void Start()
     {
         audioSource.volume = PlayerPrefs.GetFloat("musicVolume");
@@ -107,7 +109,7 @@ public class PlayerNet : NetworkBehaviour
 
             Texture chipTexture = lastTexture;
 
-            // ��������� ����� ������������ (�� ��������� ������ ����� ������������)
+            // 
             for (int i = 0; i < user.ChipParam.Count; i++)
             {
 
@@ -115,20 +117,20 @@ public class PlayerNet : NetworkBehaviour
                 {
                     chipTexture = user.ChipParam[i].ChipTexture;
 
-                    foreach(RawImage chipImage in userChipImage) // ���������� ���� ����� �� ������
+                    foreach(RawImage chipImage in userChipImages) //
                     {
                         chipImage.texture = chipTexture;
                     }
                     Debug.Log("Chip loaded = " + ChipId);
                     return;
                 }
-                else    // ��� ������ ������� � ParrelSync id ����� �� ������ ������� �������� ���������
+                else    // 
                 {
                     Debug.Log("ChipId not found. prefab id = " +  ChipId);
 
                     chipTexture = user.ChipParam[UnityEngine.Random.Range(0, user.ChipParam.Count - 1)].ChipTexture;
 
-                    foreach(RawImage chipImage in userChipImage) // ���������� ���� ����� �� ������
+                    foreach(RawImage chipImage in userChipImages) //
                     {
                         chipImage.texture = chipTexture;
                     }
@@ -137,7 +139,7 @@ public class PlayerNet : NetworkBehaviour
         }
     }
 
-    // ���������� ����������� ��� ������ ������� � ��� ���������� ���������� ���� �������
+    // 
     public void UpdatePlayerCharacteristic(int Capital, float Morale, int EnemyCapitale, float EnemyEnergy, float maxEnergy)
     {
         this.Capital = Capital;
@@ -150,7 +152,7 @@ public class PlayerNet : NetworkBehaviour
         UpdateClientParameters(this.Capital, this.Morale, this.EnemyCapital, this.EnemyEnergy, this.MaxEnergy, this.MaxHealth);
     }
 
-    // ��������� ����� � ���� (���������� ��������� ����� � ������������ ���������)
+    // 
     public void UpdateRoundCards(CardData[] hand)
     {
         HandCards = hand;
@@ -163,7 +165,7 @@ public class PlayerNet : NetworkBehaviour
         SyncRoundCards(HandCards);
     }
 
-    // ��������� ��������� ������
+    // 
     public void UpdateUI()
     {
         float floatCapital = Convert.ToSingle(Capital);
@@ -199,7 +201,7 @@ public class PlayerNet : NetworkBehaviour
         FindObjectOfType<NetworkController>().SetDistribution(this); // cringe
     }
 
-    [Command] // �� ������ ������������ ������� ����������� ������������
+    [Command] // 
     public void CmdSendWalletAndId(string wallet, int chipId, bool received)
     {
         Wallet = wallet;
@@ -226,7 +228,7 @@ public class PlayerNet : NetworkBehaviour
     {
         if (hasAuthority)
         {
-            // �������� ����� ���������
+            // 
             cardManager.AuditRivalCards(handCards);
         }
     }
@@ -235,7 +237,7 @@ public class PlayerNet : NetworkBehaviour
     {
         if (hasAuthority)
         {
-            // ������ ����� ������
+            // 
             cardManager.DisableAudit();
         }
     }
@@ -270,9 +272,8 @@ public class PlayerNet : NetworkBehaviour
     [ClientRpc]
     public void RecieveRivalCards(int cardId, CardData rivalCard)
     {
-        if (hasAuthority) // ��� ����� �� ��������� ���������� � �� ������ ����� ������
+        if (hasAuthority) // 
         {
-            // � �������� ������� ��� ����� � ��������� ����������� ���������� ���� ����������]
             RivalCard = rivalCard;
             cardManager.RivalCardSelect(cardId, RivalCard);
         }
@@ -343,40 +344,51 @@ public class PlayerNet : NetworkBehaviour
     [ClientRpc]
     public void TimerEnded()
     {
-        if(hasAuthority) // ����������� ������ send (OnSendCards ��������� ���������� �����)
+        if(hasAuthority) //
         {
             cardManager.SelectRandomCard();
         }
     }
 
     [ClientRpc]
-    public async void LoadRivalChip(int rivalChipId) // 
+    public async void LoadRivalChip(int[] rivalChipId) // 
     {
         if(hasAuthority)
         {
             Debug.Log("Load textures...");
-
-            string newImgUri = seUrl + "images/" + rivalChipId + ".png";
-
-            // fetch image and display in game
-            UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(newImgUri); // imageUri
-            await textureRequest.SendWebRequest();
-            rivalChipTexture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
-
-            if(textureRequest.error != null) // ���� �� ������� ��������� ��������, �� ��������� ��������� �������
+            // В зависимости от режима будут загружаться фишки других игроков последний индекс массива - фишка сокомандника
+            for (int i = 0; i < rivalChipId.Length; i++)
             {
-                LoadRivalChip(rivalChipId);
-                return;
-            }
-            Debug.Log("Load complete");
+                string newImgUri = seUrl + "images/" + rivalChipId[i] + ".png";
 
-            foreach (RawImage rivalImg in rivalChipImages)
-            {
-                rivalImg.texture = rivalChipTexture;
-            }
+                // fetch image and display in game
+                UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(newImgUri); // imageUri
+                await textureRequest.SendWebRequest();
+                rivalChipTexture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
 
-            ChipReceived = true;
-            CmdSendWalletAndId(Wallet, ChipId, ChipReceived);
+                if(textureRequest.error != null) //
+                {
+                    LoadRivalChip(rivalChipId);
+                    return;
+                }
+                Debug.Log("Load complete");
+                
+                if (i == 0)
+                {
+                    foreach (RawImage rivalImg in rivalChipImages)
+                    {
+                        rivalImg.texture = rivalChipTexture;
+                    }
+                }
+                else if (i == 1)
+                {
+
+                }
+                
+
+                ChipReceived = true;
+                CmdSendWalletAndId(Wallet, ChipId, ChipReceived);
+            }
         }
     }
 
@@ -405,7 +417,7 @@ public class PlayerNet : NetworkBehaviour
         public string image;
     }
     
-    // Impact �������� �� ���������� �������� ������ � ��� �������
+    // Сохранение действий прошлой карты 
     public class Impact
     {
         public string JokerName;

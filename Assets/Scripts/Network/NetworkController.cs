@@ -164,7 +164,10 @@ public class NetworkController : NetworkManager
 
     public void OnPlayerTwoModeDisconnect(GameObject player)
     {
-        _twoByTwo.Remove(player);
+        if (_twoByTwo.Contains(player))
+        {
+            _twoByTwo.Remove(player);
+        }
     }
 
     private void Update()

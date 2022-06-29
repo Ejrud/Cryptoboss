@@ -6,28 +6,23 @@ using Mirror;
 public class GameProcessManagement : NetworkBehaviour
 {
     [Header("Server functional")]
-    [SerializeField] private BattleManager battle;          // Выполняется логика сложения/вычитания карт\
-
-    [SerializeField] private bool debugMode;
+    [SerializeField] private BattleManager battle;
 
     [Header("Server objects")]
-    [SerializeField] private Transform allSessions;         // Transform хранящий все сессии
-    [SerializeField] private GameObject sessionObject;      // экземпляр сессии
+    [SerializeField] private Transform allSessions;
+    [SerializeField] private GameObject sessionObject;
 
-    private List<Session> sessions = new List<Session>();   // Список сессий
+    private List<Session> sessions = new List<Session>(); 
 
-    // В Update контролируется вся логика сессий
+    // Update РєР°Р¶РґРѕР№ СЃРµСЃСЃРёРё РІ СЃРїРёСЃРєРµ
     private void Update()
     {
         if (isServer)
         {
-            // Производится логика конкретной сессии
             foreach (Session currentSession in sessions)
             {
-                // Обновление параметров сессии
                 currentSession.UpdateSession();
 
-                // Если игроки выбрали карты, то происходит вычисление
                 if (currentSession.Ready)
                 {
                     battle.SimpleCalculation(currentSession);
@@ -36,7 +31,6 @@ public class GameProcessManagement : NetworkBehaviour
         }
     }
 
-    // при запуске сессии (Вызывается из NetworkController) Происходит определение пользователей
     public void PrepareSession(GameObject[] players, string gameMode)
     {
         if (isServer)
@@ -53,7 +47,7 @@ public class GameProcessManagement : NetworkBehaviour
                 players[i].transform.SetParent(session.transform);
             }
 
-            session.Init(playerNets, this, debugMode);
+            session.Init(playerNets, this, false);
             sessions.Add(session);
         }
     }
