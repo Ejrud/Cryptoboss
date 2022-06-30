@@ -327,25 +327,27 @@ public class Session : MonoBehaviour
         if (PlayerNets.Length > 2)
         {
             PlayerNets[0].Friend = PlayerNets[2];
+            PlayerNets[2].Friend = PlayerNets[0];
             PlayerNets[1].Friend = PlayerNets[3];
+            PlayerNets[3].Friend = PlayerNets[1];
 
             int[] pId_1 = { PlayerNets[1].ChipId, PlayerNets[3].ChipId, PlayerNets[2].ChipId }; // 0
             int[] pId_2 = { PlayerNets[0].ChipId, PlayerNets[2].ChipId, PlayerNets[3].ChipId }; // 1
             int[] pId_3 = { PlayerNets[1].ChipId, PlayerNets[3].ChipId, PlayerNets[0].ChipId }; // 2
             int[] pId_4 = { PlayerNets[0].ChipId, PlayerNets[2].ChipId, PlayerNets[1].ChipId }; // 3
 
-            PlayerNets[0].LoadRivalChip(pId_1);
-            PlayerNets[1].LoadRivalChip(pId_2);
-            PlayerNets[2].LoadRivalChip(pId_3);
-            PlayerNets[3].LoadRivalChip(pId_4);
+            PlayerNets[0].LoadRivalChip(pId_1, "two");
+            PlayerNets[1].LoadRivalChip(pId_2, "two");
+            PlayerNets[2].LoadRivalChip(pId_3, "two");
+            PlayerNets[3].LoadRivalChip(pId_4, "two");
         }
         else
         {
             int[] pId_1 = { PlayerNets[1].ChipId };
             int[] pId_2 = { PlayerNets[0].ChipId };
 
-            PlayerNets[0].LoadRivalChip(pId_1);
-            PlayerNets[1].LoadRivalChip(pId_2);
+            PlayerNets[0].LoadRivalChip(pId_1, "one");
+            PlayerNets[1].LoadRivalChip(pId_2, "one");
         }
 
         while (!chipIdRecieved)
@@ -377,9 +379,11 @@ public class Session : MonoBehaviour
         StartCoroutine(PreparePlayers());
         
         yield return new WaitForSeconds(5f);
-
-        PlayerNets[0].RepresentationWindow(false);
-        PlayerNets[1].RepresentationWindow(false);
+        
+        for (int i = 0; i < PlayerNets.Length; i++)
+        {
+            PlayerNets[i].RepresentationWindow(false);
+        }
         
         timer.StartTimer();
         yield return null;
@@ -387,22 +391,18 @@ public class Session : MonoBehaviour
 
     private IEnumerator PreparePlayers()
     {
-        int[] playerHealth = new int[PlayerNets.Length];
 
         for (int i = 0; i < PlayerNets.Length; i++)
         {
             WWWForm form = new WWWForm();
             form.AddField("guid", "CryptoBoss #" + PlayerNets[i].ChipId); // 
 
-            // �������� ����
-            using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_cards.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_cards.php", form)) // Загрузка карт
             { 
                 yield return www.SendWebRequest();
 
                 if (www.result == UnityWebRequest.Result.Success)
                 {
-                    CardData[] cards = new CardData[10];
-
                     string json = www.downloadHandler.text;
                     Debug.Log(json);
                     List<Cards> dbCard = JsonConvert.DeserializeObject<List<Cards>>(json);
@@ -416,7 +416,7 @@ public class Session : MonoBehaviour
                 }
             }
 
-            using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_health.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_health.php", form)) // Загрузка здоровья
             { 
                 yield return www.SendWebRequest();
 
@@ -426,34 +426,12 @@ public class Session : MonoBehaviour
                     Debug.Log(json);
                     List<UserHealth> health = JsonConvert.DeserializeObject<List<UserHealth>>(json);
 
-                    playerHealth[i] = Convert.ToInt32(health[0].capital_max);
-                    PlayerNets[i].MaxHealth = playerHealth[i];
+                    PlayerNets[i].MaxHealth = Convert.ToInt32(health[0].capital_max);
 
-                    Debug.Log($"Player {i + 1} health: " + playerHealth[i]);
+                    Debug.Log($"Player {i + 1} health: " + PlayerNets[i].MaxHealth);
                 }
                 else
                 { 
-                    Debug.Log("Incorrect data");
-                    Debug.Log(www.error);
-                }
-            }
-            
-            using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "game_params.php", form)) // "a0664627.xsph.ru/cryptoboss_back/"
-            { 
-                yield return www.SendWebRequest();
-
-                if (www.result == UnityWebRequest.Result.Success)
-                {
-                    string json = www.downloadHandler.text;
-                    
-                    List<GameParams> gameParams = JsonConvert.DeserializeObject<List<GameParams>>(json);
-                    timer.RoundTimer = Convert.ToInt32(gameParams[0].timer);
-                    timer.OriginalTime = timer.RoundTimer;
-                    Debug.Log("Session timer = " + timer.RoundTimer);
-                }
-                else
-                { 
-                    timer.RoundTimer = 10;
                     Debug.Log("Incorrect data");
                     Debug.Log(www.error);
                 }
@@ -462,8 +440,50 @@ public class Session : MonoBehaviour
             yield return null; 
         }
 
-        PlayerNets[0].UpdatePlayerCharacteristic(playerHealth[0], 20, playerHealth[1], 20, 20);
-        PlayerNets[1].UpdatePlayerCharacteristic(playerHealth[1], 20, playerHealth[0], 20, 20);
+        WWWForm emptyForm = new WWWForm(); // Загрузка длительности сессии
+
+        using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "game_params.php", emptyForm)) // "a0664627.xsph.ru/cryptoboss_back/"
+        { 
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                string json = www.downloadHandler.text;
+                
+                List<GameParams> gameParams = JsonConvert.DeserializeObject<List<GameParams>>(json);
+                timer.RoundTimer = Convert.ToInt32(gameParams[0].timer);
+                timer.OriginalTime = timer.RoundTimer;
+                Debug.Log("Session timer = " + timer.RoundTimer);
+            }
+            else
+            { 
+                timer.RoundTimer = 10;
+                Debug.Log("Incorrect data");
+                Debug.Log(www.error);
+            }
+        }
+
+        if(PlayerNets.Length > 2) // Режим 2 на 2
+        {
+            for (int i = 0; i < PlayerNets.Length / 2; i++)
+            {
+                PlayerNets[i].MaxHealth = PlayerNets[i].MaxHealth + PlayerNets[i].Friend.MaxHealth / 2; // Присвоение нового максимального здоровья
+                PlayerNets[i].Capital = PlayerNets[i].MaxHealth;                                        // Присвоение максимального капитала к текущему капиталу
+                PlayerNets[i].Friend.MaxHealth = PlayerNets[i].MaxHealth;                               // Присвоение максимального капитала союзнику
+                PlayerNets[i].Friend.Capital = PlayerNets[i].Friend.MaxHealth;                          // Присвоение союзнику максимального капитала к текущему капиталу
+            }
+
+            PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, 20, PlayerNets[1].Capital, 20, 20);     // Правило 3-х "п" похер, потом переделаем
+            PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, 20, PlayerNets[0].Capital, 20, 20);     // Синхронизированные капиталы игроков с инденксами:
+            PlayerNets[2].UpdatePlayerCharacteristic(PlayerNets[2].Capital, 20, PlayerNets[1].Capital, 20, 20);     // (0, 2)      (1, 3)
+            PlayerNets[3].UpdatePlayerCharacteristic(PlayerNets[3].Capital, 20, PlayerNets[0].Capital, 20, 20);
+            
+        }
+        else // Режим 1 на 1 ( + возможно 3 на 3)
+        {
+            PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, 20, PlayerNets[1].Capital, 20, 20);
+            PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, 20, PlayerNets[0].Capital, 20, 20);
+        }
 
         PrepareNextRound();
 

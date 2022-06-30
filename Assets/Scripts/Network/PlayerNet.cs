@@ -14,8 +14,8 @@ public class PlayerNet : NetworkBehaviour
     public string Wallet;
     public string GameMode;
     public int ChipId;
-    public CardData[] CardCollection;     // ��� ����� ������������ (��� ����� �����)
-    public CardData[] HandCards;         // ����� � ����
+    public CardData[] CardCollection;
+    public CardData[] HandCards;
     public CardData[] PreviousCards;
     public CardData PreviousCard;
     public CardData RivalCard;
@@ -41,13 +41,14 @@ public class PlayerNet : NetworkBehaviour
     public bool CardSelected;
     public bool ChipReceived;
     public bool FirstStart;
-    public int SelectedCardId;       // ���������� �� �������
+    public int SelectedCardId;
     public int UsedCount;
     
     private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/images/  // https://cryptoboss.win/game/back/images/
 
     #region UI elements
     [Header("player UI")]
+    [SerializeField] private ChipRepresentation chipRepresentation;
     [SerializeField] private Text timerText;
     [SerializeField] private Text healthText;
     [SerializeField] private Text energyText;
@@ -56,8 +57,8 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private Text raitingText;
     [SerializeField] private Image healthImage;
     [SerializeField] private Image energyImage;
-    [SerializeField] private RawImage ChipImage;
-    [SerializeField] private RawImage RivalChipImage;
+    [SerializeField] private RawImage ChipImage;        // Используется для настройки цвета
+    [SerializeField] private RawImage RivalChipImage;   // Используется для настройки цвета
 
 
     [SerializeField] private GameObject playersWaitingObj;
@@ -74,12 +75,15 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private CardManager cardManager;
     [SerializeField] private int menuSceneIndex = 0;
     [SerializeField] private User user;
-    [SerializeField] private RawImage[] userChipImages;
-    [SerializeField] private RawImage[] fiendChipImages;
-    [SerializeField] private RawImage[] rivalChipImages;
+    [SerializeField] private RawImage[] userChipImages_1;  // Изображения на экране презентации, и в игровом процессе
+    [SerializeField] private RawImage[] userChipImages_2; // Изображения на экране презентации, и в игровом процессе
+    [SerializeField] private RawImage[] userChipImages_3; // Изображения на экране презентации, и в игровом процессе
+    [SerializeField] private RawImage[] rivalChipImages_1; // Изображения на экране презентации, и в игровом процессе
+    [SerializeField] private RawImage[] rivalChipImages_2; // Изображения на экране презентации, и в игровом процессе
+    [SerializeField] private RawImage[] rivalChipImages_3; // Изображения на экране презентации, и в игровом процессе
     [SerializeField] private Texture lastTexture;
     [SerializeField] private AudioSource audioSource;
-    private Texture2D rivalChipTexture;
+    private Texture2D[] rivalChipTexture;
 
     #endregion
 
@@ -104,6 +108,7 @@ public class PlayerNet : NetworkBehaviour
             Wallet = PlayerPrefs.GetString("Wallet");
             ChipId = PlayerPrefs.GetInt("chipId");
             GameMode = PlayerPrefs.GetString("GameMode");
+            chipRepresentation.SetUpWindows(GameMode);
             
             CmdSendWalletAndId(Wallet, ChipId, ChipReceived);
 
@@ -117,7 +122,7 @@ public class PlayerNet : NetworkBehaviour
                 {
                     chipTexture = user.ChipParam[i].ChipTexture;
 
-                    foreach(RawImage chipImage in userChipImages) //
+                    foreach(RawImage chipImage in userChipImages_1) //
                     {
                         chipImage.texture = chipTexture;
                     }
@@ -130,7 +135,7 @@ public class PlayerNet : NetworkBehaviour
 
                     chipTexture = user.ChipParam[UnityEngine.Random.Range(0, user.ChipParam.Count - 1)].ChipTexture;
 
-                    foreach(RawImage chipImage in userChipImages) //
+                    foreach(RawImage chipImage in userChipImages_1) //
                     {
                         chipImage.texture = chipTexture;
                     }
@@ -351,11 +356,12 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public async void LoadRivalChip(int[] rivalChipId) // 
+    public async void LoadRivalChip(int[] rivalChipId, string gameMode) // 
     {
         if(hasAuthority)
         {
             Debug.Log("Load textures...");
+            rivalChipTexture = new Texture2D[rivalChipId.Length];
             // В зависимости от режима будут загружаться фишки других игроков последний индекс массива - фишка сокомандника
             for (int i = 0; i < rivalChipId.Length; i++)
             {
@@ -364,30 +370,69 @@ public class PlayerNet : NetworkBehaviour
                 // fetch image and display in game
                 UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(newImgUri); // imageUri
                 await textureRequest.SendWebRequest();
-                rivalChipTexture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
+                rivalChipTexture[i] = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
 
                 if(textureRequest.error != null) //
                 {
-                    LoadRivalChip(rivalChipId);
+                    LoadRivalChip(rivalChipId, gameMode);
                     return;
                 }
                 Debug.Log("Load complete");
-                
-                if (i == 0)
-                {
-                    foreach (RawImage rivalImg in rivalChipImages)
-                    {
-                        rivalImg.texture = rivalChipTexture;
-                    }
-                }
-                else if (i == 1)
-                {
-
-                }
-                
 
                 ChipReceived = true;
                 CmdSendWalletAndId(Wallet, ChipId, ChipReceived);
+            }
+
+            if (gameMode == "one")
+            {
+                PrepareChip(rivalChipImages_2, 0, false); // где bool просто скрыть объект. цифра - индекс текстуры 
+                PrepareChip(rivalChipImages_3, 0, false);
+                PrepareChip(userChipImages_2, 0, false);
+                PrepareChip(userChipImages_3, 0, false);
+                
+                PrepareChip(rivalChipImages_1, 0, true);
+                PrepareChip(userChipImages_1, 0, true, true); // Если текущий игрок, то игнорировать присвоение текстуры 
+            }
+            else if (gameMode == "two") // Скрыть лишние фишки и показать 2 текущей фишки и 2 фишки соперников 
+            {
+                PrepareChip(rivalChipImages_3, 0, false);
+                PrepareChip(userChipImages_3, 0, false);
+
+                PrepareChip(rivalChipImages_1, 0, true);
+                PrepareChip(rivalChipImages_2, 1, true);
+                PrepareChip(userChipImages_2, 2, true);
+            }
+            else if (gameMode == "three") // Показать 3 фишки соперника (т.к. 3 на 3 играют 2 игрока, то фишки игрока были изначально загружены при авторизации)
+            {
+                PrepareChip(rivalChipImages_1, 0, true);
+                PrepareChip(rivalChipImages_2, 1, true);
+                PrepareChip(rivalChipImages_3, 2, true);
+            }
+            else
+            {
+                EndGame("Game mode not selected", "", 0f, "0");
+            }
+        }
+    }
+
+    private void PrepareChip(RawImage[] playerImages, int index, bool active, bool currentUser = false)
+    {
+        if (active)
+        {
+            foreach (RawImage image in playerImages)
+            {
+                image.gameObject.SetActive(active);
+                if (!currentUser)
+                {
+                    image.texture = rivalChipTexture[index];
+                }
+            }
+        }
+        else
+        {
+            foreach (RawImage image in playerImages)
+            {
+                image.gameObject.SetActive(active);
             }
         }
     }

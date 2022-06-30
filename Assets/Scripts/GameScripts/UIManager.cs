@@ -26,7 +26,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         sceneToLoad = 1;
-        PlayerPrefs.SetString("GameMode", "one"); // Менять при выборе сцены
+        PlayerPrefs.SetString("GameMode", "two"); // Менять при выборе сцены
     }
 
     public void PanelActivate(GameObject objectToClose) // 
