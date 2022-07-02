@@ -37,7 +37,7 @@ public class BattleManager : NetworkBehaviour
             int Resistance = session.PlayerNets[playerQueueIndex].HandCards[cardId].DamageResistance;
             bool correction = false; // 
 
-            // поиск индекса соперника
+            // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             int rivalIndex = 0;
 
             for (int i = 0; i < session.PlayerNets.Length; i++)
@@ -48,11 +48,11 @@ public class BattleManager : NetworkBehaviour
                 }
             }
 
-            // Капитал и энегрия другого игрока
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
             int otherCapital = session.PlayerNets[rivalIndex].Capital;
             float otherEnergy = session.PlayerNets[rivalIndex].Morale;
 
-            // доп. параметры
+            // пїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (session.PlayerNets[playerQueueIndex].ToTheMoon)
             {
                 cardCost *= 2;
@@ -69,7 +69,7 @@ public class BattleManager : NetworkBehaviour
 
             #endregion
             
-            // Если у игрока не была выбрана карта HedgeFund, то выпол
+            // пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ HedgeFund, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
             if (session.PlayerNets[rivalIndex].HedgeFundCount <= 0)
             {
                 PlayerNet currentPlayer = session.PlayerNets[playerQueueIndex];
@@ -77,7 +77,7 @@ public class BattleManager : NetworkBehaviour
                 
                 switch (session.PlayerNets[playerQueueIndex].HandCards[cardId].Name)
                 {
-                    case "Turn around": // Отрицательные эффекты прошлой карты накладываются на самого игрока (у текущего востанавливаются до изначального значения)
+                    case "Turn around": // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
                         
                         if (otherPlayer.PlayerImpact.JokerName == "Scam")
                         {
@@ -108,7 +108,7 @@ public class BattleManager : NetworkBehaviour
                         }
                         else if (otherPlayer.PlayerImpact.JokerName == "Audit") ///////
                         {
-                            // Отображать карты соперника, а свои спрятать
+                            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                             currentPlayer.SetAudit(otherPlayer.HandCards);
                             otherPlayer.ResetAudit();
                             currentPlayer.PlayerImpact.JokerName = "Audit";
@@ -133,14 +133,14 @@ public class BattleManager : NetworkBehaviour
                             queueCapital += otherPlayer.PlayerImpact.CapitalDamage;
                             otherCapital -= otherPlayer.PlayerImpact.CapitalDamage;
                         
-                            // Сохранение действий конкретного игрока
+                            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                             currentPlayer.PlayerImpact.CapitalDamage = otherPlayer.PlayerImpact.CapitalDamage;
                             currentPlayer.PlayerImpact.CapitalHealth = otherPlayer.PlayerImpact.CapitalDamage;
                         }
 
                         break;
 
-                    case "Liquidation": // Нейтрализация последней карты соперника
+                    case "Liquidation": // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                         currentPlayer.PlayerImpact.JokerName = "Liquidation";
                         
                         if (otherPlayer.PlayerImpact.JokerName == "Scam")
@@ -184,16 +184,16 @@ public class BattleManager : NetworkBehaviour
                         {
                             queueCapital += otherPlayer.PlayerImpact.CapitalDamage;
                         
-                            // Сохранение действий конкретного игрока
+                            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                             currentPlayer.PlayerImpact.CapitalHealth = otherPlayer.PlayerImpact.CapitalDamage; 
                         }
                        break;
 
-                    case "Correction":  // Блокирует оппонента класть 1 карту на стол
+                    case "Correction":  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 1 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
                         correction = true;
                         break;
 
-                    case "Scam":        // В половину урезает характеристики карт соперника ////////
+                    case "Scam":        // пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ////////
                         CardData[] otherCards = otherPlayer.HandCards;
                         for (int i = 0; i < 5; i++)
                         {
@@ -206,29 +206,29 @@ public class BattleManager : NetworkBehaviour
                         currentPlayer.PlayerImpact.JokerName = "Scam";
                         break;
 
-                    case "Hedge fund":  // Блок от джокера в течении 3 ходов
+                    case "Hedge fund":  // пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3 пїЅпїЅпїЅпїЅпїЅ
                         session.PlayerNets[playerQueueIndex].HedgeFundCount = 3;
                         queueCapital += capHealth;
                         queueEnergy += engHealth;
                         otherCapital -= capAttack;
                         break;
 
-                    case "Audit":       // Видимость характеристик карт соперника
+                    case "Audit":       // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                         currentPlayer.SetAudit(otherPlayer.HandCards);
                         break;
 
-                    case "To the moon": // След противника карта потребует в 2 раза больше энергии
+                    case "To the moon": // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 2 пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                         session.PlayerNets[playerQueueIndex].PlayerImpact.JokerName = "To The Moon";
                         session.PlayerNets[rivalIndex].ToTheMoon = true;
                         break;
 
-                    case "Pump":        // Увеличивает след. карту игрока в 2 раза
+                    case "Pump":        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 2 пїЅпїЅпїЅпїЅ
                         currentPlayer.PlayerImpact.JokerName = "Pump";
                         currentPlayer.Pump = true;
                         break;
                     
                     case "Pivot":
-                        if (capAttack != 0) // В данном случае лечение капитала - лечение энергии
+                        if (capAttack != 0) // пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                         {
                             queueCapital -= capAttack;
                             queueEnergy += capHealth;
@@ -312,6 +312,8 @@ public class BattleManager : NetworkBehaviour
                 session.PlayerNets[playerQueueIndex].PreviousCard = session.PlayerNets[playerQueueIndex].HandCards[cardId];
                 session.PrepareNextRound(correction);
             }
+
+            session.SavePlayers();
         }
     }
 

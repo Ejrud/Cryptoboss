@@ -24,6 +24,8 @@ public class NetworkController : NetworkManager
     private GameObject[] _oneByOne = new GameObject[2];
     private List<GameObject> _twoByTwo = new List<GameObject>();
     private GameObject[] _threeByThree = new GameObject[2];
+
+    public List<Session> Sessions = new List<Session>();
     
 
     private NetworkConnection connection;
@@ -84,47 +86,77 @@ public class NetworkController : NetworkManager
     // Когда игрок определит режим игры, про произойдет сортировка
     public void SetDistribution(PlayerNet player)
     {
-        switch (player.GameMode)
+        bool repeatConnect = false; 
+
+        foreach (Session session in Sessions)
         {
-            case "one": // Режим один на один
-                _oneByOne[connectedCountOne] = player.gameObject;
-                connectedCountOne++;
-                Debug.Log(connectedCountOne);
-
-                if (connectedCountOne >= 2)
+            for (int i = 0; i < session.StatsHolder.Count; i++)
+            {
+                if (session.StatsHolder[i].Wallet == player.Wallet)
                 {
-                    gameProcessManagement.PrepareSession(_oneByOne, "one");
-                    connectedCountOne = 0;
-                }
-                break;
+                    session.PlayerNets[i] = player;
 
-            case "two": // Режим два игрока на два игрока
-                _twoByTwo.Add(player.gameObject);
-                Debug.Log("Game mode two = " + _twoByTwo.Count + " players");
-
-                if (_twoByTwo.Count >= 4)
-                {
-                    GameObject[] twoByTwoPlayers = new GameObject[4];
-
-                    for (int i = 0; i < _twoByTwo.Count; i++)
+                    GameObject[] players = new GameObject[session.PlayerNets.Length];
+                    
+                    for (int j = 0; j < players.Length; j++)
                     {
-                        twoByTwoPlayers[i] = _twoByTwo[i];
+                        players[j] = session.PlayerNets[j].gameObject;
                     }
 
-                    gameProcessManagement.PrepareSession(twoByTwoPlayers, "two");
+                    gameProcessManagement.PrepareSession(players, session.GameMode, session);
+                    
+                    Debug.Log("Ну типа что то должно произойти");
+                    
+                    repeatConnect = true;
+                    break;
                 }
-                break;
+            }
+        }
 
-            case "three": // Режим один на один 3 фишки против 3 фишек соперника
-                _threeByThree[connectedCountThree] = player.gameObject;
-                connectedCountThree++;
+        if (!repeatConnect)
+        {
+            switch (player.GameMode)
+            {
+                case "one": // Режим один на один
+                    _oneByOne[connectedCountOne] = player.gameObject;
+                    connectedCountOne++;
+                    Debug.Log(connectedCountOne);
 
-                if (connectedCountThree >= 2)
-                {
-                    gameProcessManagement.PrepareSession(_threeByThree, "two");
-                    connectedCountThree = 0;
-                }
-                break;
+                    if (connectedCountOne >= 2)
+                    {
+                        gameProcessManagement.PrepareSession(_oneByOne, "one");
+                        connectedCountOne = 0;
+                    }
+                    break;
+
+                case "two": // Режим два игрока на два игрока
+                    _twoByTwo.Add(player.gameObject);
+                    Debug.Log("Game mode two = " + _twoByTwo.Count + " players");
+
+                    if (_twoByTwo.Count >= 4)
+                    {
+                        GameObject[] twoByTwoPlayers = new GameObject[4];
+
+                        for (int i = 0; i < _twoByTwo.Count; i++)
+                        {
+                            twoByTwoPlayers[i] = _twoByTwo[i];
+                        }
+
+                        gameProcessManagement.PrepareSession(twoByTwoPlayers, "two");
+                    }
+                    break;
+
+                case "three": // Режим один на один 3 фишки против 3 фишек соперника
+                    _threeByThree[connectedCountThree] = player.gameObject;
+                    connectedCountThree++;
+
+                    if (connectedCountThree >= 2)
+                    {
+                        gameProcessManagement.PrepareSession(_threeByThree, "two");
+                        connectedCountThree = 0;
+                    }
+                    break;
+            }
         }
     }
 

@@ -31,24 +31,38 @@ public class GameProcessManagement : NetworkBehaviour
         }
     }
 
-    public void PrepareSession(GameObject[] players, string gameMode)
+    public void PrepareSession(GameObject[] players, string gameMode, Session oldSession = null)
     {
         if (isServer)
         {
-            Debug.Log("Create new session");
-
-            Session session = Instantiate(sessionObject, Vector3.zero, Quaternion.identity).GetComponent<Session>();
-            session.transform.SetParent(allSessions);
-
-            PlayerNet[] playerNets = new PlayerNet[players.Length];
-            for (int i = 0; i < playerNets.Length; i++)
+            if(!oldSession)
             {
-                playerNets[i] = players[i].GetComponent<PlayerNet>();
-                players[i].transform.SetParent(session.transform);
-            }
+                Debug.Log("Create new session");
 
-            session.Init(playerNets, this, false);
-            sessions.Add(session);
+                Session session = Instantiate(sessionObject, Vector3.zero, Quaternion.identity).GetComponent<Session>();
+                session.transform.SetParent(allSessions);
+
+                PlayerNet[] playerNets = new PlayerNet[players.Length];
+                for (int i = 0; i < playerNets.Length; i++)
+                {
+                    playerNets[i] = players[i].GetComponent<PlayerNet>();
+                    players[i].transform.SetParent(session.transform);
+                }
+
+                session.Init(playerNets, this, false);
+                sessions.Add(session);
+            }
+            else
+            {
+                Debug.Log("Recreate session");
+
+                for (int i = 0; i < oldSession.PlayerNets.Length; i++)
+                {
+                    players[i].transform.SetParent(oldSession.transform);
+                }
+
+                oldSession.Init(oldSession.PlayerNets, this, false);
+            }
         }
     }
 

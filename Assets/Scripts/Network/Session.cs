@@ -15,13 +15,13 @@ public class Session : MonoBehaviour
 
     public bool Correction;
     public int PlayerIndexQueue;             
-    public PlayerNet[] PlayerNets;      
-    public PlayerNet[] RecoverPlayerNets;
+    public PlayerNet[] PlayerNets;    
+    public List<PlayerStatsHolder> StatsHolder = new List<PlayerStatsHolder>();  
+    public string GameMode;
 
     private GameProcessManagement manager;
     private SessionTimer timer;
 
-    [Header("TypeStage")]
     private bool debugMode;
 
     [SerializeField] private ChipData debugData;
@@ -35,10 +35,15 @@ public class Session : MonoBehaviour
     
     public void Init(PlayerNet[] players, GameProcessManagement manager, bool debugMode = false) 
     {
+        Finished = false;
+        WalletsRecieved = false;
+        chipIdRecieved = false;
+
         // Инициализация сессии и присвоение параметров
         this.debugMode = debugMode;
         this.manager = manager;
         PlayerNets = players;
+        GameMode = PlayerNets[0].GameMode;
 
         timer = GetComponent<SessionTimer>();
 
@@ -47,6 +52,14 @@ public class Session : MonoBehaviour
 
         // Первый кто выбирает карту
         PlayerIndexQueue = UnityEngine.Random.Range(0, PlayerNets.Length);
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            PlayerStatsHolder stats = new PlayerStatsHolder();
+            StatsHolder.Add(stats);
+        }
+
+        SavePlayers();
     }
 
     public void UpdateSession()
@@ -193,6 +206,7 @@ public class Session : MonoBehaviour
         }
         else
         {
+            FindObjectOfType<NetworkController>().Sessions.Add(this);
             timer.isStoped = true;
             PlayerNets[0].StopGame("Other player disconnected", "", 0f, "0", true);
             PlayerNets[1].StopGame("Other player disconnected", "", 0f, "0", true);
@@ -251,6 +265,17 @@ public class Session : MonoBehaviour
     public void EndRound()
     {   
         PrepareNextRound();
+    }
+
+    public void SavePlayers()
+    {
+        for (int i = 0; i < PlayerNets.Length; i++)
+        {
+            StatsHolder[i].Capital = PlayerNets[i].Capital;
+            StatsHolder[i].Morale = PlayerNets[i].Morale;
+            StatsHolder[i].HandCards = PlayerNets[i].HandCards;
+            StatsHolder[i].Wallet = PlayerNets[i].Wallet;
+        }
     }
     
     private CardData GetSelectedCards(int playerIndex)
@@ -532,6 +557,12 @@ public class Session : MonoBehaviour
 
     private void OnDestroy()
     {
+        NetworkController controller = FindObjectOfType<NetworkController>();
+        if (controller.Sessions.Contains(this))
+        {
+            controller.Sessions.Remove(this);
+        }
+        
         manager.RemoveSession(this);
     }
 
@@ -562,6 +593,14 @@ public class Session : MonoBehaviour
     public class GameParams
     {
         public string timer { get; set; }
+    }
+
+    public class PlayerStatsHolder
+    {
+        public string Wallet;
+        public int Capital;
+        public float Morale;
+        public CardData[] HandCards;
     }
 
     #endregion
