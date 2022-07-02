@@ -14,13 +14,14 @@ public class SelectChip : MonoBehaviour
     [SerializeField] private Transform[] chipPositions = new Transform[3];
     [SerializeField] private Transform chipContainer;
     [SerializeField] private Text ChipName;
+    [SerializeField] private Text ChipMorale;
 
     private GameObject[] selectableChips;
     private int[] currentIdPos;
     private bool chipsLoaded;
     private int offsetMassive = 0;
 
-    // �������� ���� ����� ������������ � ������� ����
+    // �������� ���� ����� ������������ � ������� ����
     public void Init(List<ChipParameters> chipParam)
     {
         if (selectableChips != null)
@@ -52,10 +53,21 @@ public class SelectChip : MonoBehaviour
             selectableChips[i].transform.SetParent(chipContainer);
             selectableChips[i].transform.localScale = new Vector3(1,1,1);
             selectableChips[i].GetComponent<RawImage>().texture = chipParam[i].ChipTexture;
-            selectableChips[i].GetComponent<ChipContainer>().Init(chipParam[i].Id, chipParam[i].ChipName);
+            selectableChips[i].GetComponent<ChipContainer>().Init(chipParam[i].Id, chipParam[i].ChipName, chipParam[i].Morale);
 
-            selectableChips[i].SetActive(false);
-        }
+            // Если у фишки будет недостаточно энергии для игры то она помечается серым (данные обновляются при перезаходе в игру или возврате из игровой сессии)
+            if (chipParam[i].Morale == "0") 
+            {
+                Debug.Log("0");
+                selectableChips[i].GetComponent<RawImage>().color = Color.gray;
+            }
+            else
+            {
+                selectableChips[i].GetComponent<RawImage>().color = Color.white;
+            }
+
+                selectableChips[i].SetActive(false);
+            }
 
         chipsLoaded = true;
 
@@ -109,11 +121,13 @@ public class SelectChip : MonoBehaviour
 
                 int chipId = Convert.ToInt32(selectableChips[currentIdPos[i]].GetComponent<ChipContainer>().ChipId);
                 string chipName = selectableChips[currentIdPos[i]].GetComponent<ChipContainer>().ChipName;
+                string chipMorale = selectableChips[currentIdPos[i]].GetComponent<ChipContainer>().Morale;
 
                 PlayerPrefs.SetInt("chipId", chipId);
                 Debug.Log("Selected chipId: " + chipId);
-
+                
                 ChipName.text = chipName;
+                ChipMorale.text = chipMorale;
             }
             count++;
         }

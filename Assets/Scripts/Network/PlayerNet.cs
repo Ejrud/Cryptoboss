@@ -114,6 +114,25 @@ public class PlayerNet : NetworkBehaviour
 
             Texture chipTexture = lastTexture;
 
+            Debug.Log(GameMode);
+
+            if (GameMode == "one")
+            {
+                PrepareChip(rivalChipImages_2, 0, false); // где bool просто скрыть объект. цифра - индекс текстуры 
+                PrepareChip(rivalChipImages_3, 0, false);
+                PrepareChip(userChipImages_2, 0, false);
+                PrepareChip(userChipImages_3, 0, false);
+            }
+            else if (GameMode == "two") // Скрыть лишние фишки и показать 2 текущей фишки и 2 фишки соперников 
+            {
+                PrepareChip(rivalChipImages_3, 0, false);
+                PrepareChip(userChipImages_3, 0, false);
+            }
+            else if (GameMode == "three") // Показать 3 фишки соперника (т.к. 3 на 3 играют 2 игрока, то фишки игрока были изначально загружены при авторизации)
+            {
+                
+            }
+
             // 
             for (int i = 0; i < user.ChipParam.Count; i++)
             {
@@ -141,6 +160,8 @@ public class PlayerNet : NetworkBehaviour
                     }
                 }
             }
+
+            
         }
     }
 
@@ -338,12 +359,20 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void EndGame(string text, string charIncrement, float bossy, string raiting)
+    public void StopGame(string text, string charIncrement, float bossy, string raiting, bool disconnected)
     {
         backToLobbyWindow.SetActive(true);
-        exitWindowText.text = text;
-        bossyText.text = charIncrement + bossy;
-        raitingText.text = charIncrement + raiting;
+
+        if (disconnected) // Если соперник "случайно" отключился, то ожидать 60 секунд или выйти и не получмить награду
+        {
+            
+        }
+        else
+        {
+            exitWindowText.text = text;
+            bossyText.text = charIncrement + bossy;
+            raitingText.text = charIncrement + raiting;
+        }
     }
 
     [ClientRpc]
@@ -410,8 +439,10 @@ public class PlayerNet : NetworkBehaviour
             }
             else
             {
-                EndGame("Game mode not selected", "", 0f, "0");
+                StopGame("Game mode not selected", "", 0f, "0", false);
             }
+
+            chipRepresentation.SetUpWindows(gameMode);
         }
     }
 
@@ -434,6 +465,7 @@ public class PlayerNet : NetworkBehaviour
             {
                 image.gameObject.SetActive(active);
             }
+            Debug.Log("Chip hided");
         }
     }
 
@@ -441,7 +473,6 @@ public class PlayerNet : NetworkBehaviour
     public void GetGameMode()
     {
         string gameMode = PlayerPrefs.GetString("GameMode");
-        gameMode = "three";
         GameMode = gameMode;
         CmdSendGameMode(gameMode);
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using System;
 
 public class ChipFrameData : MonoBehaviour, IPointerDownHandler
 {
@@ -13,11 +14,28 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler
     private ChipParameters chipData;
     private bool selectable;
 
-    public void Init(ChipParameters chipParam, bool selectable = false)
+    private string chipCapital;
+    private string chipMorale;
+    private string chipRating;
+
+    private Text chipCapitalTxt;
+    private Text chipMoraleTxt;
+    private Text chipRatingTxt;
+
+    public void Init(ChipParameters chipParam, Text capitalTxt, Text moraleTxt, Text ratingTxt, bool selectable = false)
     {
         this.selectable = selectable;
         this.chipData = chipParam;
         this.chipName.text = this.chipData.ChipName;
+
+        chipCapital = chipParam.Capital;
+        chipMorale = chipParam.Morale;
+        chipRating = chipParam.Rating;
+
+        chipCapitalTxt = capitalTxt;
+        chipMoraleTxt = moraleTxt;
+        chipRatingTxt = ratingTxt;
+
         chipTexture.texture = chipParam.ChipTexture;
     }
     public void SetChipForGame()
@@ -34,6 +52,10 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler
         if (!selectable)
         { 
             GlobalEventManager.SendCards(chipData.CardDeck);
+
+            chipCapitalTxt.text = chipCapital;
+            chipMoraleTxt.text = chipMorale;
+            chipRatingTxt.text = chipRating;
         }
     }
 }

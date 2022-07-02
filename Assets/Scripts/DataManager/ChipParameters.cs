@@ -5,8 +5,12 @@ public class ChipParameters
 {
     public int Id;
     public string ChipName;
-    // Изображение фишки
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     public Texture ChipTexture;
-    // Карты фишки
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     public CardData[] CardDeck;
+
+    public string Morale;
+    public string Rating;
+    public string Capital;
 }

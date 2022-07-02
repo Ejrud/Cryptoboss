@@ -26,7 +26,8 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         sceneToLoad = 1;
-        PlayerPrefs.SetString("GameMode", "two"); // Менять при выборе сцены
+        PlayerPrefs.SetString("GameMode", "one"); // Менять при выборе сцены
+        PlayerPrefs.SetString("Wallet", "0xD2522633650Ac225eB410D92Eb15Bf82847B0220"); //
     }
 
     public void PanelActivate(GameObject objectToClose) // 
@@ -50,7 +51,7 @@ public class UIManager : MonoBehaviour
                 GameObject chipFrame = Instantiate(chipFramePrefab, new Vector3(0, 0, 0), Quaternion.identity);
 
                 chipFrame.transform.SetParent(chipWindowTransform.transform);
-                chipFrame.GetComponent<ChipFrameData>().Init(user.ChipParam[i], true);
+                // chipFrame.GetComponent<ChipFrameData>().Init(user.ChipParam[i], true);
                 chipFrame.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             }
 

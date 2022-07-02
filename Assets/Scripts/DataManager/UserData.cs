@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using System;
 using System.IO;
+using Newtonsoft.Json;
 
 public class UserData : MonoBehaviour
 {
@@ -82,12 +83,24 @@ public class UserData : MonoBehaviour
             
             if(!user.Authorized)
             {
-                SetCard(user.ChipParam[i].ChipName, i); // ������ ���� �����
+                SetCard(user.ChipParam[i].ChipName, i); //
             }
 
             Debug.Log("CryptoBoss #" + tokenIds[i]);
-            
-            // fetch uri from chain
+
+            // Загрузка данных фишки
+            WWWForm form = new WWWForm();
+            form.AddField("ChipGuid", user.ChipParam[i].ChipName);
+            UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_chipData.php", form);
+            await www.SendWebRequest();
+            List<ChipParam> chipParam = JsonConvert.DeserializeObject<List<ChipParam>>(www.downloadHandler.text);
+            user.ChipParam[i].Capital = chipParam[0].capital_current;
+            user.ChipParam[i].Morale = chipParam[0].energy_current;
+            user.ChipParam[i].Rating = chipParam[0].rating;
+
+            Debug.Log(www.downloadHandler.text);
+
+            // Загрузка текстур
             string uri = await ERC721.URI(chain, network, contract, tokenIds[i]); // change to ERC721
 
             UnityWebRequest webRequest = UnityWebRequest.Get(uri);
@@ -189,6 +202,13 @@ public class UserData : MonoBehaviour
     public class Response 
     {
         public string image;
+    }
+
+    public class ChipParam
+    {
+        public string capital_current { get; set; }
+        public string energy_current { get; set; }
+        public string rating { get; set; }
     }
 
     private float UpdateLoading(float currentLoad, float loadStep)

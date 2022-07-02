@@ -9,18 +9,14 @@ using Newtonsoft.Json;
 
 public class Session : MonoBehaviour
 {
-    // ���� ������������ ��������� ������ ����� ��������� �� ������, �� ������ ������
     public bool Ready;        
-    // ���� ������ ��������� ���������, �� GameProcessManagment ���������� � ���� ����������          
     public bool Finished;
-    // ���� ��� �������� �������, �� � GameProcessManagment ���������� ������ ���� (������������ ������ � �������)              
     public bool WalletsRecieved;
 
     public bool Correction;
-    // ����� ����� ����    
     public int PlayerIndexQueue;             
-    // ������� ������ ������ (������ � ���� �������������� ������)
     public PlayerNet[] PlayerNets;      
+    public PlayerNet[] RecoverPlayerNets;
 
     private GameProcessManagement manager;
     private SessionTimer timer;
@@ -61,8 +57,6 @@ public class Session : MonoBehaviour
             {
                 FinishTheGame(false, false, true);
             }
-            
-
             else if (PlayerNets[PlayerIndexQueue].CardSelected)
             {
                 PlayerNets[PlayerIndexQueue].CardSelected = false;
@@ -199,8 +193,9 @@ public class Session : MonoBehaviour
         }
         else
         {
-            PlayerNets[0].EndGame("Other player disconnected", "", 0f, "0");
-            PlayerNets[1].EndGame("Other player disconnected", "", 0f, "0");
+            timer.isStoped = true;
+            PlayerNets[0].StopGame("Other player disconnected", "", 0f, "0", true);
+            PlayerNets[1].StopGame("Other player disconnected", "", 0f, "0", true);
         }
     }
 
@@ -224,23 +219,23 @@ public class Session : MonoBehaviour
 
                 if (PlayerNets[0].Win && !PlayerNets[1].Win)
                 {
-                    PlayerNets[0].EndGame("YOU HAVE WON!", "+", results.bossy, results.rating);
-                    PlayerNets[1].EndGame("YOU LOSE", "-", 0f, results.decrement);
+                    PlayerNets[0].StopGame("YOU HAVE WON!", "+", results.bossy, results.rating, false);
+                    PlayerNets[1].StopGame("YOU LOSE", "-", 0f, results.decrement, false);
                 }
                 else if (!PlayerNets[0].Win && PlayerNets[1].Win)
                 {
-                    PlayerNets[1].EndGame("YOU HAVE WON!", "+", results.bossy, results.rating);
-                    PlayerNets[0].EndGame("YOU LOSE", "-", 0f ,results.decrement);
+                    PlayerNets[1].StopGame("YOU HAVE WON!", "+", results.bossy, results.rating, false);
+                    PlayerNets[0].StopGame("YOU LOSE", "-", 0f ,results.decrement, false);
                 }
                 else if (!PlayerNets[0].Win && !PlayerNets[1].Win)
                 {
-                    PlayerNets[0].EndGame("DRAW", "", 0f, "0");
-                    PlayerNets[1].EndGame("DRAW", "", 0f, "0");
+                    PlayerNets[0].StopGame("DRAW", "", 0f, "0", false);
+                    PlayerNets[1].StopGame("DRAW", "", 0f, "0", false);
                 }
                 else
                 {
-                    PlayerNets[0].EndGame("DRAW", "", 0f, "0");
-                    PlayerNets[1].EndGame("DRAW", "", 0f, "0");
+                    PlayerNets[0].StopGame("DRAW", "", 0f, "0", false);
+                    PlayerNets[1].StopGame("DRAW", "", 0f, "0", false);
                 }
 
                 Debug.Log("Reward = " + results.bossy);
@@ -391,7 +386,7 @@ public class Session : MonoBehaviour
 
     private IEnumerator PreparePlayers()
     {
-
+        // Цикл загрузки данных с бд
         for (int i = 0; i < PlayerNets.Length; i++)
         {
             WWWForm form = new WWWForm();
@@ -481,6 +476,9 @@ public class Session : MonoBehaviour
         }
         else // Режим 1 на 1 ( + возможно 3 на 3)
         {
+            PlayerNets[0].Capital = PlayerNets[0].MaxHealth;   
+            PlayerNets[1].Capital = PlayerNets[1].MaxHealth;   
+
             PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, 20, PlayerNets[1].Capital, 20, 20);
             PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, 20, PlayerNets[0].Capital, 20, 20);
         }

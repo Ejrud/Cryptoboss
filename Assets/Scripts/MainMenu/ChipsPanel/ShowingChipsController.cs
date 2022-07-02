@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShowingChipsController : MonoBehaviour
 {
@@ -12,9 +13,14 @@ public class ShowingChipsController : MonoBehaviour
     [Header("Chip prefab")]
     [SerializeField] private GameObject chipFrame;
 
+    [Header("Links")]
+    [SerializeField] private Text chipCapital;
+    [SerializeField] private Text chipMorale;
+    [SerializeField] private Text chipRating;
+
     private void Start()
     {
-        ShowChips(user); // При авторизации пользователя вводить иной scriptableObject с заранее загруженными данными
+        ShowChips(user); // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ scriptableObject пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     }
 
     public void ShowChips(User user)
@@ -24,7 +30,7 @@ public class ShowingChipsController : MonoBehaviour
             GameObject chipFrame = Instantiate(this.chipFrame, new Vector3(0, 0, 0), Quaternion.identity);
 
             chipFrame.transform.SetParent(chipsViewportContent.transform);
-            chipFrame.GetComponent<ChipFrameData>().Init(user.ChipParam[i], false);
+            chipFrame.GetComponent<ChipFrameData>().Init(user.ChipParam[i], chipCapital, chipMorale, chipRating, false);
             chipFrame.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
         }
     }
