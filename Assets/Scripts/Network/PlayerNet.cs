@@ -59,6 +59,8 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private Image energyImage;
     [SerializeField] private RawImage ChipImage;        // Используется для настройки цвета
     [SerializeField] private RawImage RivalChipImage;   // Используется для настройки цвета
+    [SerializeField] private GameObject winContainer;
+    [SerializeField] private Text awaitPlayerTxt;
 
 
     [SerializeField] private GameObject playersWaitingObj;
@@ -331,6 +333,7 @@ public class PlayerNet : NetworkBehaviour
     public void SetTimerText(string time)
     {
         timerText.text = time;
+        awaitPlayerTxt.text = time;
         UpdateUI();
     }
 
@@ -375,10 +378,14 @@ public class PlayerNet : NetworkBehaviour
 
         if (disconnected) // Если соперник "случайно" отключился, то ожидать 60 секунд или выйти и не получмить награду
         {
-            
+            exitWindowText.text = text;
+            winContainer.SetActive(false);
+            awaitPlayerTxt.gameObject.SetActive(true);
         }
         else
         {
+            awaitPlayerTxt.gameObject.SetActive(false);
+            winContainer.SetActive(true);
             exitWindowText.text = text;
             bossyText.text = charIncrement + bossy;
             raitingText.text = charIncrement + raiting;

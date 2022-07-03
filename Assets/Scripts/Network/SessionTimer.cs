@@ -10,18 +10,18 @@ public class SessionTimer : NetworkBehaviour
     [SerializeField] private Session session;
 
     [Header("Timer parameters")]
-    public bool isRunning = false;  // Переклячатель для таймера
+    public bool isRunning = false;  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public bool isStoped = false;
-    public float RoundTimer;        // Время для раунда
-    public float OriginalTime;     // Используется при запуске нового раунда
-    private string timerString;     // Текст времени для вывода на UI игрока
+    public float RoundTimer;        // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    public float OriginalTime;     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    private string timerString;     // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ UI пїЅпїЅпїЅпїЅпїЅпїЅ
 
     private void Start()
     {
         OriginalTime = RoundTimer;
     }
 
-    // Таймер конкретного раунда (Выполняется только на сервере и отправляется всем клиентам)
+    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
     private IEnumerator TimerMethod()
     {
         isRunning = true;
@@ -34,8 +34,29 @@ public class SessionTimer : NetworkBehaviour
             }
             if (RoundTimer <= 0 && !isStoped)
             {
-                isStoped = true;
-                session.EndRound();
+                if(!session.AwaitPlayer)
+                {
+                    isStoped = true;
+                    session.EndRound();
+                }
+                else
+                {
+                    bool[] playerWins = new bool[session.PlayerNets.Length];
+
+                    for (int i = 0; i < session.PlayerNets.Length; i++)
+                    {
+                        if (session.PlayerNets[i] != null)
+                        {
+                            playerWins[i] = true;
+                        }
+                        else
+                        {
+                            playerWins[i] = false;
+                        }
+                    }
+
+                    session.FinishTheGame(playerWins[0], playerWins[1]);
+                }
             }
 
             int min = (int)RoundTimer / 60;
@@ -45,6 +66,7 @@ public class SessionTimer : NetworkBehaviour
             session.UpdatePlayerTimer(timerString);
 
             yield return new WaitForSeconds(1f);
+            
         }
 
         yield return null;
@@ -53,12 +75,13 @@ public class SessionTimer : NetworkBehaviour
     public void StartTimer()
     {
         Debug.Log("Timer started");
+        StopAllCoroutines();
         StartCoroutine(TimerMethod());
     }
 
     public void ResetTimer()
     {
-        // Сброс таймера до изначального значения
+        // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         RoundTimer = OriginalTime;
         isRunning = true;
         isStoped = false;

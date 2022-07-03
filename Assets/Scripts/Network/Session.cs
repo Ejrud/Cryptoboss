@@ -23,11 +23,12 @@ public class Session : MonoBehaviour
     private SessionTimer timer;
 
     public bool DataSaved;
+    public bool AwaitPlayer;
 
     [SerializeField] private ChipData debugData;
+    [SerializeField] private int playerAwaiting = 60;
     private bool gameStarted = false;
     private bool chipIdRecieved;
-
     private bool playerIndexRecieved = false;
 
     private string seUrl = "https://cryptoboss.win/game/back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
@@ -37,6 +38,7 @@ public class Session : MonoBehaviour
     
     public void Init(PlayerNet[] players, GameProcessManagement manager, bool RepeatConnect = false) 
     {
+        AwaitPlayer = false;
         Finished = false;
         WalletsRecieved = false;
         chipIdRecieved = false;
@@ -47,6 +49,8 @@ public class Session : MonoBehaviour
         GameMode = PlayerNets[0].GameMode;
 
         timer = GetComponent<SessionTimer>();
+        timer.ResetTimer();
+        timer.isStoped = true;
 
         // Подготовка игроков
         StartCoroutine(WalletRecieve());
@@ -193,6 +197,12 @@ public class Session : MonoBehaviour
 
         if (!playerDisconnected)
         {
+            NetworkController controller = FindObjectOfType<NetworkController>();
+            if (controller.Sessions.Contains(this))
+            {
+                controller.Sessions.Remove(this);
+            }
+            
             PlayerNets[0].Win = playerWin_1;
             PlayerNets[1].Win = playerWin_2;
 
@@ -216,12 +226,18 @@ public class Session : MonoBehaviour
             }
 
             StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode));
+
+            timer.isStoped = true;
+            timer.isRunning = false;
         }
         else
         {
             FindObjectOfType<NetworkController>().Sessions.Add(this);
-            timer.isStoped = true;
-            timer.isRunning = false;
+            
+
+            timer.RoundTimer = playerAwaiting;
+            AwaitPlayer = true;
+
             PlayerNets[0].StopGame("Other player disconnected", "", 0f, "0", true);
             PlayerNets[1].StopGame("Other player disconnected", "", 0f, "0", true);
         }
