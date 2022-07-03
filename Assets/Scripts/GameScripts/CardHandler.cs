@@ -7,7 +7,7 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 {
     [Header("Settings")]
     [SerializeField] private float deadZone = 1f;
-    [SerializeField] private bool active = true; // Активна ли карта для взаимодействия
+    [SerializeField] private bool active = true; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
     [Header("Links")]
     public Vector3 CardDisplacement;
@@ -31,13 +31,13 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     {
         if (hold && acceptMove)
         {
-            // Нахождение позиции курсора
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             Vector3 pointerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 resPos2D = new Vector2(pointerPos.x, pointerPos.y) - offset;
             Vector3 resPosition = new Vector3(resPos2D.x, resPos2D.y, 0);
 
-            // Движение объекта за курсором
-            rectTransform.position = new Vector3(resPosition.x, resPosition.y, 100); // 100 - стартовое значение plane distance
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            rectTransform.position = new Vector3(resPosition.x, resPosition.y, 100); // 100 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ plane distance
         }
     }
 
@@ -75,17 +75,18 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         }
         else
         {
-            // Возврат в изначальное положение
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             ReturnCard();
         }
     }
 
     public void ReturnCard()
     {
+        gameObject.SetActive(true);
         StartCoroutine(SetStartPosition());
     }
 
-    // Если карта не передвинулась с места то вернуть ее в изначальное место
+    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     private IEnumerator SetStartPosition()
     {
         Vector3 startPos = rectTransform.transform.position;

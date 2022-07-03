@@ -61,7 +61,7 @@ public class GameProcessManagement : NetworkBehaviour
                     players[i].transform.SetParent(oldSession.transform);
                 }
 
-                oldSession.Init(oldSession.PlayerNets, this, false);
+                oldSession.Init(oldSession.PlayerNets, this, true);
             }
         }
     }

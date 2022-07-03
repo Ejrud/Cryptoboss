@@ -87,16 +87,21 @@ public class NetworkController : NetworkManager
     public void SetDistribution(PlayerNet player)
     {
         bool repeatConnect = false; 
+        Session oldSession = new Session();
 
         foreach (Session session in Sessions)
         {
-            for (int i = 0; i < session.StatsHolder.Count; i++)
+            for (int i = 0; i < session.PlayerNets.Length; i++)
             {
-                if (session.StatsHolder[i].Wallet == player.Wallet)
+                Debug.Log(session.StatsHolder[i].ChipId +  "    " + player.ChipId);
+
+                if (session.StatsHolder[i].ChipId == player.ChipId)
                 {
                     session.PlayerNets[i] = player;
 
                     GameObject[] players = new GameObject[session.PlayerNets.Length];
+
+                    Debug.Log("Problem index = " + i);
                     
                     for (int j = 0; j < players.Length; j++)
                     {
@@ -104,8 +109,7 @@ public class NetworkController : NetworkManager
                     }
 
                     gameProcessManagement.PrepareSession(players, session.GameMode, session);
-                    
-                    Debug.Log("Ну типа что то должно произойти");
+                    oldSession = session;
                     
                     repeatConnect = true;
                     break;
@@ -157,6 +161,10 @@ public class NetworkController : NetworkManager
                     }
                     break;
             }
+        }
+        else
+        {
+            Sessions.Remove(oldSession);
         }
     }
 

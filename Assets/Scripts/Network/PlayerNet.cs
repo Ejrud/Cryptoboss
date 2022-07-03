@@ -179,17 +179,24 @@ public class PlayerNet : NetworkBehaviour
     }
 
     // 
-    public void UpdateRoundCards(CardData[] hand)
+    public void UpdateRoundCards(CardData[] hand, bool reconnect = false)
     {
         HandCards = hand;
         CardSelected = false;
-        UsedCount = hand.Length;
-        foreach (CardData card in HandCards)
+
+        if(!reconnect)
         {
-            card.Used = false;
+            foreach (CardData card in HandCards)
+            {
+                card.Used = false;
+            }
+
+            UsedCount = hand.Length;
         }
-        SyncRoundCards(HandCards);
+        
+        SyncRoundCards(HandCards, UsedCount);
     }
+    
 
     // 
     public void UpdateUI()
@@ -220,9 +227,10 @@ public class PlayerNet : NetworkBehaviour
         SceneManager.LoadScene(menuSceneIndex);
     }
     [Command]
-    public void CmdSendGameMode(string gameMode)
+    public void CmdSendGameMode(string gameMode, int chipId)
     {
         GameMode = gameMode;
+        this.ChipId = chipId;
         Debug.Log(GameMode);
         FindObjectOfType<NetworkController>().SetDistribution(this); // cringe
     }
@@ -306,12 +314,13 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void SyncRoundCards(CardData[] roundCards)
+    public void SyncRoundCards(CardData[] roundCards, int usedCount)
     {
         if (hasAuthority)
         {
             Debug.Log("Local player prepared");
 
+            UsedCount = usedCount;
             HandCards = roundCards;
             CardSelected = false;
             cardManager.ReturnCards();
@@ -335,6 +344,7 @@ public class PlayerNet : NetworkBehaviour
     public void RepresentationWindow(bool view)
     {
         representationScreen.SetActive(view);
+        backToLobbyWindow.SetActive(false);
 
         if (!audioSource.isPlaying)
         {
@@ -473,8 +483,9 @@ public class PlayerNet : NetworkBehaviour
     public void GetGameMode()
     {
         string gameMode = PlayerPrefs.GetString("GameMode");
+        int chipId = PlayerPrefs.GetInt("chipId");
         GameMode = gameMode;
-        CmdSendGameMode(gameMode);
+        CmdSendGameMode(gameMode, chipId);
     }
 
     private void OnDestroy()

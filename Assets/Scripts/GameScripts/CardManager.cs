@@ -44,11 +44,6 @@ public class CardManager : NetworkBehaviour
         {
             stk.gameObject.SetActive(false);
         }
-        foreach (CardParameters card in playerCards)
-        {
-            card.Selected = true;
-            card.Card.Used = true;
-        }
 
         StartCoroutine(UpdateCardPositions(false, true));
     }
@@ -95,29 +90,7 @@ public class CardManager : NetworkBehaviour
                 StartCoroutine(CardTransition(card, card.transform.position, tablePosition.transform.position));
 
                 // Инициализация новых позиций
-                int selectedCount = 0;
-                for (int i = 0; i < playerCards.Length; i++)
-                {
-                    if (playerCards[i].Selected)
-                    {
-                        for (int j = i; j < playerCards.Length; j++)
-                        {
-                            if (j + 1 == playerCards.Length) continue;
-
-                            playerCards[j + 1].GetComponent<CardHandler>().CardDisplacement = playerCardPositions[j - selectedCount].position;
-                            playerCards[j + 1].GetComponent<CardHandler>().IndexPosition = j - selectedCount;
-                        }
-                        selectedCount++;
-                    }
-                }
-
-                for (int i = 0; i < playerCards.Length; i++)
-                {
-                    if (!playerCards[i].Selected)
-                    {
-                        playerCards[i].GetComponent<CardHandler>().ReturnCard();
-                    }
-                }
+                ReposPlayerCards();
 
                 Animate = true;
 
@@ -281,17 +254,26 @@ public class CardManager : NetworkBehaviour
     {
         for (int i = 0; i < playerCards.Length; i++)
         {
-            Debug.Log("Card returned");
-            playerCards[i].Card.Used = false;
-            playerCards[i].Selected = false;
-            playerCards[i].gameObject.SetActive(true);
+            if (!playerNet.HandCards[i].Used)
+            {
+                playerCards[i].Card.Used = false;
+                playerCards[i].Selected = false;
+                playerCards[i].gameObject.SetActive(true);
 
-            playerCards[i].GetComponent<CardHandler>().CardDisplacement = playerCardPositions[i].transform.position;
+                playerCards[i].GetComponent<CardHandler>().CardDisplacement = playerCardPositions[i].transform.position;
 
-            playerCards[i].SetCardEffects(playerNet.HandCards[i], i);
-            playerCards[i].GetComponent<CardHandler>().ReturnCard();
-            playerCards[i].GetComponent<CardHandler>().IndexPosition = i;
+                playerCards[i].SetCardEffects(playerNet.HandCards[i], i);
+                playerCards[i].GetComponent<CardHandler>().ReturnCard();
+                playerCards[i].GetComponent<CardHandler>().IndexPosition = i;
+            }
+            else
+            {
+                playerCards[i].gameObject.SetActive(false);
+                playerCards[i].Selected = true;
+            }
         }
+
+        ReposPlayerCards();
     }
 
     // Перемещение карты
@@ -429,5 +411,32 @@ public class CardManager : NetworkBehaviour
         }
 
         yield return null;
+    }
+
+    private void ReposPlayerCards()
+    {
+        int selectedCount = 0;
+        for (int i = 0; i < playerCards.Length; i++)
+        {
+            if (playerCards[i].Selected)
+            {
+                for (int j = i; j < playerCards.Length; j++)
+                {
+                    if (j + 1 == playerCards.Length) continue;
+
+                    playerCards[j + 1].GetComponent<CardHandler>().CardDisplacement = playerCardPositions[j - selectedCount].position;
+                    playerCards[j + 1].GetComponent<CardHandler>().IndexPosition = j - selectedCount;
+                }
+                selectedCount++;
+            }
+        }
+
+        for (int i = 0; i < playerCards.Length; i++)
+        {
+            if (!playerCards[i].Selected)
+            {
+                playerCards[i].GetComponent<CardHandler>().ReturnCard();
+            }
+        }
     }
 }

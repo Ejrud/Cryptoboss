@@ -22,25 +22,26 @@ public class Session : MonoBehaviour
     private GameProcessManagement manager;
     private SessionTimer timer;
 
-    private bool debugMode;
+    public bool DataSaved;
 
     [SerializeField] private ChipData debugData;
     private bool gameStarted = false;
     private bool chipIdRecieved;
+
+    private bool playerIndexRecieved = false;
 
     private string seUrl = "https://cryptoboss.win/game/back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
 
     [Header("Settings")]
     [SerializeField] private float energyRecovery = 0.5f;
     
-    public void Init(PlayerNet[] players, GameProcessManagement manager, bool debugMode = false) 
+    public void Init(PlayerNet[] players, GameProcessManagement manager, bool RepeatConnect = false) 
     {
         Finished = false;
         WalletsRecieved = false;
         chipIdRecieved = false;
 
         // Инициализация сессии и присвоение параметров
-        this.debugMode = debugMode;
         this.manager = manager;
         PlayerNets = players;
         GameMode = PlayerNets[0].GameMode;
@@ -51,15 +52,24 @@ public class Session : MonoBehaviour
         StartCoroutine(WalletRecieve());
 
         // Первый кто выбирает карту
-        PlayerIndexQueue = UnityEngine.Random.Range(0, PlayerNets.Length);
-
-        for (int i = 0; i < players.Length; i++)
+        if (!RepeatConnect)
         {
-            PlayerStatsHolder stats = new PlayerStatsHolder();
-            StatsHolder.Add(stats);
+            PlayerIndexQueue = UnityEngine.Random.Range(0, PlayerNets.Length);
+        }
+        else
+        {
+            PlayerIndexQueue = StatsHolder[0].QueueIndex;
+            playerIndexRecieved = true;
         }
 
-        SavePlayers();
+        if (StatsHolder.Count <= 0)
+        {
+            for (int i = 0; i < players.Length; i++)
+            {
+                PlayerStatsHolder stats = new PlayerStatsHolder();
+                StatsHolder.Add(stats);
+            }
+        }
     }
 
     public void UpdateSession()
@@ -108,6 +118,7 @@ public class Session : MonoBehaviour
     public void PrepareNextRound(bool correction = false)
     {
         SetNextIndexQueue(correction);
+        SavePlayers();
         
         for (int i = 0; i < PlayerNets.Length; i++)
         {
@@ -161,6 +172,8 @@ public class Session : MonoBehaviour
             PlayerNets[i].CloseWindowWaitingForPlayers();
         }
 
+        SavePlayers();
+
         Ready = false;
         timer.ResetTimer();
     }
@@ -208,6 +221,7 @@ public class Session : MonoBehaviour
         {
             FindObjectOfType<NetworkController>().Sessions.Add(this);
             timer.isStoped = true;
+            timer.isRunning = false;
             PlayerNets[0].StopGame("Other player disconnected", "", 0f, "0", true);
             PlayerNets[1].StopGame("Other player disconnected", "", 0f, "0", true);
         }
@@ -275,7 +289,13 @@ public class Session : MonoBehaviour
             StatsHolder[i].Morale = PlayerNets[i].Morale;
             StatsHolder[i].HandCards = PlayerNets[i].HandCards;
             StatsHolder[i].Wallet = PlayerNets[i].Wallet;
+            StatsHolder[i].ChipId = PlayerNets[i].ChipId;
+            StatsHolder[i].RepeatConnect = true;
+            StatsHolder[i].UsedCount = PlayerNets[i].UsedCount;
+            StatsHolder[i].QueueIndex = PlayerIndexQueue;
         }
+
+        DataSaved = true;
     }
     
     private CardData GetSelectedCards(int playerIndex)
@@ -286,7 +306,7 @@ public class Session : MonoBehaviour
 
     private void SetNextIndexQueue(bool correction = false)
     {
-        if (!correction)
+        if (!correction && !playerIndexRecieved)
         {
             PlayerIndexQueue++;
             if (PlayerIndexQueue >= PlayerNets.Length)
@@ -294,6 +314,8 @@ public class Session : MonoBehaviour
                 PlayerIndexQueue = 0;
             }
         }
+
+        playerIndexRecieved = false;
 
         for(int i = 0; i < PlayerNets.Length; i++)
         {
@@ -501,11 +523,45 @@ public class Session : MonoBehaviour
         }
         else // Режим 1 на 1 ( + возможно 3 на 3)
         {
-            PlayerNets[0].Capital = PlayerNets[0].MaxHealth;   
-            PlayerNets[1].Capital = PlayerNets[1].MaxHealth;   
+            if (StatsHolder[0].RepeatConnect)
+            {
+                PlayerNets[0].Capital = StatsHolder[0].Capital;
+                PlayerNets[0].Morale = StatsHolder[0].Morale;
+                PlayerNets[0].FirstStart = false;
+            }
+            else
+            {
+                PlayerNets[0].Capital = PlayerNets[0].MaxHealth;
+                PlayerNets[0].Morale = 20;
+            }
 
-            PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, 20, PlayerNets[1].Capital, 20, 20);
-            PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, 20, PlayerNets[0].Capital, 20, 20);
+            if (StatsHolder[1].RepeatConnect)
+            {
+                PlayerNets[1].Capital = StatsHolder[1].Capital;
+                PlayerNets[1].Morale = StatsHolder[1].Morale;
+                PlayerNets[1].FirstStart = false;
+            }
+            else
+            {
+                PlayerNets[1].Capital = PlayerNets[1].MaxHealth;  
+                PlayerNets[1].Morale = 20; 
+            }
+
+            PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[1].Capital, PlayerNets[1].Morale, 20);
+            PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[0].Capital, PlayerNets[0].Morale, 20);
+        }
+
+        for (int i = 0; i < PlayerNets.Length; i++)
+        {
+            if (DataSaved)
+            {
+                for (int j = 0; j < PlayerNets[i].HandCards.Length; j++)
+                {
+                    PlayerNets[i].HandCards[j] = StatsHolder[i].HandCards[j];
+                }
+                PlayerNets[i].UsedCount = StatsHolder[i].UsedCount;
+                PlayerNets[i].UpdateRoundCards(PlayerNets[i].HandCards, true);
+            }
         }
 
         PrepareNextRound();
@@ -597,10 +653,14 @@ public class Session : MonoBehaviour
 
     public class PlayerStatsHolder
     {
+        public bool RepeatConnect;
         public string Wallet;
+        public int ChipId;
         public int Capital;
         public float Morale;
         public CardData[] HandCards;
+        public int UsedCount;
+        public int QueueIndex;
     }
 
     #endregion
