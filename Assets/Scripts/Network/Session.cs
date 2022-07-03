@@ -31,7 +31,7 @@ public class Session : MonoBehaviour
     private bool chipIdRecieved;
     private bool playerIndexRecieved = false;
 
-    private string seUrl = "https://cryptoboss.win/game/back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
+    private string seUrl = "a0664627.xsph.ru/cryptoboss_back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
 
     [Header("Settings")]
     [SerializeField] private float energyRecovery = 0.5f;
@@ -114,6 +114,10 @@ public class Session : MonoBehaviour
         {
             if (PlayerNets[0] == null && PlayerNets[1] == null)
             {
+                if (gameStarted)
+                {
+                    FinishTheGame(false, false);
+                }
                 Destroy(gameObject);
             }
         }
@@ -194,6 +198,7 @@ public class Session : MonoBehaviour
     {
         Ready = false;
         Finished = true;
+        bool left = false;
 
         if (!playerDisconnected)
         {
@@ -213,19 +218,25 @@ public class Session : MonoBehaviour
         
             if (PlayerNets[0].Win)
             {
-                winnerWallet = PlayerNets[0].Wallet;
-                winnerGuid = "CryptoBoss #" + PlayerNets[0].ChipId;
-                looseGuid = "CryptoBoss #" + PlayerNets[1].ChipId;
+                winnerWallet = StatsHolder[0].Wallet;
+                winnerGuid = "CryptoBoss #" + StatsHolder[0].ChipId;
+                looseGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
 
             }
             else if (PlayerNets[1].Win)
             {
-                winnerWallet = PlayerNets[1].Wallet;
-                winnerGuid = "CryptoBoss #" + PlayerNets[1].ChipId;
-                looseGuid = "CryptoBoss #" + PlayerNets[0].ChipId;
+                winnerWallet = StatsHolder[1].Wallet;
+                winnerGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
+                looseGuid = "CryptoBoss #" + StatsHolder[0].ChipId;
+            }
+            else if (!PlayerNets[0].Win && !PlayerNets[1].Win)
+            {
+                left = true;
+                winnerGuid = "CryptoBoss #" + StatsHolder[0].ChipId;
+                looseGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
             }
 
-            StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode));
+            StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode, left));
 
             timer.isStoped = true;
             timer.isRunning = false;
@@ -243,14 +254,19 @@ public class Session : MonoBehaviour
         }
     }
 
-    private IEnumerator SetReward(string winnerWallet, string winnerGuid, string looseGuid, string mode)
+    private IEnumerator SetReward(string winnerWallet, string winnerGuid, string looseGuid, string mode, bool left)
     {
         WWWForm form = new WWWForm();
         
-        form.AddField("WinGuid", winnerGuid);
-        form.AddField("WinWallet", winnerWallet);
-        form.AddField("LooseGuid", looseGuid);
+        form.AddField("WinGuid_1", winnerGuid);
+        form.AddField("WinWallet_1", winnerWallet);
+        form.AddField("LooseGuid_1", looseGuid);
         form.AddField("Mode", mode);
+
+        if(left)
+        {
+            form.AddField("Leave", "true");
+        }
 
         // �������� ����
         using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "accrual.php", form))
