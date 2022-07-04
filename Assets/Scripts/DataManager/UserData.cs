@@ -59,14 +59,12 @@ public class UserData : MonoBehaviour
 
     private async void LoadData(string[] tokenIds, float loadProgress = 0, int errorLoop = 0)
     {
-        string chain = "polygon";
-        string network = "mainnet";
-        string contract = "0x4fa6d1Fc702bD7f1607dfeE4206Db368995E1443";
         float MaxLoad = tokenIds.Length;
         float loadStep = 1 / MaxLoad;
         float currentLoad = loadProgress;
         loadBar.fillAmount = currentLoad;
-        loadText.text = currentLoad * 100 + " %";
+        int loadRounded = (int)currentLoad * 100;
+        loadText.text = (int)(currentLoad * 100) + " %";
         loadScreen.SetActive(true);
 
         for (int i = errorLoop; i < tokenIds.Length; i++)
@@ -99,22 +97,6 @@ public class UserData : MonoBehaviour
             user.ChipParam[i].Rating = chipParam[0].rating;
 
             Debug.Log(www.downloadHandler.text);
-
-            // Загрузка текстур
-            string uri = await ERC721.URI(chain, network, contract, tokenIds[i]); // change to ERC721
-
-            UnityWebRequest webRequest = UnityWebRequest.Get(uri);
-            await webRequest.SendWebRequest();
-            if(webRequest.error != null)
-            {
-                Debug.Log("Repeat load nft uri");
-                LoadData(tokenIds, currentLoad, i);
-                return;
-            }
-            Response data = JsonUtility.FromJson<Response>(System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data));
-
-            // parse json to get image uri
-            string imageUri = data.image;
 
             string newImgUri = seUrl + "images/" + tokenIds[i] + ".png"; // 
 
@@ -215,7 +197,7 @@ public class UserData : MonoBehaviour
     {
         currentLoad += loadStep;
         loadBar.fillAmount = currentLoad; // ���������� �������� �����
-        loadText.text = currentLoad * 100 + " %";
+        loadText.text = (int)(currentLoad * 100) + " %";
 
         return currentLoad;
     }

@@ -543,415 +543,106 @@ MonoBehaviour:
       CardCost: 1
       ChipId: CryptoBoss #907
       Description: 
+    Morale: 7
+    Rating: 978
+    Capital: 500
   - Id: 906
     ChipName: CryptoBoss #906
     ChipTexture: {fileID: 0}
     CardDeck:
     - Used: 0
-      Guid: 41
-      Version: 
-      Name: Inflation
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 200
-      EnergyHealth: 0
-      CapitalEarnings: 50
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 42
-      Version: 
-      Name: Hacker attack
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 190
-      EnergyHealth: 0
-      CapitalEarnings: 75
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 43
-      Version: 
-      Name: Inflation
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 190
-      EnergyHealth: 0
-      CapitalEarnings: 50
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 44
-      Version: 
-      Name: Cryptocurrency drop
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 185
-      EnergyHealth: 0
-      CapitalEarnings: 25
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 45
-      Version: 
-      Name: Interest rate hike
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 185
-      EnergyHealth: 0
-      CapitalEarnings: 75
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 46
-      Version: 
-      Name: Cryptocurrency drop
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 180
-      EnergyHealth: 0
-      CapitalEarnings: 75
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 47
-      Version: 
-      Name: Hacker attack
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 180
-      EnergyHealth: 0
-      CapitalEarnings: 50
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 48
+      Guid: 281
       Version: 
       Name: Utility bill
       Type: damage
       EnergyDamage: 0
-      CapitalDamage: 180
-      EnergyHealth: 0
-      CapitalEarnings: 25
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 49
-      Version: 
-      Name: 'Inflation '
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 170
+      CapitalDamage: 160
       EnergyHealth: 0
       CapitalEarnings: 50
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 50
-      Version: 
-      Name: Hacker attack
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 170
-      EnergyHealth: 0
-      CapitalEarnings: 75
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 51
-      Version: 
-      Name: 'Inflation '
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 170
-      EnergyHealth: 0
-      CapitalEarnings: 50
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 52
-      Version: 
-      Name: Cryptocurrency drop
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 170
-      EnergyHealth: 0
-      CapitalEarnings: 25
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 53
+      Guid: 282
       Version: 
       Name: Interest rate hike
       Type: damage
       EnergyDamage: 0
-      CapitalDamage: 170
+      CapitalDamage: 160
       EnergyHealth: 0
       CapitalEarnings: 75
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 54
-      Version: 
-      Name: Cryptocurrency drop
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 170
-      EnergyHealth: 0
-      CapitalEarnings: 75
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 55
-      Version: 
-      Name: Hacker attack
-      Type: damage
-      EnergyDamage: 0
-      CapitalDamage: 170
-      EnergyHealth: 0
-      CapitalEarnings: 50
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 56
+      Guid: 283
       Version: 
       Name: Utility bill
       Type: damage
       EnergyDamage: 0
-      CapitalDamage: 170
+      CapitalDamage: 150
       EnergyHealth: 0
-      CapitalEarnings: 25
+      CapitalEarnings: 50
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 65
-      Version: 
-      Name: Airdrop
-      Type: heal
-      EnergyDamage: 0
-      CapitalDamage: 0
-      EnergyHealth: 0
-      CapitalEarnings: 125
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 66
-      Version: 
-      Name: Diversification
-      Type: heal
-      EnergyDamage: 0
-      CapitalDamage: 0
-      EnergyHealth: 0
-      CapitalEarnings: 110
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 67
-      Version: 
-      Name: Airdrop
-      Type: heal
-      EnergyDamage: 0
-      CapitalDamage: 0
-      EnergyHealth: 0
-      CapitalEarnings: 110
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 68
-      Version: 
-      Name: Diversification
-      Type: heal
-      EnergyDamage: 0
-      CapitalDamage: 0
-      EnergyHealth: 0
-      CapitalEarnings: 95
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 69
-      Version: 
-      Name: Airdrop
-      Type: heal
-      EnergyDamage: 0
-      CapitalDamage: 0
-      EnergyHealth: 0
-      CapitalEarnings: 95
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 70
-      Version: 
-      Name: Diversification
-      Type: heal
-      EnergyDamage: 0
-      CapitalDamage: 0
-      EnergyHealth: 0
-      CapitalEarnings: 75
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 71
-      Version: 
-      Name: Airdrop
-      Type: heal
-      EnergyDamage: 0
-      CapitalDamage: 0
-      EnergyHealth: 0
-      CapitalEarnings: 75
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 72
-      Version: 
-      Name: Diversification
-      Type: heal
-      EnergyDamage: 0
-      CapitalDamage: 0
-      EnergyHealth: 0
-      CapitalEarnings: 75
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 153
-      Version: 
-      Name: Pension accruals
-      Type: heal
-      EnergyDamage: 0
-      CapitalDamage: 75
-      EnergyHealth: 0
-      CapitalEarnings: 95
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 154
-      Version: 
-      Name: Pension accruals
-      Type: heal
-      EnergyDamage: 0
-      CapitalDamage: 50
-      EnergyHealth: 0
-      CapitalEarnings: 95
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 155
-      Version: 
-      Name: Interest rates fall
-      Type: heal
-      EnergyDamage: 0
-      CapitalDamage: 50
-      EnergyHealth: 0
-      CapitalEarnings: 75
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 156
-      Version: 
-      Name: Bonus at work
-      Type: energy
-      EnergyDamage: 2
-      CapitalDamage: 0
-      EnergyHealth: 3
-      CapitalEarnings: 0
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 157
-      Version: 
-      Name: Double salary
-      Type: energy
-      EnergyDamage: 2
-      CapitalDamage: 0
-      EnergyHealth: 2
-      CapitalEarnings: 0
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 158
+      Guid: 284
       Version: 
       Name: Interest rate hike
       Type: damage
       EnergyDamage: 0
       CapitalDamage: 150
       EnergyHealth: 0
-      CapitalEarnings: 75
+      CapitalEarnings: 25
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 159
+      Guid: 285
       Version: 
       Name: Utility bill
       Type: damage
       EnergyDamage: 0
       CapitalDamage: 140
       EnergyHealth: 0
+      CapitalEarnings: 75
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 286
+      Version: 
+      Name: Interest rate hike
+      Type: damage
+      EnergyDamage: 0
+      CapitalDamage: 140
+      EnergyHealth: 0
+      CapitalEarnings: 75
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 287
+      Version: 
+      Name: Utility bill
+      Type: damage
+      EnergyDamage: 0
+      CapitalDamage: 130
+      EnergyHealth: 0
       CapitalEarnings: 50
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 160
+      Guid: 288
       Version: 
       Name: Interest rate hike
       Type: damage
@@ -961,112 +652,323 @@ MonoBehaviour:
       CapitalEarnings: 25
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 137
+      Guid: 305
       Version: 
-      Name: Bonus at work
-      Type: energy
+      Name: Pension accruals
+      Type: heal
+      EnergyDamage: 0
+      CapitalDamage: 50
+      EnergyHealth: 0
+      CapitalEarnings: 125
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 306
+      Version: 
+      Name: Pension accruals
+      Type: heal
+      EnergyDamage: 0
+      CapitalDamage: 100
+      EnergyHealth: 0
+      CapitalEarnings: 110
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 307
+      Version: 
+      Name: Interest rates fall
+      Type: heal
+      EnergyDamage: 0
+      CapitalDamage: 50
+      EnergyHealth: 0
+      CapitalEarnings: 110
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 308
+      Version: 
+      Name: Interest rates fall
+      Type: heal
+      EnergyDamage: 0
+      CapitalDamage: 75
+      EnergyHealth: 0
+      CapitalEarnings: 95
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 309
+      Version: 
+      Name: Insurance
+      Type: heal
+      EnergyDamage: 0
+      CapitalDamage: 50
+      EnergyHealth: 0
+      CapitalEarnings: 95
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 310
+      Version: 
+      Name: Insurance
+      Type: heal
+      EnergyDamage: 0
+      CapitalDamage: 50
+      EnergyHealth: 0
+      CapitalEarnings: 75
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 311
+      Version: 
+      Name: Insurance
+      Type: heal
+      EnergyDamage: 0
+      CapitalDamage: 75
+      EnergyHealth: 0
+      CapitalEarnings: 75
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 312
+      Version: 
+      Name: Interest rates fall
+      Type: heal
+      EnergyDamage: 0
+      CapitalDamage: 30
+      EnergyHealth: 0
+      CapitalEarnings: 75
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 273
+      Version: 
+      Name: Audit
+      Type: joker
+      EnergyDamage: 0
+      CapitalDamage: 0
+      EnergyHealth: 0
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 274
+      Version: 
+      Name: Pivot
+      Type: joker
       EnergyDamage: 2
       CapitalDamage: 0
+      EnergyHealth: 0
+      CapitalEarnings: 100
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 275
+      Version: 
+      Name: Turn around
+      Type: joker
+      EnergyDamage: 0
+      CapitalDamage: 0
+      EnergyHealth: 0
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 276
+      Version: 
+      Name: Audit
+      Type: joker
+      EnergyDamage: 0
+      CapitalDamage: 0
+      EnergyHealth: 0
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 277
+      Version: 
+      Name: Pivot
+      Type: joker
+      EnergyDamage: 2
+      CapitalDamage: 0
+      EnergyHealth: 0
+      CapitalEarnings: 100
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 278
+      Version: 
+      Name: Turn around
+      Type: joker
+      EnergyDamage: 0
+      CapitalDamage: 0
+      EnergyHealth: 0
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 279
+      Version: 
+      Name: Audit
+      Type: joker
+      EnergyDamage: 0
+      CapitalDamage: 0
+      EnergyHealth: 0
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 280
+      Version: 
+      Name: Pivot
+      Type: joker
+      EnergyDamage: 0
+      CapitalDamage: 100
+      EnergyHealth: 0
+      CapitalEarnings: 2
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 257
+      Version: 
+      Name: Tax reduction
+      Type: energy
+      EnergyDamage: 2
+      CapitalDamage: 50
       EnergyHealth: 3
-      CapitalEarnings: 0
+      CapitalEarnings: 25
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 138
+      Guid: 258
       Version: 
-      Name: Double salary
+      Name: Holiday
       Type: energy
       EnergyDamage: 2
-      CapitalDamage: 0
+      CapitalDamage: 50
       EnergyHealth: 2
-      CapitalEarnings: 0
+      CapitalEarnings: 25
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 139
+      Guid: 259
       Version: 
-      Name: Bonus at work
+      Name: Opening new branches
       Type: energy
       EnergyDamage: 1
-      CapitalDamage: 0
+      CapitalDamage: 50
       EnergyHealth: 2
-      CapitalEarnings: 0
+      CapitalEarnings: 25
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 140
+      Guid: 260
       Version: 
-      Name: Double salary
+      Name: Increased demand for your product
       Type: energy
       EnergyDamage: 1
-      CapitalDamage: 0
+      CapitalDamage: 50
       EnergyHealth: 1
-      CapitalEarnings: 0
+      CapitalEarnings: 25
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 141
+      Guid: 261
       Version: 
-      Name: Unscheduled off-day
+      Name: Holiday
       Type: energy
       EnergyDamage: 1
-      CapitalDamage: 0
+      CapitalDamage: 50
       EnergyHealth: 1
-      CapitalEarnings: 0
+      CapitalEarnings: 25
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 142
+      Guid: 262
       Version: 
-      Name: Advanced training
+      Name: Opening new branches
       Type: energy
       EnergyDamage: 1
-      CapitalDamage: 0
+      CapitalDamage: 50
       EnergyHealth: 0
-      CapitalEarnings: 0
+      CapitalEarnings: 25
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 143
+      Guid: 263
       Version: 
-      Name: Unscheduled off-day
+      Name: Increased demand for your product
       Type: energy
       EnergyDamage: 1
-      CapitalDamage: 0
+      CapitalDamage: 50
       EnergyHealth: 0
-      CapitalEarnings: 0
+      CapitalEarnings: 25
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
     - Used: 0
-      Guid: 144
+      Guid: 264
       Version: 
-      Name: Advanced training
+      Name: Tax reduction
       Type: energy
       EnergyDamage: 1
-      CapitalDamage: 0
+      CapitalDamage: 50
       EnergyHealth: 0
-      CapitalEarnings: 0
+      CapitalEarnings: 25
       DamageResistance: 0
       CardCost: 1
-      ChipId: CryptoBoss #907
+      ChipId: CryptoBoss #906
       Description: 
+    Morale: 19
+    Rating: 32
+    Capital: 500
   nftTokens:
   - 907
   - 906

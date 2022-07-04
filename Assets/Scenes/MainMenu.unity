@@ -18357,6 +18357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afa6e5a3cdd404aeebca024db9afeae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputWallet: {fileID: 1804687770}
 --- !u!1 &1096427517
 GameObject:
   m_ObjectHideFlags: 0
@@ -38270,6 +38271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afa6e5a3cdd404aeebca024db9afeae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputWallet: {fileID: 0}
 --- !u!1 &2119268657
 GameObject:
   m_ObjectHideFlags: 0

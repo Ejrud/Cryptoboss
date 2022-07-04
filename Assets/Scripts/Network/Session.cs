@@ -12,6 +12,7 @@ public class Session : MonoBehaviour
     public bool Ready;        
     public bool Finished;
     public bool WalletsRecieved;
+    public bool Rewarded;
 
     public bool Correction;
     public int PlayerIndexQueue;             
@@ -114,7 +115,7 @@ public class Session : MonoBehaviour
         {
             if (PlayerNets[0] == null && PlayerNets[1] == null)
             {
-                if (gameStarted)
+                if (gameStarted && !Rewarded)
                 {
                     FinishTheGame(false, false);
                 }
@@ -236,6 +237,7 @@ public class Session : MonoBehaviour
                 looseGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
             }
 
+            Rewarded = true;
             StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode, left));
 
             timer.isStoped = true;
@@ -268,7 +270,7 @@ public class Session : MonoBehaviour
             form.AddField("Leave", "true");
         }
 
-        // �������� ����
+        // 
         using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "accrual.php", form))
         { 
             yield return www.SendWebRequest();
