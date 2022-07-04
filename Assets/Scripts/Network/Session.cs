@@ -9,15 +9,15 @@ using Newtonsoft.Json;
 
 public class Session : MonoBehaviour
 {
-    public bool Ready;        
+    public bool Ready;
     public bool Finished;
     public bool WalletsRecieved;
     public bool Rewarded;
 
     public bool Correction;
-    public int PlayerIndexQueue;             
-    public PlayerNet[] PlayerNets;    
-    public List<PlayerStatsHolder> StatsHolder = new List<PlayerStatsHolder>();  
+    public int PlayerIndexQueue;
+    public PlayerNet[] PlayerNets;
+    public List<PlayerStatsHolder> StatsHolder = new List<PlayerStatsHolder>();
     public string GameMode;
 
     private GameProcessManagement manager;
@@ -27,7 +27,6 @@ public class Session : MonoBehaviour
     public bool AwaitPlayer;
 
     [SerializeField] private ChipData debugData;
-    [SerializeField] private int playerAwaiting = 60;
     private bool gameStarted = false;
     private bool chipIdRecieved;
     private bool playerIndexRecieved = false;
@@ -246,9 +245,8 @@ public class Session : MonoBehaviour
         else
         {
             FindObjectOfType<NetworkController>().Sessions.Add(this);
-            
 
-            timer.RoundTimer = playerAwaiting;
+            timer.AwaitPlayer();
             AwaitPlayer = true;
 
             PlayerNets[0].StopGame("Other player disconnected", "", 0f, "0", true);
@@ -528,12 +526,14 @@ public class Session : MonoBehaviour
                 
                 List<GameParams> gameParams = JsonConvert.DeserializeObject<List<GameParams>>(json);
                 timer.RoundTimer = Convert.ToInt32(gameParams[0].timer);
+                timer.AwaitTime = Convert.ToInt32(gameParams[0].reconnect_time);
                 timer.OriginalTime = timer.RoundTimer;
                 Debug.Log("Session timer = " + timer.RoundTimer);
             }
             else
             { 
-                timer.RoundTimer = 10;
+                timer.RoundTimer = 20;
+                timer.AwaitTime = 60;
                 Debug.Log("Incorrect data");
                 Debug.Log(www.error);
             }
@@ -683,6 +683,7 @@ public class Session : MonoBehaviour
     public class GameParams
     {
         public string timer { get; set; }
+        public string reconnect_time { get; set; }
     }
 
     public class PlayerStatsHolder

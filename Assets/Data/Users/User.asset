@@ -232,6 +232,110 @@ MonoBehaviour:
       ChipId: CryptoBoss #907
       Description: 
     - Used: 0
+      Guid: 137
+      Version: 
+      Name: Bonus at work
+      Type: energy
+      EnergyDamage: 2
+      CapitalDamage: 0
+      EnergyHealth: 3
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #907
+      Description: 
+    - Used: 0
+      Guid: 138
+      Version: 
+      Name: Double salary
+      Type: energy
+      EnergyDamage: 2
+      CapitalDamage: 0
+      EnergyHealth: 2
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #907
+      Description: 
+    - Used: 0
+      Guid: 139
+      Version: 
+      Name: Bonus at work
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 0
+      EnergyHealth: 2
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #907
+      Description: 
+    - Used: 0
+      Guid: 140
+      Version: 
+      Name: Double salary
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 0
+      EnergyHealth: 1
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #907
+      Description: 
+    - Used: 0
+      Guid: 141
+      Version: 
+      Name: Unscheduled off-day
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 0
+      EnergyHealth: 1
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #907
+      Description: 
+    - Used: 0
+      Guid: 142
+      Version: 
+      Name: Advanced training
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 0
+      EnergyHealth: 0
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #907
+      Description: 
+    - Used: 0
+      Guid: 143
+      Version: 
+      Name: Unscheduled off-day
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 0
+      EnergyHealth: 0
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #907
+      Description: 
+    - Used: 0
+      Guid: 144
+      Version: 
+      Name: Advanced training
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 0
+      EnergyHealth: 0
+      CapitalEarnings: 0
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #907
+      Description: 
+    - Used: 0
       Guid: 65
       Version: 
       Name: Airdrop
@@ -439,112 +543,8 @@ MonoBehaviour:
       CardCost: 1
       ChipId: CryptoBoss #907
       Description: 
-    - Used: 0
-      Guid: 137
-      Version: 
-      Name: Bonus at work
-      Type: energy
-      EnergyDamage: 2
-      CapitalDamage: 0
-      EnergyHealth: 3
-      CapitalEarnings: 0
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 138
-      Version: 
-      Name: Double salary
-      Type: energy
-      EnergyDamage: 2
-      CapitalDamage: 0
-      EnergyHealth: 2
-      CapitalEarnings: 0
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 139
-      Version: 
-      Name: Bonus at work
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 0
-      EnergyHealth: 2
-      CapitalEarnings: 0
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 140
-      Version: 
-      Name: Double salary
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 0
-      EnergyHealth: 1
-      CapitalEarnings: 0
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 141
-      Version: 
-      Name: Unscheduled off-day
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 0
-      EnergyHealth: 1
-      CapitalEarnings: 0
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 142
-      Version: 
-      Name: Advanced training
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 0
-      EnergyHealth: 0
-      CapitalEarnings: 0
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 143
-      Version: 
-      Name: Unscheduled off-day
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 0
-      EnergyHealth: 0
-      CapitalEarnings: 0
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    - Used: 0
-      Guid: 144
-      Version: 
-      Name: Advanced training
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 0
-      EnergyHealth: 0
-      CapitalEarnings: 0
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #907
-      Description: 
-    Morale: 7
-    Rating: 978
+    Morale: 3
+    Rating: 1008
     Capital: 500
   - Id: 906
     ChipName: CryptoBoss #906
@@ -648,6 +648,110 @@ MonoBehaviour:
       Type: damage
       EnergyDamage: 0
       CapitalDamage: 130
+      EnergyHealth: 0
+      CapitalEarnings: 25
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 257
+      Version: 
+      Name: Tax reduction
+      Type: energy
+      EnergyDamage: 2
+      CapitalDamage: 50
+      EnergyHealth: 3
+      CapitalEarnings: 25
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 258
+      Version: 
+      Name: Holiday
+      Type: energy
+      EnergyDamage: 2
+      CapitalDamage: 50
+      EnergyHealth: 2
+      CapitalEarnings: 25
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 259
+      Version: 
+      Name: Opening new branches
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 50
+      EnergyHealth: 2
+      CapitalEarnings: 25
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 260
+      Version: 
+      Name: Increased demand for your product
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 50
+      EnergyHealth: 1
+      CapitalEarnings: 25
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 261
+      Version: 
+      Name: Holiday
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 50
+      EnergyHealth: 1
+      CapitalEarnings: 25
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 262
+      Version: 
+      Name: Opening new branches
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 50
+      EnergyHealth: 0
+      CapitalEarnings: 25
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 263
+      Version: 
+      Name: Increased demand for your product
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 50
+      EnergyHealth: 0
+      CapitalEarnings: 25
+      DamageResistance: 0
+      CardCost: 1
+      ChipId: CryptoBoss #906
+      Description: 
+    - Used: 0
+      Guid: 264
+      Version: 
+      Name: Tax reduction
+      Type: energy
+      EnergyDamage: 1
+      CapitalDamage: 50
       EnergyHealth: 0
       CapitalEarnings: 25
       DamageResistance: 0
@@ -862,112 +966,8 @@ MonoBehaviour:
       CardCost: 1
       ChipId: CryptoBoss #906
       Description: 
-    - Used: 0
-      Guid: 257
-      Version: 
-      Name: Tax reduction
-      Type: energy
-      EnergyDamage: 2
-      CapitalDamage: 50
-      EnergyHealth: 3
-      CapitalEarnings: 25
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #906
-      Description: 
-    - Used: 0
-      Guid: 258
-      Version: 
-      Name: Holiday
-      Type: energy
-      EnergyDamage: 2
-      CapitalDamage: 50
-      EnergyHealth: 2
-      CapitalEarnings: 25
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #906
-      Description: 
-    - Used: 0
-      Guid: 259
-      Version: 
-      Name: Opening new branches
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 50
-      EnergyHealth: 2
-      CapitalEarnings: 25
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #906
-      Description: 
-    - Used: 0
-      Guid: 260
-      Version: 
-      Name: Increased demand for your product
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 50
-      EnergyHealth: 1
-      CapitalEarnings: 25
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #906
-      Description: 
-    - Used: 0
-      Guid: 261
-      Version: 
-      Name: Holiday
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 50
-      EnergyHealth: 1
-      CapitalEarnings: 25
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #906
-      Description: 
-    - Used: 0
-      Guid: 262
-      Version: 
-      Name: Opening new branches
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 50
-      EnergyHealth: 0
-      CapitalEarnings: 25
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #906
-      Description: 
-    - Used: 0
-      Guid: 263
-      Version: 
-      Name: Increased demand for your product
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 50
-      EnergyHealth: 0
-      CapitalEarnings: 25
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #906
-      Description: 
-    - Used: 0
-      Guid: 264
-      Version: 
-      Name: Tax reduction
-      Type: energy
-      EnergyDamage: 1
-      CapitalDamage: 50
-      EnergyHealth: 0
-      CapitalEarnings: 25
-      DamageResistance: 0
-      CardCost: 1
-      ChipId: CryptoBoss #906
-      Description: 
-    Morale: 19
-    Rating: 32
+    Morale: 13
+    Rating: 8
     Capital: 500
   nftTokens:
   - 907

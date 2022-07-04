@@ -211,6 +211,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chipTexture: {fileID: 3717282232187395971}
   chipName: {fileID: 7520651684494485935}
+  chipBgImage: {fileID: 8809326262325516710}
+  chipSelected: {fileID: 21300000, guid: b439668c8b085064da834fbba48407c0, type: 3}
+  chipDefault: {fileID: 21300000, guid: f9c7f54dbb4123b4d8d026415695a3af, type: 3}
 --- !u!114 &2190345892879754859
 MonoBehaviour:
   m_ObjectHideFlags: 0

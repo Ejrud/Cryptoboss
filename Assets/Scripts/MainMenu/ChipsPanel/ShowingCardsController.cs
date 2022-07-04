@@ -9,16 +9,16 @@ public class ShowingCardsController : MonoBehaviour
     [Header("Cards")]
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private Transform contentContainer;
-    [SerializeField] private CardParameters[] cardParameters; // Оболочка карт. Хранит данные карты (атаку, оборону, описание)
+    [SerializeField] private CardParameters[] cardParameters; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
 
     private void Start()
     {
-        GlobalEventManager.OnSelectCards.AddListener(UpdateWindow);         // Если игрок нажмет на фишку, то обновится окно с картами
+        GlobalEventManager.OnSelectCards.AddListener(UpdateWindow);         // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
         PrepareCards();
     }
 
-    private void UpdateWindow(CardData[] cardDatas)                         // ChipFrameData являются "наблюдаемыми" объектами.
+    private void UpdateWindow(CardData[] cardDatas)                         // ChipFrameData пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
     {
         PutAwayCards();
         ShowCards(cardDatas.Length);
@@ -29,7 +29,7 @@ public class ShowingCardsController : MonoBehaviour
         } 
     }
 
-    private void PrepareCards()                                             // Убрать карты
+    private void PrepareCards()                                             // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     {
         int count = 0;
         for (int i = 0; i < user.ChipParam.Count; i++)
@@ -59,7 +59,7 @@ public class ShowingCardsController : MonoBehaviour
         }
     }
 
-    private void ShowCards(int cardCount)                                                // Показать карты
+    private void ShowCards(int cardCount)                                                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     {
         for (int i = 0; i < cardCount; i++)
         {
@@ -72,7 +72,7 @@ public class ShowingCardsController : MonoBehaviour
         GlobalEventManager.OnSelectCards.RemoveListener(UpdateWindow);
     }
 
-    private void OnDisable()                                                // Если окно с фишками закрывается, то карты прячутся
+    private void OnDisable()                                                // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     {
         PutAwayCards();
     }

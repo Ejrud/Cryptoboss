@@ -13,6 +13,7 @@ public class SessionTimer : NetworkBehaviour
     public bool isRunning = false;  // ������������� ��� �������
     public bool isStoped = false;
     public float RoundTimer;        // ����� ��� ������
+    public float AwaitTime = 60;
     public float OriginalTime;     // ������������ ��� ������� ������ ������
     private string timerString;     // ����� ������� ��� ������ �� UI ������
 
@@ -70,6 +71,11 @@ public class SessionTimer : NetworkBehaviour
         }
 
         yield return null;
+    }
+
+    public void AwaitPlayer()
+    {
+        RoundTimer = AwaitTime;
     }
 
     public void StartTimer()

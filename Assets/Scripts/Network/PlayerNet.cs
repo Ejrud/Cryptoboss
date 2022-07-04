@@ -49,6 +49,7 @@ public class PlayerNet : NetworkBehaviour
     #region UI elements
     [Header("player UI")]
     [SerializeField] private ChipRepresentation chipRepresentation;
+    [SerializeField] private TurnVisualize turnVisualize;
     [SerializeField] private Text timerText;
     [SerializeField] private Text healthText;
     [SerializeField] private Text energyText;
@@ -162,8 +163,6 @@ public class PlayerNet : NetworkBehaviour
                     }
                 }
             }
-
-            
         }
     }
 
@@ -225,6 +224,8 @@ public class PlayerNet : NetworkBehaviour
     {
         NetworkManager.singleton.StopClient();
         GameObject netObj = FindObjectOfType<NetworkManager>().gameObject;
+        NetworkController controller = netObj.GetComponent<NetworkController>();
+        controller.HideExitWindow();
         Destroy(netObj);
         SceneManager.LoadScene(menuSceneIndex);
     }
@@ -296,6 +297,7 @@ public class PlayerNet : NetworkBehaviour
             {
                 ChipImage.color = Color.white;
                 RivalChipImage.color = Color.gray;
+                turnVisualize.SetTurn();
             }
             else
             {

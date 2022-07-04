@@ -16,6 +16,8 @@ public class SelectChip : MonoBehaviour
     [SerializeField] private Text ChipName;
     [SerializeField] private Text ChipMorale;
 
+    [SerializeField] private Button playButton;
+
     private GameObject[] selectableChips;
     private int[] currentIdPos;
     private bool chipsLoaded;
@@ -102,6 +104,7 @@ public class SelectChip : MonoBehaviour
 
     private void UpdatePositions()
     {
+        int currentChipId = 0;
         foreach (GameObject chipObj in selectableChips)
         {
             chipObj.SetActive(false);
@@ -128,6 +131,20 @@ public class SelectChip : MonoBehaviour
                 
                 ChipName.text = chipName;
                 ChipMorale.text = chipMorale;
+                currentChipId = i;
+                
+                int morale = Convert.ToInt32(selectableChips[currentIdPos[i]].GetComponent<ChipContainer>().Morale);
+
+                Debug.Log(morale);
+
+                if (morale <= 0)
+                {
+                    playButton.interactable = false;
+                }
+                else
+                {
+                    playButton.interactable = true;
+                }
             }
             count++;
         }
@@ -144,6 +161,10 @@ public class SelectChip : MonoBehaviour
             Debug.Log("Selected chipId: " + chipId);
 
             ChipName.text = chipName;
+
+            
         }
+
+        
     }
 }

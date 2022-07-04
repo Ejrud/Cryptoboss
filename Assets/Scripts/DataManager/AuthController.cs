@@ -11,7 +11,7 @@ public class AuthController : MonoBehaviour
     public enum ServerType {Alt, Sprint, Local}
     [Header("Server")]
     [SerializeField] private ServerType serverType = ServerType.Sprint;
-    private string altServer = "https://cryptoboss.win/game/back/auth.php"; // Изменить адресс
+    private string altServer = "https://cryptoboss.win/game/back/auth.php"; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     private string sprintServer = "http://a0664627.xsph.ru/cryptoboss_back/auth.php";
     private string localServer = "http://serverback/auth.php";
     
@@ -85,7 +85,7 @@ public class AuthController : MonoBehaviour
         string uri = "https://cryptoboss.win/ajax/models/messages/customizers/get_nft_by_address_6j986xfw9?address=";
         uri = uri + userWallet;
 
-        // Получение всех nft этого кошелька
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ nft пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             string jsonNft = "";
@@ -118,7 +118,7 @@ public class AuthController : MonoBehaviour
         }
     }
 
-    private IEnumerator SendForm(string userWallet, string jsonNft)           // отправка формы на хостинг
+    private IEnumerator SendForm(string userWallet, string jsonNft)           // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     {
         WWWForm form = new WWWForm();
 
@@ -140,11 +140,11 @@ public class AuthController : MonoBehaviour
             break;
         }
         
-        //Отправление запроса на Altrp сервер
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ Altrp пїЅпїЅпїЅпїЅпїЅпїЅ
         using (UnityWebRequest www = UnityWebRequest.Post(server, form))   // server
         { 
             www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-            // www.SetRequestHeader("Content-Type", "application/json");  Не рекомендуется использовать
+            // www.SetRequestHeader("Content-Type", "application/json");  пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             // www.SetRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"); // !!!
 
             yield return www.SendWebRequest();
@@ -153,32 +153,39 @@ public class AuthController : MonoBehaviour
             {
                 Debug.Log("Server response: " + www.downloadHandler.text);
 
-                string message = www.downloadHandler.text;
-                string[] array = message.Split('|'); // 0 - данные пользователя, 2 - все его фишки, 5 - данные карт // , '[', ']'
-
-                // Создание массива параметров пользователя
-                UserDatas userParam = JsonConvert.DeserializeObject<UserDatas>(array[0]);
-                // Debug.Log(userParam.name);
-
-                // Создание массива id фишек
-                char[] delimiters = {'c', 'h', 'i', 'p', '"', 'C', 'r', 'y', 'p', 't', 'b', 'o', 's', ' ', '#', '}', ',', '{', 'B', ':', '[', ']'};
-                string[] chipIds = array[1].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-                // Создание массива карт для одной фишки
-                char[] delimiters2 = {'[', ']'};
-                string[] cardJson = array[2].Split(delimiters2, StringSplitOptions.RemoveEmptyEntries);
-
-                string newJson = "";
-                foreach (string str in cardJson)
+                if (www.downloadHandler.text != "no_chips")
                 {
-                    newJson += str;
-                }
-                // Debug.Log(newJson);
-                List<DbCards> card = JsonConvert.DeserializeObject<List<DbCards>>("[" + newJson + "]"); // Dictionary<string, string>
+                    string message = www.downloadHandler.text;
+                    string[] array = message.Split('|'); // 0 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, 2 - пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, 5 - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ // , '[', ']'
 
-                userData.SetUser(userParam.id, userParam.name, userParam.email, userParam.metamask_wallet, userParam.raiting, chipIds, card);
-                PlayerPrefs.SetString("Wallet", userParam.metamask_wallet);
-                gameObject.SetActive(false);
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                    UserDatas userParam = JsonConvert.DeserializeObject<UserDatas>(array[0]);
+                    // Debug.Log(userParam.name);
+
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ id пїЅпїЅпїЅпїЅпїЅ
+                    char[] delimiters = {'c', 'h', 'i', 'p', '"', 'C', 'r', 'y', 'p', 't', 'b', 'o', 's', ' ', '#', '}', ',', '{', 'B', ':', '[', ']'};
+                    string[] chipIds = array[1].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+                    char[] delimiters2 = {'[', ']'};
+                    string[] cardJson = array[2].Split(delimiters2, StringSplitOptions.RemoveEmptyEntries);
+
+                    string newJson = "";
+                    foreach (string str in cardJson)
+                    {
+                        newJson += str;
+                    }
+                    Debug.Log(newJson);
+                    List<DbCards> card = JsonConvert.DeserializeObject<List<DbCards>>("[" + newJson + "]"); // Dictionary<string, string>
+
+                    userData.SetUser(userParam.id, userParam.name, userParam.email, userParam.metamask_wallet, userParam.raiting, chipIds, card);
+                    PlayerPrefs.SetString("Wallet", userParam.metamask_wallet);
+                    gameObject.SetActive(false);
+                }
+                else
+                {
+                   StartCoroutine(SetAlert("No chips found", true)); 
+                }
             }
             else
             { 
@@ -229,10 +236,10 @@ public class AuthController : MonoBehaviour
         public string tutorial { get; set; }
     }
 
-    private IEnumerator SetAlert(string text = "", bool alert = false) // alert отвечает за цвет текста
+    private IEnumerator SetAlert(string text = "", bool alert = false) // alert пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     {
         alertText.text = text;
-        // alertText.color = (!alert) ? defaultColor : alertColor;
+        alertText.color = (!alert) ? defaultColor : alertColor;
 
         float apogee = 4f;
         float timer = apogee;

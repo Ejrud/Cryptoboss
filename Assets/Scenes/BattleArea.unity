@@ -673,8 +673,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -262.4995}
-  m_SizeDelta: {x: 1253.0667, y: 175.99902}
+  m_AnchoredPosition: {x: 0, y: -430.92004}
+  m_SizeDelta: {x: 727.02, y: 291.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &667609178
 MonoBehaviour:
@@ -708,8 +708,8 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Server not found
+    m_LineSpacing: 0.69
+  m_Text: Disconnected from the server
 --- !u!222 &667609179
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -982,7 +982,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &798378998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -996,7 +996,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.20710216, g: 0.23263302, b: 0.24528301, a: 1}
+  m_Color: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -217,18 +217,14 @@ public class NetworkController : NetworkManager
             ActivatePlayerSpawn();
         }
 
-        if(!playerConnected)
+        if (serverOff <= 0)
         {
-            if (serverOff <= 0)
-            {
-                exitWindow.SetActive(true);
-            }
-            else
-            {
-                serverOff -= Time.deltaTime;
-            }
+            exitWindow.SetActive(true);
         }
-        
+        else
+        {
+            serverOff -= Time.deltaTime;
+        }
     }
 
     public void Exit()
@@ -237,6 +233,11 @@ public class NetworkController : NetworkManager
         GameObject netObj = FindObjectOfType<NetworkManager>().gameObject;
         Destroy(netObj);
         SceneManager.LoadScene(0);
+    }
+
+    public void HideExitWindow()
+    {
+        exitWindow.SetActive(false);
     }
 }
 
