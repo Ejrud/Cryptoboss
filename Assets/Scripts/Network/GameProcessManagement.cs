@@ -12,7 +12,7 @@ public class GameProcessManagement : NetworkBehaviour
     [SerializeField] private Transform allSessions;
     [SerializeField] private GameObject sessionObject;
 
-    private List<Session> sessions = new List<Session>(); 
+    public List<Session> sessions = new List<Session>();
 
     // Update каждой сессии в списке
     private void Update()

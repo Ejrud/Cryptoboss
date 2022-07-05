@@ -31,7 +31,7 @@ public class Session : MonoBehaviour
     private bool chipIdRecieved;
     private bool playerIndexRecieved = false;
 
-    private string seUrl = "a0664627.xsph.ru/cryptoboss_back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
+    private string seUrl = "https://cryptoboss.win/game/back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
 
     [Header("Settings")]
     [SerializeField] private float energyRecovery = 0.5f;
@@ -256,6 +256,11 @@ public class Session : MonoBehaviour
 
     private IEnumerator SetReward(string winnerWallet, string winnerGuid, string looseGuid, string mode, bool left)
     {
+        foreach (PlayerNet player in PlayerNets)
+        {
+            player.LoadReward();
+        }
+
         WWWForm form = new WWWForm();
         
         form.AddField("WinGuid_1", winnerGuid);

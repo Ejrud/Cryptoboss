@@ -382,6 +382,7 @@ MonoBehaviour:
   battle: {fileID: 213690376}
   allSessions: {fileID: 1075347955}
   sessionObject: {fileID: 811711018392014507, guid: 3d7a405262e9f9449bda34f86c1aad04, type: 3}
+  sessions: []
 --- !u!114 &213690374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2176,7 +2177,7 @@ PrefabInstance:
       objectReference: {fileID: 706183018}
     - target: {fileID: 2729208454843092320, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: hostMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092320, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: msgField
@@ -2232,11 +2233,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092326, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: sslEnabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092326, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: clientUseWss
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092327, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: m_RootOrder

@@ -45,7 +45,7 @@ public class PlayerNet : NetworkBehaviour
     public int SelectedCardId;
     public int UsedCount;
     
-    private string seUrl = "http://a0664627.xsph.ru/cryptoboss_back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/images/
+    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/
 
     #region UI elements
     [Header("player UI")]
@@ -68,6 +68,7 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private GameObject playersWaitingObj;
     [SerializeField] private GameObject representationScreen;
     [SerializeField] private GameObject backToLobbyWindow;
+    [SerializeField] private GameObject LoadRewardWindow;
 
     [Header("Enemy UI")]
     [SerializeField] private Image enemyHealthImage;
@@ -88,6 +89,8 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private Texture lastTexture;
     [SerializeField] private AudioSource audioSource;
     private Texture2D[] rivalChipTexture;
+    
+    private NetworkController controller;
 
     #endregion
 
@@ -98,12 +101,18 @@ public class PlayerNet : NetworkBehaviour
 
         playersWaitingObj.SetActive(true);
         representationScreen.SetActive(false);
+        LoadRewardWindow.SetActive(false);
 
         GameObject netObject = FindObjectOfType<NetworkManager>().gameObject;
         
         gameObject.SetActive(false);
 
         FirstStart = true;
+
+        if (isServer)
+        {
+            controller = FindObjectOfType<NetworkController>();
+        }
 
         if (hasAuthority)
         {
@@ -406,6 +415,15 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
+    public void LoadReward()
+    {
+        if(hasAuthority)
+        {
+            LoadRewardWindow.SetActive(true);
+        }
+    }
+
+    [ClientRpc]
     public async void LoadRivalChip(int[] rivalChipId, string gameMode) // 
     {
         if(hasAuthority)
@@ -494,7 +512,7 @@ public class PlayerNet : NetworkBehaviour
     public void GetGameMode()
     {
         string gameMode = PlayerPrefs.GetString("GameMode");
-        Wallet = PlayerPrefs.GetString("Wallet");
+        Wallet = user.Wallet;
         int chipId = PlayerPrefs.GetInt("chipId");
         GameMode = gameMode;
         CmdSendGameMode(gameMode, Wallet, chipId);
@@ -504,10 +522,7 @@ public class PlayerNet : NetworkBehaviour
     {
         if (isServer)
         {
-            if (!Understudy)
-            {
-                FindObjectOfType<NetworkController>().RemoveWallet(Wallet);
-            }
+            controller.RemovePlayer(this);
 
             if (GameMode == "two")
             {

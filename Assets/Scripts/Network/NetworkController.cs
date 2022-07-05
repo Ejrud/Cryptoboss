@@ -25,8 +25,7 @@ public class NetworkController : NetworkManager
     private List<GameObject> _twoByTwo = new List<GameObject>();
     private GameObject[] _threeByThree = new GameObject[2];
     public List<Session> Sessions = new List<Session>();
-    public List<string> Wallets = new List<string>();
-    
+    public List<PlayerNet> Players = new List<PlayerNet>();
 
     private NetworkConnection connection;
     private bool playerSpawned;
@@ -87,16 +86,21 @@ public class NetworkController : NetworkManager
     public void SetDistribution(PlayerNet player)
     {
         bool repeatConnect = false; 
+        bool allowed = true;
         Session oldSession = new Session();
 
-        if (Wallets.Contains(player.Wallet))
+        foreach (PlayerNet playerNet in Players)
         {
-            player.Understudy = true; // Если кошелек повторяется, то кошелек в списке не удалять
-            Destroy(player.gameObject);
+            if (playerNet.Wallet == player.Wallet)
+            {
+                allowed = false;
+                Destroy(player);
+            }
         }
-        else
+
+        if (allowed && player)
         {
-            Wallets.Add(player.Wallet);
+            Players.Add(player);
 
             foreach (Session session in Sessions)
             {
@@ -176,8 +180,6 @@ public class NetworkController : NetworkManager
                 Sessions.Remove(oldSession);
             }
         }
-
-        
     }
 
     public void ActivatePlayerSpawn()
@@ -252,11 +254,11 @@ public class NetworkController : NetworkManager
         exitWindow.SetActive(false);
     }
 
-    public void RemoveWallet(string wallet)
+    public void RemovePlayer(PlayerNet player)
     {
-        if (Wallets.Contains(wallet))
+        if(Players.Contains(player))
         {
-            Wallets.Remove(wallet);
+            Players.Remove(player);
         }
     }
 }
