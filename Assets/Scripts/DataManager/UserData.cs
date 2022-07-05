@@ -33,7 +33,7 @@ public class UserData : MonoBehaviour
     // private List<DbCards> nullCards;
     private string pathToSave;
     private string saveFileName = "Data";
-    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/ // https://cryptoboss.win/game/back/
+    private string seUrl = "http://a0664627.xsph.ru/cryptoboss_back/"; // http://a0664627.xsph.ru/cryptoboss_back/ // https://cryptoboss.win/game/back/
 
     private void Start()
     {
@@ -82,38 +82,39 @@ public class UserData : MonoBehaviour
             if(!user.Authorized)
             {
                 SetCard(user.ChipParam[i].ChipName, i); //
+            
+
+                Debug.Log("CryptoBoss #" + tokenIds[i]);
+
+                // Загрузка данных фишки
+                WWWForm form = new WWWForm();
+                form.AddField("ChipGuid", user.ChipParam[i].ChipName);
+                UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_chipData.php", form);
+                await www.SendWebRequest();
+                List<ChipParam> chipParam = JsonConvert.DeserializeObject<List<ChipParam>>(www.downloadHandler.text);
+                user.ChipParam[i].Capital = chipParam[0].capital_current;
+                user.ChipParam[i].Morale = chipParam[0].energy_current;
+                user.ChipParam[i].Rating = chipParam[0].rating;
+
+                Debug.Log(www.downloadHandler.text);
+
+            
+                string newImgUri = seUrl + "images/" + tokenIds[i] + ".png"; // 
+                // fetch image and display in game
+                UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(newImgUri); // imageUri
+                await textureRequest.SendWebRequest();
+                if(textureRequest.error != null)
+                {
+                    Debug.Log(textureRequest.error + " Repeat load image");
+                    LoadData(tokenIds, currentLoad, i);
+                    return;
+                }
+
+                Texture2D nft = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
+
+                // ���������� �������� ��������
+                user.ChipParam[i].ChipTexture = nft;
             }
-
-            Debug.Log("CryptoBoss #" + tokenIds[i]);
-
-            // Загрузка данных фишки
-            WWWForm form = new WWWForm();
-            form.AddField("ChipGuid", user.ChipParam[i].ChipName);
-            UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_chipData.php", form);
-            await www.SendWebRequest();
-            List<ChipParam> chipParam = JsonConvert.DeserializeObject<List<ChipParam>>(www.downloadHandler.text);
-            user.ChipParam[i].Capital = chipParam[0].capital_current;
-            user.ChipParam[i].Morale = chipParam[0].energy_current;
-            user.ChipParam[i].Rating = chipParam[0].rating;
-
-            Debug.Log(www.downloadHandler.text);
-
-            string newImgUri = seUrl + "images/" + tokenIds[i] + ".png"; // 
-
-            // fetch image and display in game
-            UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(newImgUri); // imageUri
-            await textureRequest.SendWebRequest();
-            if(textureRequest.error != null)
-            {
-                Debug.Log(textureRequest.error + " Repeat load image");
-                LoadData(tokenIds, currentLoad, i);
-                return;
-            }
-
-            Texture2D nft = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
-
-            // ���������� �������� ��������
-            user.ChipParam[i].ChipTexture = nft;
 
             currentLoad = UpdateLoading(currentLoad, loadStep);
         }
@@ -236,5 +237,10 @@ public class UserData : MonoBehaviour
         {
             user.ChipParam[massive_id].CardDeck[i] = listCards[i];
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        user.Authorized = false;
     }
 }

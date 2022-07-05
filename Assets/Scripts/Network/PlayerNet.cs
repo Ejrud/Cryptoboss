@@ -41,10 +41,11 @@ public class PlayerNet : NetworkBehaviour
     public bool CardSelected;
     public bool ChipReceived;
     public bool FirstStart;
+    public bool Understudy;
     public int SelectedCardId;
     public int UsedCount;
     
-    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/images/  // https://cryptoboss.win/game/back/images/
+    private string seUrl = "http://a0664627.xsph.ru/cryptoboss_back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/images/
 
     #region UI elements
     [Header("player UI")]
@@ -230,9 +231,10 @@ public class PlayerNet : NetworkBehaviour
         SceneManager.LoadScene(menuSceneIndex);
     }
     [Command]
-    public void CmdSendGameMode(string gameMode, int chipId)
+    public void CmdSendGameMode(string gameMode, string wallet, int chipId)
     {
         GameMode = gameMode;
+        Wallet = wallet;
         this.ChipId = chipId;
         Debug.Log(GameMode);
         FindObjectOfType<NetworkController>().SetDistribution(this); // cringe
@@ -492,15 +494,21 @@ public class PlayerNet : NetworkBehaviour
     public void GetGameMode()
     {
         string gameMode = PlayerPrefs.GetString("GameMode");
+        Wallet = PlayerPrefs.GetString("Wallet");
         int chipId = PlayerPrefs.GetInt("chipId");
         GameMode = gameMode;
-        CmdSendGameMode(gameMode, chipId);
+        CmdSendGameMode(gameMode, Wallet, chipId);
     }
 
     private void OnDestroy()
     {
         if (isServer)
         {
+            if (!Understudy)
+            {
+                FindObjectOfType<NetworkController>().RemoveWallet(Wallet);
+            }
+
             if (GameMode == "two")
             {
                 FindObjectOfType<NetworkController>().OnPlayerTwoModeDisconnect(this.gameObject);

@@ -17,7 +17,7 @@ public class ChipRepresentation : MonoBehaviour
             teamText[0].gameObject.SetActive(false);
             teamText[1].gameObject.SetActive(false);
             
-            team_1[0].text = "player 1";
+            team_1[0].text = "Player 1";
             team_2[0].text = "Player 2";
         }
         else if (gameMode == "two")

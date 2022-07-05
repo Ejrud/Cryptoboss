@@ -5,10 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(RectTransform))]
 public class SafeAreaFitter : MonoBehaviour
 {
+    private Rect currentRect;
+
     private void Awake()
+    {
+        SafeAreaFit();
+    }
+
+    private void SafeAreaFit()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
         Rect safeArea = Screen.safeArea;
+        currentRect = Screen.safeArea;
         Vector2 anchorMin = safeArea.position;
         Vector2 anchorMax = anchorMin + safeArea.size;
 
@@ -20,4 +28,13 @@ public class SafeAreaFitter : MonoBehaviour
         rectTransform.anchorMin = anchorMin;
         rectTransform.anchorMax = anchorMax;
     }
+
+    private void Update()
+    {
+        if (Screen.safeArea != currentRect)
+        {
+            SafeAreaFit();
+        }
+    }
+
 }

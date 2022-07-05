@@ -22,7 +22,7 @@ public class Leaders : MonoBehaviour
     private List<LeadersDb> _leaders = new List<LeadersDb>();
     private string[] _chipIds;
     
-    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/      // https://cryptoboss.win/game/back/images/
+    private string seUrl = "http://a0664627.xsph.ru/cryptoboss_back/"; // http://a0664627.xsph.ru/cryptoboss_back/      // https://cryptoboss.win/game/back/images/
 
     private void Start()
     {

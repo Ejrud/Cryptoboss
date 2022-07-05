@@ -410,6 +410,11 @@ public class CardManager : NetworkBehaviour
             }
         }
 
+        if (audit)
+        {
+            AuditCardOffset(rivalPositions);
+        }
+
         yield return null;
     }
 
@@ -436,6 +441,35 @@ public class CardManager : NetworkBehaviour
             if (!playerCards[i].Selected)
             {
                 playerCards[i].GetComponent<CardHandler>().ReturnCard();
+            }
+        }
+    }
+
+    private void AuditCardOffset(Transform[] cellPosition)
+    {
+        // Смещение карт в пустые ячейки
+        int selectedCount = 0;
+
+        for (int i = 0; i < rivalCards.Length; i++)
+        {
+            if (rivalCards[i].Selected)
+            {
+                for (int j = i; j < rivalCards.Length; j++)
+                {
+                    if (j + 1 == rivalCards.Length) continue;
+
+                    rivalCards[j + 1].GetComponent<CardHandler>().CardDisplacement = cellPosition[j - selectedCount].position;
+                    rivalCards[j + 1].GetComponent<CardHandler>().IndexPosition = j - selectedCount;
+                }
+                selectedCount++;
+            }
+        }
+
+        for (int i = 0; i < rivalCards.Length; i++)
+        {
+            if (!rivalCards[i].Selected)
+            {
+                rivalCards[i].GetComponent<CardHandler>().ReturnCard();
             }
         }
     }
