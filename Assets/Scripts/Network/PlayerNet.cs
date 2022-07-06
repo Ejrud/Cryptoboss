@@ -531,6 +531,15 @@ public class PlayerNet : NetworkBehaviour
         }
     }
 
+    private void OnApplicationQuit()
+    {
+        if (hasAuthority)
+        {
+            user.Authorized = false;
+        }
+       
+    } 
+
     public class Response 
     {
         public string image;

@@ -31,7 +31,7 @@ public class GameProcessManagement : NetworkBehaviour
         }
     }
 
-    public void PrepareSession(GameObject[] players, string gameMode, Session oldSession = null)
+    public void PrepareSession(List<GameObject> players, string gameMode, Session oldSession = null)
     {
         if (isServer)
         {
@@ -42,7 +42,7 @@ public class GameProcessManagement : NetworkBehaviour
                 Session session = Instantiate(sessionObject, Vector3.zero, Quaternion.identity).GetComponent<Session>();
                 session.transform.SetParent(allSessions);
 
-                PlayerNet[] playerNets = new PlayerNet[players.Length];
+                PlayerNet[] playerNets = new PlayerNet[players.Count];
                 for (int i = 0; i < playerNets.Length; i++)
                 {
                     playerNets[i] = players[i].GetComponent<PlayerNet>();

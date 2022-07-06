@@ -307,6 +307,8 @@ public class Session : MonoBehaviour
             }
             else
             { 
+                PlayerNets[0].StopGame("Server error", "", 0f, "0", false);
+                PlayerNets[1].StopGame("Server error", "", 0f, "0", false);
                 Debug.Log("Incorrect data");
                 Debug.Log(www.error);
             }

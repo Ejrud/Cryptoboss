@@ -16,22 +16,21 @@ public class NetworkController : NetworkManager
 
     [Header("Game controller")]
     [SerializeField] private GameProcessManagement gameProcessManagement;
+    [SerializeField] private User user;
 
     [Header("Network objects")]
     [SerializeField] private InputField msgField;
     [SerializeField] private GameObject buttons;
     [SerializeField] private GameObject exitWindow;
-    private GameObject[] _oneByOne = new GameObject[2];
+    private List<GameObject> _oneByOne = new List<GameObject>();
     private List<GameObject> _twoByTwo = new List<GameObject>();
-    private GameObject[] _threeByThree = new GameObject[2];
+    private List<GameObject> _threeByThree = new List<GameObject>();
     public List<Session> Sessions = new List<Session>();
     public List<PlayerNet> Players = new List<PlayerNet>();
 
     private NetworkConnection connection;
     private bool playerSpawned;
     private bool playerConnected;
-    private int connectedCountOne = 0;
-    private int connectedCountThree = 0;
 
     private float serverOff = 5;
     private bool isServer;
@@ -94,7 +93,7 @@ public class NetworkController : NetworkManager
             if (playerNet.Wallet == player.Wallet)
             {
                 allowed = false;
-                Destroy(player);
+                Destroy(player.gameObject);
             }
         }
 
@@ -112,13 +111,10 @@ public class NetworkController : NetworkManager
                     {
                         session.PlayerNets[i] = player;
 
-                        GameObject[] players = new GameObject[session.PlayerNets.Length];
-
-                        Debug.Log("Problem index = " + i);
-                        
-                        for (int j = 0; j < players.Length; j++)
+                        List<GameObject> players = new List<GameObject>();
+                        for (int j = 0; j < session.PlayerNets.Length; j++)
                         {
-                            players[j] = session.PlayerNets[j].gameObject;
+                            players.Add(session.PlayerNets[j].gameObject);
                         }
 
                         gameProcessManagement.PrepareSession(players, session.GameMode, session);
@@ -135,42 +131,42 @@ public class NetworkController : NetworkManager
                 switch (player.GameMode)
                 {
                     case "one": // Режим один на один
-                        _oneByOne[connectedCountOne] = player.gameObject;
-                        connectedCountOne++;
-                        Debug.Log(connectedCountOne);
+                        
+                        _oneByOne.RemoveAll(p => p.gameObject == null); // Чистка списка где элемент списка является null
 
-                        if (connectedCountOne >= 2)
+                        _oneByOne.Add(player.gameObject);
+
+                        if (_oneByOne.Count >= 2)
                         {
                             gameProcessManagement.PrepareSession(_oneByOne, "one");
-                            connectedCountOne = 0;
+                            _oneByOne = new List<GameObject>();
                         }
+
                         break;
 
                     case "two": // Режим два игрока на два игрока
+                        _twoByTwo.RemoveAll(p => p.gameObject == null);
+
                         _twoByTwo.Add(player.gameObject);
                         Debug.Log("Game mode two = " + _twoByTwo.Count + " players");
 
                         if (_twoByTwo.Count >= 4)
                         {
-                            GameObject[] twoByTwoPlayers = new GameObject[4];
-
-                            for (int i = 0; i < _twoByTwo.Count; i++)
-                            {
-                                twoByTwoPlayers[i] = _twoByTwo[i];
-                            }
-
-                            gameProcessManagement.PrepareSession(twoByTwoPlayers, "two");
+                            gameProcessManagement.PrepareSession(_twoByTwo, "two");
+                            _twoByTwo = new List<GameObject>();
                         }
+
                         break;
 
                     case "three": // Режим один на один 3 фишки против 3 фишек соперника
-                        _threeByThree[connectedCountThree] = player.gameObject;
-                        connectedCountThree++;
+                        _threeByThree.RemoveAll(p => p.gameObject == null); 
 
-                        if (connectedCountThree >= 2)
+                        _threeByThree.Add(player.gameObject);
+
+                        if (_threeByThree.Count >= 2)
                         {
                             gameProcessManagement.PrepareSession(_threeByThree, "two");
-                            connectedCountThree = 0;
+                            _threeByThree = new List<GameObject>();
                         }
                         break;
                 }
@@ -195,25 +191,6 @@ public class NetworkController : NetworkManager
         base.OnClientConnect(conn);
         connection = conn;
         playerConnected = true;
-    }
-
-    public override void OnServerDisconnect(NetworkConnectionToClient conn)
-    {
-        base.OnServerDisconnect(conn);
-        //connectedCount--;
-        
-        if (_oneByOne[1] == null) // 1 фишка против 1 фишки
-        {
-            connectedCountOne = 0; 
-        }
-        // if (_twoByTwo[1] != null) // 2 игрока против 2 игроков // OnPlayerTwoModeDisconnect + PlayerNet OnDestroy
-        // {
-
-        // }
-        if (_threeByThree[1] == null) // 2 игрока против 2 игроков
-        {
-            connectedCountThree = 0; 
-        }
     }
 
     public void OnPlayerTwoModeDisconnect(GameObject player)
@@ -259,6 +236,14 @@ public class NetworkController : NetworkManager
         if(Players.Contains(player))
         {
             Players.Remove(player);
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (user)
+        {
+            user.Authorized = false;
         }
     }
 }
