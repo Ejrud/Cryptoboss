@@ -98,6 +98,7 @@ public class PlayerNet : NetworkBehaviour
     private void Start()
     {
         audioSource.volume = PlayerPrefs.GetFloat("musicVolume");
+        audioSource.mute = user.Mute;
 
         playersWaitingObj.SetActive(true);
         representationScreen.SetActive(false);
@@ -118,7 +119,7 @@ public class PlayerNet : NetworkBehaviour
         {
             gameObject.SetActive(true);
 
-            Wallet = PlayerPrefs.GetString("Wallet");
+            // Wallet = PlayerPrefs.GetString("Wallet");
             ChipId = PlayerPrefs.GetInt("chipId");
             GameMode = PlayerPrefs.GetString("GameMode");
             chipRepresentation.SetUpWindows(GameMode);
@@ -511,11 +512,14 @@ public class PlayerNet : NetworkBehaviour
     [ClientRpc]
     public void GetGameMode()
     {
-        string gameMode = PlayerPrefs.GetString("GameMode");
-        Wallet = user.Wallet;
-        int chipId = PlayerPrefs.GetInt("chipId");
-        GameMode = gameMode;
-        CmdSendGameMode(gameMode, Wallet, chipId);
+        if (hasAuthority)
+        {
+            string gameMode = PlayerPrefs.GetString("GameMode");
+            Wallet = user.Wallet;
+            int chipId = PlayerPrefs.GetInt("chipId");
+            GameMode = gameMode;
+            CmdSendGameMode(gameMode, Wallet, chipId);
+        }
     }
 
     private void OnDestroy()

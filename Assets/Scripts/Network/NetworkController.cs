@@ -239,6 +239,11 @@ public class NetworkController : NetworkManager
         }
     }
 
+    public void CheckPlayers()
+    {
+        Players.RemoveAll(p => p.gameObject == null);
+    }
+
     private void OnApplicationQuit()
     {
         if (user)

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ShowingCardsController : MonoBehaviour
 {
+    [Header("Settings")]
+    [SerializeField] private int _cardsCount = 120;
     [SerializeField] private User user;
 
     [Header("Cards")]
@@ -31,13 +33,7 @@ public class ShowingCardsController : MonoBehaviour
 
     private void PrepareCards()                                             // ������ �����
     {
-        int count = 0;
-        for (int i = 0; i < user.ChipParam.Count; i++)
-        {
-            count += user.ChipParam[i].CardDeck.Length;
-        }
-
-        cardParameters = new CardParameters[count];
+        cardParameters = new CardParameters[_cardsCount];
 
         for (int i = 0; i < cardParameters.Length; i++)
         { 

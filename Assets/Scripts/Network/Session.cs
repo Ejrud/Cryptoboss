@@ -239,13 +239,19 @@ public class Session : MonoBehaviour
             Rewarded = true;
             StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode, left));
 
+            for(int i = 0; i < PlayerNets.Length; i++)
+            {
+                controller.RemovePlayer(PlayerNets[i]);
+            }
+
             timer.isStoped = true;
             timer.isRunning = false;
         }
         else
         {
-            FindObjectOfType<NetworkController>().Sessions.Add(this);
-
+            NetworkController controller = FindObjectOfType<NetworkController>();
+            controller.Sessions.Add(this);
+            controller.CheckPlayers();
             timer.AwaitPlayer();
             AwaitPlayer = true;
 

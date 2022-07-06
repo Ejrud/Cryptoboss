@@ -11,6 +11,7 @@ public class User : ScriptableObject
     public string Email;
     public string Wallet;
     public string Score;
+    public bool Mute;
 
     // debug zone
     public List<ChipParameters> ChipParam;

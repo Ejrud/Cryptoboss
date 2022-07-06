@@ -5056,7 +5056,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &279188951
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16132,8 +16132,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716204605c9a82940833ab8fa2a0b88b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSrc: {fileID: 963194229}
-  musicValume: {fileID: 1281401265}
+  _audioSrc: {fileID: 963194229}
+  _musicValume: {fileID: 1281401265}
+  _user: {fileID: 11400000, guid: b02e5e1c3ebc65845bee169c994fef68, type: 2}
+  _muteImage: {fileID: 1271072016}
+  _activeButtons:
+  - {fileID: 21300000, guid: 74b4ba99c01b95a4faf2d565c5cbf643, type: 3}
+  - {fileID: 21300000, guid: 71d5bb0f761b5fe4d83f03d00b97a0ec, type: 3}
 --- !u!1 &970653338
 GameObject:
   m_ObjectHideFlags: 0
@@ -17784,7 +17789,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: af256ba5abcee2849a540cede273f8ee, type: 3}
-  m_Type: 3
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
@@ -18056,7 +18061,6 @@ GameObject:
   - component: {fileID: 1082058686}
   - component: {fileID: 1082058687}
   - component: {fileID: 1082058688}
-  - component: {fileID: 1082058689}
   m_Layer: 5
   m_Name: AuthWindow
   m_TagString: Untagged
@@ -18119,19 +18123,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   metaInput: {fileID: 1804687770}
---- !u!114 &1082058689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1082058685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afa6e5a3cdd404aeebca024db9afeae7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputWallet: {fileID: 1804687770}
 --- !u!1 &1096427517
 GameObject:
   m_ObjectHideFlags: 0
@@ -24668,6 +24659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7491dbecb394e894288cef366ef28f92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cardsCount: 100
   user: {fileID: 11400000, guid: b02e5e1c3ebc65845bee169c994fef68, type: 2}
   cardPrefab: {fileID: 5560346213922817583, guid: b0f49bc1d81131a4a94820990d38f9ad, type: 3}
   contentContainer: {fileID: 1815873463}
@@ -26435,7 +26427,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1271072016}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 963194230}
+        m_TargetAssemblyTypeName: SoundPlayer, Assembly-CSharp
+        m_MethodName: OnChangeMute
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1271072016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30290,8 +30294,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1082058689}
-        m_TargetAssemblyTypeName: WebLogin, Assembly-CSharp
+      - m_Target: {fileID: 1082058688}
+        m_TargetAssemblyTypeName: WalletLogin, Assembly-CSharp
         m_MethodName: OnLogin
         m_Mode: 1
         m_Arguments:
@@ -31272,8 +31276,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.7999878, y: 6.420002}
-  m_SizeDelta: {x: -19.77, y: -25.72}
+  m_AnchoredPosition: {x: -1.25, y: 6.420002}
+  m_SizeDelta: {x: -21.63, y: -25.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1666322475
 MonoBehaviour:
