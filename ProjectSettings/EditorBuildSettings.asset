@@ -12,11 +12,11 @@ EditorBuildSettings:
     path: Assets/Scenes/BattleArea.unity
     guid: 18d3237b0e4a26945b8f91a343bc5bfa
   - enabled: 0
-    path: Assets/Scenes/OldMainMenu.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/Scenes/WebGLCopyAnPasteSampleScene.unity
-    guid: 9acb4bc5e47caf74193d42fa234aa5eb
+    path: 
+    guid: 00000000000000000000000000000000
   m_configObjects:
     WebXR.Settings: {fileID: 11400000, guid: 0351fa81f0f234c4bb92188d33ecdbbd, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 66d08ce6f4383914a9988acb0f6d78f0, type: 2}

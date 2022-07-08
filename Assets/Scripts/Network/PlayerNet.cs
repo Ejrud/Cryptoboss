@@ -389,8 +389,6 @@ public class PlayerNet : NetworkBehaviour
         this.MaxEnergy = maxEnergy;
         this.MaxHealth = MaxCapital;
 
-        Debug.Log("Player characteristics: capital = " + this.Capital + ", morale = " + this.Morale);
-
         UpdateUI();
     }
 
@@ -525,7 +523,6 @@ public class PlayerNet : NetworkBehaviour
             {
                 image.gameObject.SetActive(active);
             }
-            Debug.Log("Chip hided");
         }
     }
     
@@ -559,7 +556,6 @@ public class PlayerNet : NetworkBehaviour
                 List<ChipRating> chipRatings = JsonConvert.DeserializeObject<List<ChipRating>>(webRequest.downloadHandler.text);
                 Debug.Log(webRequest.downloadHandler.text);
                 currentRating = Convert.ToInt32(chipRatings[0].rating); // текущий рейтинг
-                Debug.Log("current rating " + chipRatings[0].rating);
             }
 
             form = new WWWForm();
@@ -572,7 +568,6 @@ public class PlayerNet : NetworkBehaviour
             if (webRequest.result == UnityWebRequest.Result.Success)
             {
                 ratingReward = Convert.ToInt32(webRequest.downloadHandler.text);
-                Debug.Log("data rating increment " + ratingReward);
             }
             else
             {
@@ -584,7 +579,6 @@ public class PlayerNet : NetworkBehaviour
 
             if (webRequest.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log(webRequest.downloadHandler.text);
                 bossyParam = JsonConvert.DeserializeObject<List<BossyRewardParams>>(webRequest.downloadHandler.text); 
             }
 
@@ -597,8 +591,6 @@ public class PlayerNet : NetworkBehaviour
             // decimal bossyDef = Convert.ToDecimal(bossyParam[0].bossy_count);
 
             bossyReward = 10 + (10 * cof); // (float)bossyDef
-
-            Debug.Log(bossyReward + " " + 10 + " " + cof);
         }   
     }
 

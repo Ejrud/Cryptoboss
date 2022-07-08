@@ -135,8 +135,6 @@ public class SelectChip : MonoBehaviour
                 
                 int morale = Convert.ToInt32(selectableChips[currentIdPos[i]].GetComponent<ChipContainer>().Morale);
 
-                Debug.Log(morale);
-
                 if (morale <= 0)
                 {
                     playButton.interactable = false;

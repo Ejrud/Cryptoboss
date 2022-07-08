@@ -77,22 +77,11 @@ public class UserData : MonoBehaviour
         string[] pages = uri.Split('/');
         int page = pages.Length - 1;
 
-        switch (webRequest.result)
+        if (webRequest.result == UnityWebRequest.Result.Success)
         {
-            case UnityWebRequest.Result.ConnectionError:
-            case UnityWebRequest.Result.DataProcessingError:
-                Debug.LogError(pages[page] + ": Error: " + webRequest.error);
-                break;
-            case UnityWebRequest.Result.ProtocolError:
-                Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
-                break;
-            case UnityWebRequest.Result.Success:
-                Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-                UserBalance Balance = JsonConvert.DeserializeObject<UserBalance>(webRequest.downloadHandler.text);
-                user.Balance = Balance.balance;
-                break;
+            UserBalance Balance = JsonConvert.DeserializeObject<UserBalance>(webRequest.downloadHandler.text);
+            user.Balance = Balance.balance;
         }
-        
 
         for (int i = errorLoop; i < tokenIds.Length; i++)
         {
