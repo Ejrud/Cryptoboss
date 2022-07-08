@@ -76,6 +76,9 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
                 cardImage.sprite = typeSprites[2];
             break;
             case "joker":
+                string name = Card.Name;
+                Card.Name = name.Substring(0, 1).ToUpper() + name.Remove(0, 1).ToLower();
+
                 for (int i = 0; i < typeSprites.Length; i++)
                 {
                     if (typeSprites[i].name == Card.Name)
@@ -90,12 +93,12 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
                         {
                             cardImage.sprite = typeSprites[7]; // capital health
                         }
-                        
-                        bossyObj.gameObject.SetActive(false);
-                        energyObj.gameObject.SetActive(false);
                         break;
                     }
                 }
+
+                bossyObj.gameObject.SetActive(false);
+                energyObj.gameObject.SetActive(false);
             break;
         }
 

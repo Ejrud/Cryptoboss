@@ -2878,7 +2878,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -49.000122, y: 0}
+  m_AnchoredPosition: {x: -49, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &160141502
@@ -3610,7 +3610,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1674516224}
   m_HandleRect: {fileID: 1674516223}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3750,7 +3750,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 30
+  m_ScrollSensitivity: 60
   m_Viewport: {fileID: 1745203848}
   m_HorizontalScrollbar: {fileID: 192240626}
   m_VerticalScrollbar: {fileID: 935682775}
@@ -4340,9 +4340,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: fdb2927537eadd84faa93e932728036b, type: 3}
     m_FontSize: 36
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 0
-    m_MaxSize: 300
+    m_MaxSize: 36
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -14164,7 +14164,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.1787313, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -10.900009, y: 0}
+  m_AnchoredPosition: {x: -10.900024, y: 0}
   m_SizeDelta: {x: -24.57, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &825047497
@@ -14898,9 +14898,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: fdb2927537eadd84faa93e932728036b, type: 3}
     m_FontSize: 28
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 2
-    m_MaxSize: 46
+    m_BestFit: 1
+    m_MinSize: 0
+    m_MaxSize: 28
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -15084,7 +15084,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.18046196, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -11.400009, y: 0}
+  m_AnchoredPosition: {x: -11.400024, y: 0}
   m_SizeDelta: {x: -23.57, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &896246846
@@ -24716,6 +24716,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f15ccf7556cf7bf47951ddc3c9135baa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _descriptions:
+  - Redirecting the last card to enemy's chip
+  - Making the last enemy's card disappear
+  - Disabling enemy's possibility to make turn
+  - Swapping 100 points of Capital to 2 points of Moral
+  - Swapping 2 points of Moral to 100 points of Capital
+  - Cuting half of enemy's cards characteristics
+  - Protecting your chip from enemy's Joker card for 3 enemy's turns
+  - Making visible enemy's current  cards untill he'll spend it
+  - Raises enemy's next card's cost twice as much
+  - Raises your next card's characteristics twice as much
   typeValue: {fileID: 146146341}
   description: {fileID: 894088487}
   cardDescriptionObj: {fileID: 1424776000}
@@ -26096,7 +26107,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -49.000122, y: 0}
+  m_AnchoredPosition: {x: -49, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1248201446
@@ -26892,7 +26903,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.18, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -11.39003, y: 0}
+  m_AnchoredPosition: {x: -11.390015, y: 0}
   m_SizeDelta: {x: -23.58, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1308862678
@@ -29389,7 +29400,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.18073131, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -11.400009, y: 0}
+  m_AnchoredPosition: {x: -11.400024, y: 0}
   m_SizeDelta: {x: -23.56, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1507120169
@@ -34147,7 +34158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -49.000122, y: 0}
+  m_AnchoredPosition: {x: -49, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1814090903
@@ -37950,7 +37961,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afa6e5a3cdd404aeebca024db9afeae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputWallet: {fileID: 0}
 --- !u!1 &2119268657
 GameObject:
   m_ObjectHideFlags: 0

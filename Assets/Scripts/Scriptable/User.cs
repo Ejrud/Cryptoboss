@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Data", menuName = "UserData")]
 public class User : ScriptableObject
 {
+    public string Balance;
     public bool Authorized;
     public string UserID;
     public string UserName;

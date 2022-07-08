@@ -270,6 +270,8 @@ public class BattleManager : NetworkBehaviour
             queueCapital = CutSurplusValue(queueCapital, session.PlayerNets[playerQueueIndex].MaxHealth);
             queueEnergy = CutSurplusValueFloat(queueEnergy, 20); // 
 
+            otherCapital = CutSurplusValue(otherCapital, session.PlayerNets[rivalIndex].MaxHealth);
+
             if (queueCapital > 0 && otherCapital <= 0)
             {
                 Debug.Log($"Player {playerQueueIndex + 1} Win");
@@ -282,6 +284,8 @@ public class BattleManager : NetworkBehaviour
                         session.PlayerNets[i].Win = false;
                     }
                 }
+                session.PlayerNets[playerQueueIndex].UpdatePlayerCharacteristic(queueCapital, queueEnergy, otherCapital, otherEnergy, queueEnergy);
+                session.PlayerNets[rivalIndex].UpdatePlayerCharacteristic(otherCapital, otherEnergy, queueCapital, queueEnergy, otherEnergy);
                 session.FinishTheGame(session.PlayerNets[0].Win, session.PlayerNets[1].Win);
             }
             else if (queueCapital <= 0 && otherCapital > 0)
@@ -296,11 +300,15 @@ public class BattleManager : NetworkBehaviour
                         session.PlayerNets[i].Win = false;
                     }
                 }
+                session.PlayerNets[playerQueueIndex].UpdatePlayerCharacteristic(queueCapital, queueEnergy, otherCapital, otherEnergy, queueEnergy);
+                session.PlayerNets[rivalIndex].UpdatePlayerCharacteristic(otherCapital, otherEnergy, queueCapital, queueEnergy, otherEnergy);
                 session.FinishTheGame(session.PlayerNets[0].Win, session.PlayerNets[1].Win);
             }
             else if (queueCapital <= 0 && otherCapital <= 0)
             {
                 Debug.Log("Draw");
+                session.PlayerNets[playerQueueIndex].UpdatePlayerCharacteristic(queueCapital, queueEnergy, otherCapital, otherEnergy, queueEnergy);
+                session.PlayerNets[rivalIndex].UpdatePlayerCharacteristic(otherCapital, otherEnergy, queueCapital, queueEnergy, otherEnergy);
                 session.FinishTheGame(false, false);
             }
             else
@@ -312,7 +320,7 @@ public class BattleManager : NetworkBehaviour
                 session.PlayerNets[playerQueueIndex].PreviousCard = session.PlayerNets[playerQueueIndex].HandCards[cardId];
                 session.PrepareNextRound(correction);
             }
-
+            
             session.SavePlayers();
         }
     }

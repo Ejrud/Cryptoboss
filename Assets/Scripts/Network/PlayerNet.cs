@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
+using Newtonsoft.Json;
 using Mirror;
 using System;
 using TMPro;
@@ -45,7 +46,12 @@ public class PlayerNet : NetworkBehaviour
     public int SelectedCardId;
     public int UsedCount;
     
-    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/
+    private string seUrl = "http://a0664627.xsph.ru/cryptoboss_back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/
+
+    private int currentRating;
+    private float bossyReward;
+    private int ratingReward;
+    private int ratingLose = 8;
 
     #region UI elements
     [Header("player UI")]
@@ -91,6 +97,7 @@ public class PlayerNet : NetworkBehaviour
     private Texture2D[] rivalChipTexture;
     
     private NetworkController controller;
+    private List<BossyRewardParams> bossyParam = new List<BossyRewardParams>();
 
     #endregion
 
@@ -125,6 +132,8 @@ public class PlayerNet : NetworkBehaviour
             chipRepresentation.SetUpWindows(GameMode);
             
             CmdSendWalletAndId(Wallet, ChipId, ChipReceived);
+
+            CalculateResults(); // Локально у игроков висчитывать результаты игры
 
             Texture chipTexture = lastTexture;
 
@@ -386,7 +395,7 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void StopGame(string text, string charIncrement, float bossy, string raiting, bool disconnected)
+    public void StopGame(string text, string charIncrement, float bossy, string raiting, bool disconnected, bool win)
     {
         backToLobbyWindow.SetActive(true);
 
@@ -398,6 +407,17 @@ public class PlayerNet : NetworkBehaviour
         }
         else
         {
+            if (win)
+            {
+                bossy = bossyReward;
+                raiting = ratingReward.ToString();
+            }
+            else
+            {
+                bossy = 0;
+                raiting = ratingLose.ToString();
+            }
+
             awaitPlayerTxt.gameObject.SetActive(false);
             winContainer.SetActive(true);
             exitWindowText.text = text;
@@ -479,7 +499,7 @@ public class PlayerNet : NetworkBehaviour
             }
             else
             {
-                StopGame("Game mode not selected", "", 0f, "0", false);
+                StopGame("Game mode not selected", "", 0f, "0", false, false);
             }
 
             chipRepresentation.SetUpWindows(gameMode);
@@ -508,6 +528,7 @@ public class PlayerNet : NetworkBehaviour
             Debug.Log("Chip hided");
         }
     }
+    
 
     [ClientRpc]
     public void GetGameMode()
@@ -520,6 +541,62 @@ public class PlayerNet : NetworkBehaviour
             GameMode = gameMode;
             CmdSendGameMode(gameMode, Wallet, chipId);
         }
+    }
+
+    private async void CalculateResults() 
+    {
+        if (hasAuthority)
+        {
+            // Поиск текущего рейтинга, bossy и награда рейтинга и bossy за игру
+            WWWForm form = new WWWForm();
+            form.AddField("ChipGuid", "CryptoBoss #" + ChipId);
+
+            UnityWebRequest webRequest = UnityWebRequest.Post(seUrl + "/get_chipData.php", form);
+            await webRequest.SendWebRequest();
+
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                List<ChipRating> chipRatings = JsonConvert.DeserializeObject<List<ChipRating>>(webRequest.downloadHandler.text);
+                Debug.Log(webRequest.downloadHandler.text);
+                currentRating = Convert.ToInt32(chipRatings[0].rating); // текущий рейтинг
+                Debug.Log("current rating " + chipRatings[0].rating);
+            }
+
+            form = new WWWForm();
+            form.AddField("Mode", PlayerPrefs.GetString("GameMode"));
+
+            webRequest = UnityWebRequest.Post(seUrl + "/get_ratingCoefficient.php", form);
+
+            await webRequest.SendWebRequest();
+
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                ratingReward = Convert.ToInt32(webRequest.downloadHandler.text);
+                Debug.Log("data rating increment " + ratingReward);
+            }
+            else
+            {
+                Debug.Log(webRequest.error);
+            }
+
+            webRequest = UnityWebRequest.Post(seUrl + "/get_bossyParams.php", form);
+            await webRequest.SendWebRequest();
+
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log(webRequest.downloadHandler.text);
+                bossyParam = JsonConvert.DeserializeObject<List<BossyRewardParams>>(webRequest.downloadHandler.text); 
+            }
+
+            // Предполагаемая награза в зависимости от результата игры
+            float winRating = ratingReward;
+            float division = 1000;
+            float ratingPlus = 1;
+
+            bossyReward = ((winRating + currentRating) / (division + ratingPlus)) * 100;
+
+            Debug.Log(bossyReward + " " + winRating + " " + currentRating + " " + division + " " + ratingPlus);
+        }   
     }
 
     private void OnDestroy()
@@ -547,6 +624,23 @@ public class PlayerNet : NetworkBehaviour
     public class Response 
     {
         public string image;
+    }
+
+    public class ChipRating
+    {
+        public string rating { get; set; }
+    }
+
+    public class DbRating
+    {
+        public string rating_bd { get; set; }
+    }
+
+    public class BossyRewardParams
+    {
+        public string bossy_count { get; set; }
+        public string rating_div { get; set; }
+        public string rating_plus { get; set; }
     }
     
     // Сохранение действий прошлой карты 

@@ -915,6 +915,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Selected: 0
   Session: 1
+  Audited: 0
   Card:
     Used: 0
     Guid: 
@@ -932,6 +933,7 @@ MonoBehaviour:
   cardImage: {fileID: 2035265864123630530}
   bossyObj: {fileID: 3958466185982352213}
   energyObj: {fileID: 472316493516942626}
+  cardBackplate: {fileID: 0}
   cardName: {fileID: 2674330234881794408}
   capitalDamage: {fileID: 7170926474609941486}
   capitalHealth: {fileID: 523031396789590493}
@@ -951,6 +953,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7ecf04fb37bc9dd4d86e315f4833a775, type: 3}
   - {fileID: 21300000, guid: 43f3caf003c47ba429476b312e65186a, type: 3}
   - {fileID: 21300000, guid: 1f5d746e178f1e6458f823bcd003cb7d, type: 3}
+  unknownSprite: {fileID: 0}
 --- !u!114 &7406575808050751532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1022,6 +1025,7 @@ MonoBehaviour:
   deadZone: 0.5
   active: 1
   CardDisplacement: {x: 0, y: 0, z: 0}
+  IndexPosition: 0
   cardManager: {fileID: 0}
   rectTransform: {fileID: 130163297028281712}
 --- !u!114 &2035265864123630530

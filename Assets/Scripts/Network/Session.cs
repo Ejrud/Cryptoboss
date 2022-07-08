@@ -30,6 +30,7 @@ public class Session : MonoBehaviour
     private bool gameStarted = false;
     private bool chipIdRecieved;
     private bool playerIndexRecieved = false;
+    private bool stopGame;
 
     private string seUrl = "https://cryptoboss.win/game/back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
     private string accrualUrl = "a0664627.xsph.ru/cryptoboss_back/";
@@ -197,6 +198,13 @@ public class Session : MonoBehaviour
     
     public void FinishTheGame(bool playerWin_1, bool playerWin_2, bool playerDisconnected = false)
     {
+        StartCoroutine(FinishTheGameIE(playerWin_1, playerWin_2, playerDisconnected));
+    }
+
+    public IEnumerator FinishTheGameIE(bool playerWin_1, bool playerWin_2, bool playerDisconnected = false)
+    {
+        yield return new WaitForSeconds(3f);
+
         Ready = false;
         Finished = true;
         bool left = false;
@@ -256,9 +264,11 @@ public class Session : MonoBehaviour
             timer.AwaitPlayer();
             AwaitPlayer = true;
 
-            PlayerNets[0].StopGame("Other player disconnected", "", 0f, "0", true);
-            PlayerNets[1].StopGame("Other player disconnected", "", 0f, "0", true);
+            PlayerNets[0].StopGame("Other player disconnected", "", 0f, "0", true, false);
+            PlayerNets[1].StopGame("Other player disconnected", "", 0f, "0", true, false);
         }
+
+        yield return null;
     }
 
     private IEnumerator SetReward(string winnerWallet, string winnerGuid, string looseGuid, string mode, bool left)
@@ -280,6 +290,27 @@ public class Session : MonoBehaviour
             form.AddField("Leave", "true");
         }
 
+        if (PlayerNets[0].Win && !PlayerNets[1].Win)
+        {
+            PlayerNets[0].StopGame("YOU WIN", "+", 0f, "0", false, true);
+            PlayerNets[1].StopGame("YOU LOSE", "-", 0f, "0", false, false);
+        }
+        else if (!PlayerNets[0].Win && PlayerNets[1].Win)
+        {
+            PlayerNets[1].StopGame("YOU WIN", "+", 0f, "0", false, true);
+            PlayerNets[0].StopGame("YOU LOSE", "-", 0f , "0", false, false);
+        }
+        else if (!PlayerNets[0].Win && !PlayerNets[1].Win)
+        {
+            PlayerNets[0].StopGame("DRAW", "", 0f, "0", false, false);
+            PlayerNets[1].StopGame("DRAW", "", 0f, "0", false, false);
+        }
+        else
+        {
+            PlayerNets[0].StopGame("DRAW", "", 0f, "0", false, false);
+            PlayerNets[1].StopGame("DRAW", "", 0f, "0", false, false);
+        }
+
         // 
         using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form))
         { 
@@ -289,34 +320,12 @@ public class Session : MonoBehaviour
             {
                 Debug.Log(www.downloadHandler.text);
                 DataBaseResult results = JsonConvert.DeserializeObject<DataBaseResult>(www.downloadHandler.text);
-
-                if (PlayerNets[0].Win && !PlayerNets[1].Win)
-                {
-                    PlayerNets[0].StopGame("YOU HAVE WON!", "+", results.bossy, results.rating, false);
-                    PlayerNets[1].StopGame("YOU LOSE", "-", 0f, results.decrement, false);
-                }
-                else if (!PlayerNets[0].Win && PlayerNets[1].Win)
-                {
-                    PlayerNets[1].StopGame("YOU HAVE WON!", "+", results.bossy, results.rating, false);
-                    PlayerNets[0].StopGame("YOU LOSE", "-", 0f ,results.decrement, false);
-                }
-                else if (!PlayerNets[0].Win && !PlayerNets[1].Win)
-                {
-                    PlayerNets[0].StopGame("DRAW", "", 0f, "0", false);
-                    PlayerNets[1].StopGame("DRAW", "", 0f, "0", false);
-                }
-                else
-                {
-                    PlayerNets[0].StopGame("DRAW", "", 0f, "0", false);
-                    PlayerNets[1].StopGame("DRAW", "", 0f, "0", false);
-                }
-
                 Debug.Log("Reward = " + results.bossy);
             }
             else
             { 
-                PlayerNets[0].StopGame("Server error", "", 0f, "0", false);
-                PlayerNets[1].StopGame("Server error", "", 0f, "0", false);
+                // PlayerNets[0].StopGame("Server error", "", 0f, "0", false, false);
+                // PlayerNets[1].StopGame("Server error", "", 0f, "0", false, false);
                 Debug.Log("Incorrect data");
                 Debug.Log(www.error);
             }

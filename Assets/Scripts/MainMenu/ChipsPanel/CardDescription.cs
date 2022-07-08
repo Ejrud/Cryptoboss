@@ -7,6 +7,9 @@ using TMPro;
 
 public class CardDescription : MonoBehaviour, IPointerDownHandler
 {
+    [Header("Descriptions")]
+    [SerializeField] private string[] _descriptions; // 0 - turn around/ 1 - liq/ 2 - correc/ 3 - piv 100 2/  4 - piv 2 100/ 5 - scam/ 6 - hedge/ 7 - audit/ 8 - to the moon/ 9 - pump
+
     [Header("UI")]
     [SerializeField] private Text typeValue;
     [SerializeField] private TextMeshProUGUI description;
@@ -28,9 +31,9 @@ public class CardDescription : MonoBehaviour, IPointerDownHandler
     {
         cardDescriptionObj.SetActive(true);
 
-        // цикл проверки какой тип карты по значениям этой карты
+        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         int value = 0;
-        int typeIndex = 0;
+        int typeIndex = data.CapitalDamage;
 
         cardParams.SetCardEffects(data, 0);
 
@@ -40,10 +43,63 @@ public class CardDescription : MonoBehaviour, IPointerDownHandler
     private void UpdateUI(int typeValue, int typeIndex, string cardName, string description)
     {
         this.description.text = description;
+        string name = cardName;
+        cardName = name.Substring(0, 1).ToUpper() + name.Remove(0, 1).ToLower();
+
+        switch (cardName)
+        {
+            case "Turn around":
+                this.description.text = _descriptions[0];
+                break;
+
+            case "Liquidation":
+                this.description.text = _descriptions[1];
+                break;
+
+            case "Correction":
+                this.description.text = _descriptions[2];
+                break;
+
+            case "Pivot":
+                if(typeIndex > 0)
+                {
+                    this.description.text = _descriptions[3];
+                }
+                else
+                {
+                    this.description.text = _descriptions[4];
+                }
+                break;
+
+            case "Scam":
+                this.description.text = _descriptions[5];
+                break;
+
+            case "Hedge fund":
+                this.description.text = _descriptions[6];
+                break;
+
+            case "Audit":
+                this.description.text = _descriptions[7];
+                break;
+
+            case "To the moon":
+                this.description.text = _descriptions[8];
+                break;
+
+            case "Pump":
+                this.description.text = _descriptions[9];
+                break;
+
+            default:
+                this.description.text = "Not found";
+                break;
+        }
+
         this.typeValue.text = typeValue.ToString();
     }
 
-    // Закрывать окно если в обласит окна было совершено нажатие на экран
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     public void OnPointerDown(PointerEventData eventData)
     {
         cardDescriptionObj.SetActive(false);

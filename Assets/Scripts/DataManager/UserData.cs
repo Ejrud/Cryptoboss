@@ -67,6 +67,33 @@ public class UserData : MonoBehaviour
         loadText.text = (int)(currentLoad * 100) + " %";
         loadScreen.SetActive(true);
 
+        string uri = $"https://cryptoboss.win/ajax/models/comments/customizers/get_user_balance_ixdkznne7?address={user.Wallet}";
+
+        UnityWebRequest webRequest = UnityWebRequest.Get(uri);
+        
+        // Request and wait for the desired page.
+        await webRequest.SendWebRequest();
+
+        string[] pages = uri.Split('/');
+        int page = pages.Length - 1;
+
+        switch (webRequest.result)
+        {
+            case UnityWebRequest.Result.ConnectionError:
+            case UnityWebRequest.Result.DataProcessingError:
+                Debug.LogError(pages[page] + ": Error: " + webRequest.error);
+                break;
+            case UnityWebRequest.Result.ProtocolError:
+                Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
+                break;
+            case UnityWebRequest.Result.Success:
+                Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
+                UserBalance Balance = JsonConvert.DeserializeObject<UserBalance>(webRequest.downloadHandler.text);
+                user.Balance = Balance.balance;
+                break;
+        }
+        
+
         for (int i = errorLoop; i < tokenIds.Length; i++)
         {
             ChipParameters chip = new ChipParameters();
@@ -171,7 +198,7 @@ public class UserData : MonoBehaviour
     {
         nameTxt.text = user.UserName;
         pointsTxt.text = user.Score;
-        moneyTxt.text = "0";
+        moneyTxt.text = user.Balance;
         energyTxt.text = "10";
         selectChip.Init(user.ChipParam);
     }
@@ -241,5 +268,10 @@ public class UserData : MonoBehaviour
     private void OnApplicationQuit()
     {
         user.Authorized = false;
+    }
+
+    public class UserBalance
+    {
+        public string balance { get; set;}
     }
 }
