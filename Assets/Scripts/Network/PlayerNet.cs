@@ -46,7 +46,7 @@ public class PlayerNet : NetworkBehaviour
     public int SelectedCardId;
     public int UsedCount;
     
-    private string seUrl = "http://a0664627.xsph.ru/cryptoboss_back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/
+    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/
 
     private int currentRating;
     private float bossyReward;
@@ -409,7 +409,7 @@ public class PlayerNet : NetworkBehaviour
         {
             if (win)
             {
-                bossy = bossyReward;
+                bossy = (float)Math.Round(bossyReward, 2);
                 raiting = ratingReward.ToString();
             }
             else
@@ -593,9 +593,12 @@ public class PlayerNet : NetworkBehaviour
             float division = 1000;
             float ratingPlus = 1;
 
-            bossyReward = ((winRating + currentRating) / (division + ratingPlus)) * 100;
+            float cof = (currentRating + winRating) / (division + ratingPlus);
+            // decimal bossyDef = Convert.ToDecimal(bossyParam[0].bossy_count);
 
-            Debug.Log(bossyReward + " " + winRating + " " + currentRating + " " + division + " " + ratingPlus);
+            bossyReward = 10 + (10 * cof); // (float)bossyDef
+
+            Debug.Log(bossyReward + " " + 10 + " " + cof);
         }   
     }
 

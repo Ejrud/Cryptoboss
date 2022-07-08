@@ -181,6 +181,8 @@ public class UserData : MonoBehaviour
         user.ChipParam = new List<ChipParameters>();
         user.nftTokens = new string[0];
         user.Authorized = false;
+        user.Balance = "";
+        user.Mute = false;
         // user.cards = nullCards;
 
         authWindow.SetActive(true);
