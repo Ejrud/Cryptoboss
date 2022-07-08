@@ -32,6 +32,7 @@ public class Session : MonoBehaviour
     private bool playerIndexRecieved = false;
 
     private string seUrl = "https://cryptoboss.win/game/back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
+    private string accrualUrl = "a0664627.xsph.ru/cryptoboss_back/";
 
     [Header("Settings")]
     [SerializeField] private float energyRecovery = 0.5f;
@@ -280,12 +281,13 @@ public class Session : MonoBehaviour
         }
 
         // 
-        using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "accrual.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form))
         { 
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.Success)
             {
+                Debug.Log(www.downloadHandler.text);
                 DataBaseResult results = JsonConvert.DeserializeObject<DataBaseResult>(www.downloadHandler.text);
 
                 if (PlayerNets[0].Win && !PlayerNets[1].Win)
@@ -541,7 +543,9 @@ public class Session : MonoBehaviour
                 timer.RoundTimer = Convert.ToInt32(gameParams[0].timer);
                 timer.AwaitTime = Convert.ToInt32(gameParams[0].reconnect_time);
                 timer.OriginalTime = timer.RoundTimer;
+                accrualUrl = gameParams[0].accural_link;
                 Debug.Log("Session timer = " + timer.RoundTimer);
+                Debug.Log(accrualUrl);
             }
             else
             { 
@@ -697,6 +701,7 @@ public class Session : MonoBehaviour
     {
         public string timer { get; set; }
         public string reconnect_time { get; set; }
+        public string accural_link {get; set;}
     }
 
     public class PlayerStatsHolder
