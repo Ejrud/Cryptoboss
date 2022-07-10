@@ -48,7 +48,7 @@ public class NetworkController : NetworkManager
         }
         else
         {
-            networkAddress = "localhost";
+            networkAddress = "cryptoboss.win";
         }
 
         if (serverMode == ServerMode.Client)
