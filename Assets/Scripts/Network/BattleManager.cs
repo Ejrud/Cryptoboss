@@ -37,7 +37,6 @@ public class BattleManager : NetworkBehaviour
             int Resistance = session.PlayerNets[playerQueueIndex].HandCards[cardId].DamageResistance;
             bool correction = false; // 
 
-            // ����� ������� ���������
             int rivalIndex = 0;
 
             for (int i = 0; i < session.PlayerNets.Length; i++)
@@ -48,7 +47,6 @@ public class BattleManager : NetworkBehaviour
                 }
             }
 
-            // ������� � ������� ������� ������
             int otherCapital = session.PlayerNets[rivalIndex].Capital;
             float otherEnergy = session.PlayerNets[rivalIndex].Morale;
 
@@ -69,7 +67,6 @@ public class BattleManager : NetworkBehaviour
 
             #endregion
             
-            // ���� � ������ �� ���� ������� ����� HedgeFund, �� �����
             if (session.PlayerNets[rivalIndex].HedgeFundCount <= 0)
             {
                 PlayerNet currentPlayer = session.PlayerNets[playerQueueIndex];

@@ -68,7 +68,7 @@ public class Session : MonoBehaviour
             playerIndexRecieved = true;
         }
 
-        if (StatsHolder.Count <= 0)
+        if (StatsHolder.Count <= 0) // При первом запуске инициализируюется хранилище данных
         {
             for (int i = 0; i < players.Length; i++)
             {
@@ -476,7 +476,7 @@ public class Session : MonoBehaviour
 
         StartCoroutine(PreparePlayers());
         
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(4f);
         
         for (int i = 0; i < PlayerNets.Length; i++)
         {
@@ -567,12 +567,35 @@ public class Session : MonoBehaviour
 
         if(PlayerNets.Length > 2) // Режим 2 на 2
         {
+            bool repeatConnect = false;
+
             for (int i = 0; i < PlayerNets.Length / 2; i++)
             {
                 PlayerNets[i].MaxHealth = PlayerNets[i].MaxHealth + PlayerNets[i].Friend.MaxHealth / 2; // Присвоение нового максимального здоровья
                 PlayerNets[i].Capital = PlayerNets[i].MaxHealth;                                        // Присвоение максимального капитала к текущему капиталу
                 PlayerNets[i].Friend.MaxHealth = PlayerNets[i].MaxHealth;                               // Присвоение максимального капитала союзнику
                 PlayerNets[i].Friend.Capital = PlayerNets[i].Friend.MaxHealth;                          // Присвоение союзнику максимального капитала к текущему капиталу
+
+                if (StatsHolder[i].RepeatConnect)
+                {
+                    repeatConnect = true;
+                }
+            }
+
+            if (repeatConnect) // Подбор сохраненных значений относсительно кошелька игрока
+            {
+                for(int i = 0; i < PlayerNets.Length; i++)
+                {
+                    for (int j = 0; j < PlayerNets.Length; j++)
+                    {
+                        if (PlayerNets[i].Wallet == StatsHolder[j].Wallet)
+                        {
+                            PlayerNets[i].Capital = StatsHolder[j].Capital;
+                            PlayerNets[i].Morale = StatsHolder[j].Morale;
+                            continue;
+                        }
+                    }
+                } 
             }
 
             PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, 20, PlayerNets[1].Capital, 20, 20);     // Правило 3-х "п" похер, потом переделаем

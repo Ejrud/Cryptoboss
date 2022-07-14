@@ -66,7 +66,9 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private Image healthImage;
     [SerializeField] private Image energyImage;
     [SerializeField] private RawImage ChipImage;        // Используется для настройки цвета
+    [SerializeField] private RawImage FriendChipImage;        // Используется для настройки цвета
     [SerializeField] private RawImage RivalChipImage;   // Используется для настройки цвета
+    [SerializeField] private RawImage FriendRivalChipImage;   // Используется для настройки цвета
     [SerializeField] private GameObject winContainer;
     [SerializeField] private Text awaitPlayerTxt;
 
@@ -148,8 +150,11 @@ public class PlayerNet : NetworkBehaviour
             }
             else if (GameMode == "two") // Скрыть лишние фишки и показать 2 текущей фишки и 2 фишки соперников 
             {
+                PrepareChip(rivalChipImages_2, 0, false); // где bool просто скрыть объект. цифра - индекс текстуры 
                 PrepareChip(rivalChipImages_3, 0, false);
+                PrepareChip(userChipImages_2, 0, false);
                 PrepareChip(userChipImages_3, 0, false);
+                
             }
             else if (GameMode == "three") // Показать 3 фишки соперника (т.к. 3 на 3 играют 2 игрока, то фишки игрока были изначально загружены при авторизации)
             {
@@ -319,11 +324,36 @@ public class PlayerNet : NetworkBehaviour
                 ChipImage.color = Color.white;
                 RivalChipImage.color = Color.gray;
                 turnVisualize.SetTurn();
+
+                if (GameMode == "two")
+                {
+                    FriendChipImage.color = Color.gray;
+                    FriendRivalChipImage.color = Color.gray;
+                }
             }
             else
             {
+                if (GameMode == "two")
+                {
+                    if (Friend.MyTurn)
+                    {
+                        FriendChipImage.color = Color.white;
+                        RivalChipImage.color = Color.gray;
+                        FriendRivalChipImage.color = Color.gray;
+                    }
+                    else
+                    {
+                        FriendChipImage.color = Color.gray;
+                        RivalChipImage.color = Color.white;
+                        FriendRivalChipImage.color = Color.white;
+                    }
+                }
+                else
+                {
+                    RivalChipImage.color = Color.white;
+                }
+
                 ChipImage.color = Color.gray;
-                RivalChipImage.color = Color.white;
             }
         }
     }
@@ -465,10 +495,10 @@ public class PlayerNet : NetworkBehaviour
                     return;
                 }
                 Debug.Log("Load complete");
-
-                ChipReceived = true;
-                CmdSendWalletAndId(Wallet, ChipId, ChipReceived);
             }
+
+            ChipReceived = true;
+            CmdSendWalletAndId(Wallet, ChipId, ChipReceived);
 
             if (gameMode == "one")
             {

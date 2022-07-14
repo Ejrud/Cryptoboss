@@ -42,8 +42,8 @@ public class AuthController : MonoBehaviour
     
     public void PrepareAuth()
     {
-        string userWallet = inputMetaMask.text.Trim();
-        string userPass = inputPass.text.Trim();
+        string userWallet = PlayerPrefs.GetString("Account");
+        // string userPass = inputPass.text.Trim();
 
         if (!string.IsNullOrWhiteSpace(userWallet))
         {

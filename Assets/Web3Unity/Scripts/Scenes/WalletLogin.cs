@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class WalletLogin: MonoBehaviour
 {
     // public Toggle rememberMe;
-    [SerializeField] private InputField metaInput;
+    [SerializeField] private AuthController _authController;
 
     void Start() {
         // if remember me is checked, set the account to the saved account
@@ -35,7 +35,8 @@ public class WalletLogin: MonoBehaviour
         if (account.Length == 42 && expirationTime >= now) {
             // save account
             PlayerPrefs.SetString("Account", account);
-            metaInput.text = account;
+            _authController.PrepareAuth();
+            // metaInput.text = account;
             // load next scene
             // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
