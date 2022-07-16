@@ -465,7 +465,7 @@ public class Session : MonoBehaviour
                 chipIdRecieved = true;
             }
 
-            yield return new WaitForUpdate();
+            yield return new WaitForFixedUpdate();
         }
 
         for (int i = 0; i < PlayerNets.Length; i++)

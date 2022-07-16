@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 public class RegistrationController : MonoBehaviour
 {
     [Header("Server")]
-    private string altServer = "https://cryptoboss.win/game/back/reg.php"; // Изменить адресс
+    private string altServer = "https://cryptoboss.win/game/back/reg.php"; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     
     [Header("AlertText")]
     [SerializeField] private Text alertText;
@@ -33,7 +33,7 @@ public class RegistrationController : MonoBehaviour
         alertColor = Color.red;
     }
 
-    public void PrepareForm()                              // отправка на сервер имя и пароль
+    public void PrepareForm()                              // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     {
         
             string userEmail = emailInput.text.Trim();
@@ -67,7 +67,7 @@ public class RegistrationController : MonoBehaviour
         string uri = "https://cryptoboss.win/ajax/models/messages/customizers/get_nft_by_address_6j986xfw9?address=";
         uri = uri + userWallet;
 
-        // Получение всех nft этого кошелька
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ nft пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             // Request and wait for the desired page.
@@ -107,7 +107,7 @@ public class RegistrationController : MonoBehaviour
         form.AddField("pass", userPass);
         form.AddField("data", json);
 
-        // заполнение таблиц user_alts и user_profile
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ user_alts пїЅ user_profile
         using (UnityWebRequest www = UnityWebRequest.Post(altServer, form)) //    a0664627.xsph.ru/cryptoboss_back/reg.php   //altServer
         { 
             yield return www.SendWebRequest();
@@ -130,7 +130,7 @@ public class RegistrationController : MonoBehaviour
         }
     }
 
-    private IEnumerator SetAlert(string text = "", bool alert = false) // alert отвечает за цвет текста
+    private IEnumerator SetAlert(string text = "", bool alert = false) // alert пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     {
         alertText.text = text;
         // alertText.color = (!alert) ? defaultColor : alertColor;
@@ -142,7 +142,7 @@ public class RegistrationController : MonoBehaviour
         {
             alertText.color = new Vector4(alertText.color.r, alertText.color.g, alertText.color.b, timer/apogee);
             timer -= Time.deltaTime;
-            yield return new WaitForUpdate();
+            yield return new WaitForFixedUpdate();
         }
 
         yield return null;

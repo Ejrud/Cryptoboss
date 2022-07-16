@@ -6,6 +6,10 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 
+using MoralisUnity;
+using MoralisUnity.Platform.Objects;
+using MoralisUnity.Web3Api.Models;
+
 public class AuthController : MonoBehaviour
 {
     public enum ServerType {Alt, Sprint, Local}
@@ -19,7 +23,6 @@ public class AuthController : MonoBehaviour
     [SerializeField] private UserData userData;
 
     [Header("Inputs")]
-    [SerializeField] private InputField inputMetaMask; // Login
     [SerializeField] private InputField inputPass; // Password
 
 
@@ -40,9 +43,11 @@ public class AuthController : MonoBehaviour
         // UpdateMetaState();
     }
     
-    public void PrepareAuth()
+    public async void PrepareAuth()
     {
-        string userWallet = PlayerPrefs.GetString("Account");
+        MoralisUser user = await Moralis.GetUserAsync();
+        PlayerPrefs.SetString("Account", user.ethAddress);
+        string userWallet = user.ethAddress;
         // string userPass = inputPass.text.Trim();
 
         if (!string.IsNullOrWhiteSpace(userWallet))
@@ -248,7 +253,7 @@ public class AuthController : MonoBehaviour
         {
             alertText.color = new Vector4(alertText.color.r, alertText.color.g, alertText.color.b, timer/apogee);
             timer -= Time.deltaTime;
-            yield return new WaitForUpdate();
+            yield return new WaitForFixedUpdate();
         }
 
         yield return null;

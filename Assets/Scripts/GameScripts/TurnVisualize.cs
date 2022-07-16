@@ -33,7 +33,7 @@ public class TurnVisualize : MonoBehaviour
         {
             textTurn.color = new Vector4(textTurn.color.r, textTurn.color.g, textTurn.color.b, timer/apogee);
             timer -= Time.deltaTime;
-            yield return new WaitForUpdate();
+            yield return new WaitForFixedUpdate();
         }
 
         textTurn.gameObject.SetActive(false);

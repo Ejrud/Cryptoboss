@@ -301,7 +301,7 @@ public class CardManager : NetworkBehaviour
                 transition = false;
             }
 
-            yield return new WaitForUpdate();
+            yield return new WaitForFixedUpdate();
         }
 
         // Возвращать карту к фишке и когда у игрока будет 2 карты, вернуть их обратно

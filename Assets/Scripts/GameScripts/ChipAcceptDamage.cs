@@ -63,7 +63,7 @@ public class ChipAcceptDamage : MonoBehaviour
 
             if (timer <= 0 ) animate = false;
 
-            yield return new WaitForUpdate();
+            yield return new WaitForFixedUpdate();
         }
         
         Destroy(texts[0].gameObject);

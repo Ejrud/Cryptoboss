@@ -111,7 +111,7 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
                 move = false;
             }
 
-            yield return new WaitForUpdate();
+            yield return new WaitForFixedUpdate();
         }
 
         parameters.Selected = false;
