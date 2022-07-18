@@ -258,8 +258,12 @@ public class Session : MonoBehaviour
         }
         else
         {
-            NetworkController controller = FindObjectOfType<NetworkController>();
-            controller.Sessions.Add(this);
+            if(!AwaitPlayer)
+            {
+                NetworkController controller = FindObjectOfType<NetworkController>();
+                controller.Sessions.Add(this);
+            }
+
             timer.AwaitPlayer();
             AwaitPlayer = true;
 
