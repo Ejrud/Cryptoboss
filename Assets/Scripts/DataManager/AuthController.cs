@@ -12,6 +12,7 @@ using MoralisUnity.Web3Api.Models;
 
 public class AuthController : MonoBehaviour
 {
+    [SerializeField] private bool _debug;
     public enum ServerType {Alt, Sprint, Local}
     [Header("Server")]
     [SerializeField] private ServerType serverType = ServerType.Sprint;
@@ -37,18 +38,30 @@ public class AuthController : MonoBehaviour
 
     private void Start()
     {
+        if (_debug)
+            inputPass.gameObject.SetActive(true);
+        else
+            inputPass.gameObject.SetActive(false);
+            
         defaultColor = alertText.color;
         alertColor = Color.red;
-
-        // UpdateMetaState();
     }
     
     public async void PrepareAuth()
     {
-        MoralisUser user = await Moralis.GetUserAsync();
-        PlayerPrefs.SetString("Account", user.ethAddress);
-        string userWallet = user.ethAddress;
-        // string userPass = inputPass.text.Trim();
+        string userWallet;
+
+        if (!_debug)
+        {
+            MoralisUser user = await Moralis.GetUserAsync();
+            userWallet = user.ethAddress;
+        }
+        else
+        {
+            userWallet = inputPass.text;
+        }
+
+        PlayerPrefs.SetString("Account", userWallet);
 
         if (!string.IsNullOrWhiteSpace(userWallet))
         {
@@ -70,7 +83,7 @@ public class AuthController : MonoBehaviour
         }
     }
 
-    public void UDpdateMetaState()
+    public void UpdateMetaState()
     {
         if (PlayerPrefs.GetString("Account") != "")
         {

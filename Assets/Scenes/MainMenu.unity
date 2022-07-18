@@ -3008,7 +3008,7 @@ RectTransform:
   - {fileID: 1586345585}
   - {fileID: 303180256}
   m_Father: {fileID: 907571325}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.45200002}
   m_AnchorMax: {x: 0.5, y: 0.45200002}
@@ -14205,10 +14205,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2020296347}
-  - {fileID: 1804687769}
   - {fileID: 192211167}
   m_Father: {fileID: 2074975248}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -16848,10 +16847,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4138c10488f4161419c6a90e649c3021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debug: 1
   serverType: 0
   userData: {fileID: 1059100640}
-  inputMetaMask: {fileID: 1804687770}
-  inputPass: {fileID: 192211168}
+  inputPass: {fileID: 1804687770}
   metaState: {fileID: 1220794727}
   metaId: {fileID: 223974227}
   metaConnected: Connected
@@ -31973,7 +31972,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1804687769
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31981,18 +31980,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1804687768}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 813266499}
   - {fileID: 1337562999}
-  m_Father: {fileID: 907571325}
-  m_RootOrder: 1
+  m_Father: {fileID: 2074975248}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.6386126}
   m_AnchorMax: {x: 0.5, y: 0.6386126}
-  m_AnchoredPosition: {x: 0.21, y: -42.5}
+  m_AnchoredPosition: {x: 0.00000061095, y: -239.81}
   m_SizeDelta: {x: 706.18, y: 91.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1804687770
@@ -32048,7 +32047,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1082058687}
+        m_TargetAssemblyTypeName: AuthController, Assembly-CSharp
+        m_MethodName: PrepareAuth
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -35433,6 +35444,7 @@ RectTransform:
   - {fileID: 1570636273}
   - {fileID: 1267482695}
   - {fileID: 1142467115}
+  - {fileID: 1804687769}
   - {fileID: 907571325}
   m_Father: {fileID: 1011949298}
   m_RootOrder: 0

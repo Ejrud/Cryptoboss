@@ -628,12 +628,12 @@ public class PlayerNet : NetworkBehaviour
     {
         if (isServer)
         {
-            controller.RemovePlayer(this);
+            // controller.RemovePlayer(this);
 
-            if (GameMode == "two")
-            {
-                FindObjectOfType<NetworkController>().OnPlayerTwoModeDisconnect(this.gameObject);
-            }
+            // if (GameMode == "two") // Если кгрок выходит во время поиска игры в режиме 2 на 2, то убрать его из очереди
+            // {
+            //     FindObjectOfType<NetworkController>().OnPlayerTwoModeDisconnect(this.gameObject);
+            // }
         }
     }
 

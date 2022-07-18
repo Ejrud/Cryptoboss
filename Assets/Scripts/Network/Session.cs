@@ -260,7 +260,6 @@ public class Session : MonoBehaviour
         {
             NetworkController controller = FindObjectOfType<NetworkController>();
             controller.Sessions.Add(this);
-            controller.CheckPlayers();
             timer.AwaitPlayer();
             AwaitPlayer = true;
 
@@ -312,24 +311,25 @@ public class Session : MonoBehaviour
         }
 
         // 
-        using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form))
-        { 
-            yield return www.SendWebRequest();
+        // using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form))
+        // { 
+        //     yield return www.SendWebRequest();
 
-            if (www.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.downloadHandler.text);
-                DataBaseResult results = JsonConvert.DeserializeObject<DataBaseResult>(www.downloadHandler.text);
-                Debug.Log("Reward = " + results.bossy);
-            }
-            else
-            { 
-                // PlayerNets[0].StopGame("Server error", "", 0f, "0", false, false);
-                // PlayerNets[1].StopGame("Server error", "", 0f, "0", false, false);
-                Debug.Log("Incorrect data");
-                Debug.Log(www.error);
-            }
-        }
+        //     if (www.result == UnityWebRequest.Result.Success)
+        //     {
+        //         Debug.Log(www.downloadHandler.text);
+        //         DataBaseResult results = JsonConvert.DeserializeObject<DataBaseResult>(www.downloadHandler.text);
+        //         Debug.Log("Reward = " + results.bossy);
+        //     }
+        //     else
+        //     { 
+        //         // PlayerNets[0].StopGame("Server error", "", 0f, "0", false, false);
+        //         // PlayerNets[1].StopGame("Server error", "", 0f, "0", false, false);
+        //         Debug.Log("Incorrect data");
+        //         Debug.Log(www.error);
+        //     }
+        // }
+        yield return null;
     }
 
     public void EndRound()

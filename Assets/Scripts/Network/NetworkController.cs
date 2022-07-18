@@ -78,12 +78,13 @@ public class NetworkController : NetworkManager
         NetworkServer.AddPlayerForConnection(conn, playerNetObject);
         PlayerNet player = playerNetObject.GetComponent<PlayerNet>();
         player.GetGameMode();
-    
     }
 
     // Когда игрок определит режим игры, про произойдет сортировка
     public void SetDistribution(PlayerNet player)
     {
+        CheckPlayers(); // Удаление пустых слотов 
+
         bool repeatConnect = false; 
         bool allowed = true;
         Session oldSession = new Session();
@@ -193,6 +194,12 @@ public class NetworkController : NetworkManager
         playerConnected = true;
     }
 
+    public override void OnServerDisconnect(NetworkConnectionToClient conn)
+    {
+        base.OnServerDisconnect(conn);
+        CheckPlayers();
+    }
+
     public void OnPlayerTwoModeDisconnect(GameObject player)
     {
         if (_twoByTwo.Contains(player))
@@ -241,7 +248,7 @@ public class NetworkController : NetworkManager
 
     public void CheckPlayers()
     {
-        Players.RemoveAll(p => p.gameObject == null);
+        Players.RemoveAll(p => p == null);
     }
 
     private void OnApplicationQuit()
