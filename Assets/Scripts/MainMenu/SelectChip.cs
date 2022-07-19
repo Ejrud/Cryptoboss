@@ -104,7 +104,6 @@ public class SelectChip : MonoBehaviour
 
     private void UpdatePositions()
     {
-        int currentChipId = 0;
         foreach (GameObject chipObj in selectableChips)
         {
             chipObj.SetActive(false);
@@ -131,7 +130,6 @@ public class SelectChip : MonoBehaviour
                 
                 ChipName.text = chipName;
                 ChipMorale.text = chipMorale;
-                currentChipId = i;
                 
                 int morale = Convert.ToInt32(selectableChips[currentIdPos[i]].GetComponent<ChipContainer>().Morale);
 
@@ -154,15 +152,13 @@ public class SelectChip : MonoBehaviour
 
             int chipId = Convert.ToInt32(selectableChips[0].GetComponent<ChipContainer>().ChipId);
             string chipName = selectableChips[0].GetComponent<ChipContainer>().ChipName;
+            string chipMorale = selectableChips[0].GetComponent<ChipContainer>().Morale;
 
             PlayerPrefs.SetInt("chipId", chipId);
             Debug.Log("Selected chipId: " + chipId);
 
             ChipName.text = chipName;
-
-            
+            ChipMorale.text = chipMorale;
         }
-
-        
     }
 }

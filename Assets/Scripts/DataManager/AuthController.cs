@@ -51,6 +51,8 @@ public class AuthController : MonoBehaviour
     {
         string userWallet;
 
+        StartCoroutine(SetAlert("Authenticating..."));
+
         if (!_debug)
         {
             MoralisUser user = await Moralis.GetUserAsync();
