@@ -102,7 +102,7 @@ public class CardManager : NetworkBehaviour
                 card.position = playerCardTrasform.position;
 
                 playerNet.Morale -= playerNet.HandCards[cardParameters.GetCardId()].CardCost;
-                playerNet.PlayerStatus(playerNet.CardSelected = true, cardID);
+                playerNet.PlayerStatus(playerNet.CardSelected = true, cardID); // PlayerImpact
                 playerNet.UpdateUI();
             }
             else

@@ -10,18 +10,28 @@ public class SelectChip : MonoBehaviour
     [SerializeField] private User user;
     [SerializeField] private GameObject selectableChipPrefab;
 
+    [Header("Slider settings")]
+    [SerializeField] private float offset = 2.5f;
+    [SerializeField] private float timeToStop = 2f;
+
     [Header("UI")]
-    [SerializeField] private Transform[] chipPositions = new Transform[3];
+    [SerializeField] private ScrollRect scrollRect;
+    [SerializeField] private Transform center;
     [SerializeField] private Transform chipContainer;
     [SerializeField] private Text ChipName;
     [SerializeField] private Text ChipMorale;
-
     [SerializeField] private Button playButton;
 
-    private GameObject[] selectableChips;
-    private int[] currentIdPos;
+    private GameObject[] selectableChips = new GameObject[0];
+    private GameObject selectedChip;
     private bool chipsLoaded;
-    private int offsetMassive = 0;
+    private bool stabilized = false;
+    private bool move;
+    
+
+    private int currentChipIndex = 0;
+
+    private float timer = 0;
 
     // �������� ���� ����� ������������ � ������� ����
     public void Init(List<ChipParameters> chipParam)
@@ -35,18 +45,6 @@ public class SelectChip : MonoBehaviour
         }
 
         selectableChips = new GameObject[chipParam.Count];
-
-        currentIdPos = new int[chipParam.Count];
-
-        if(currentIdPos.Length > 3)
-        {
-            currentIdPos = new int[3];
-        }
-
-        for (int i = 0; i < currentIdPos.Length; i++)
-        {
-            currentIdPos[i] = i;
-        }
 
         for (int i = 0; i < chipParam.Count; i++)
         {
@@ -67,98 +65,151 @@ public class SelectChip : MonoBehaviour
             {
                 selectableChips[i].GetComponent<RawImage>().color = Color.white;
             }
-
-                selectableChips[i].SetActive(false);
-            }
-
+        }
+        
+        selectedChip = selectableChips[0];
+        currentChipIndex = 0;
         chipsLoaded = true;
-
-        UpdatePositions();
+        timer = timeToStop;
+        // UpdatePositions();
     }
 
+    private void Update()
+    {
+        if (selectableChips.Length > 0)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                timer = timeToStop;
+                stabilized = false;
+            }
+
+            if (timer <= 0 && !stabilized)
+            {
+                stabilized = true;
+                StartCoroutine(Stabilize());
+            }
+
+            for (int i = 0; i < selectableChips.Length; i++)
+            {
+                // Если фишка не входит в проомежУток, то скипается
+                if (selectableChips[i].transform.position.x < center.position.x - offset || selectableChips[i].transform.position.x > center.position.x + offset)
+                {
+                    selectableChips[i].transform.localScale = new Vector3(1,1,1);
+                    continue;
+                }
+
+                float scaleMultiply = 1;
+                float currentScale = 1;
+
+                float currentOffset = selectableChips[i].transform.position.x - center.transform.position.x; // offset
+                currentOffset = (currentOffset > 0) ? currentOffset : currentOffset * -1;
+                currentOffset = offset - currentOffset;
+                currentScale *= scaleMultiply + (currentOffset / 10);
+
+                selectableChips[i].transform.localScale = new Vector3(currentScale,currentScale,currentScale);
+
+                if (selectableChips[i].transform.position.x > center.position.x - offset / 4 && selectableChips[i].transform.position.x < center.position.x + offset / 4)
+                {
+                    int chipId = Convert.ToInt32(selectableChips[i].GetComponent<ChipContainer>().ChipId);
+                    string chipName = selectableChips[i].GetComponent<ChipContainer>().ChipName;
+                    string chipMorale = selectableChips[i].GetComponent<ChipContainer>().Morale;
+
+                    if (chipName != ChipName.text)
+                    {
+                        int morale = Convert.ToInt32(selectableChips[i].GetComponent<ChipContainer>().Morale);
+
+                        if (morale <= 0)
+                        {
+                            playButton.interactable = false;
+                        }
+                        else
+                        {
+                            playButton.interactable = true;
+                        }
+
+                        PlayerPrefs.SetInt("chipId", chipId);
+                        selectedChip = selectableChips[i];
+                        currentChipIndex = i;
+                        // Debug.Log("Selected chipId: " + chipId);
+                        // Debug.Log("Morale updated");
+                    }
+
+                    ChipName.text = chipName;
+                    ChipMorale.text = chipMorale;
+                }
+            }
+
+            timer = (timer <= 0) ? timer : timer -= Time.deltaTime;
+        }
+    }
     public void NextChip()
     {
-        for (int i = 0; i < currentIdPos.Length; i++)
+        if (!move)
         {
-            currentIdPos[i]++;
-            if (currentIdPos[i] > selectableChips.Length - 1)
+            move = true;
+            currentChipIndex++;
+            if (currentChipIndex >= selectableChips.Length - 1)
             {
-                currentIdPos[i] = currentIdPos[i] - selectableChips.Length;
+                currentChipIndex = selectableChips.Length - 1;
             }
+
+            selectedChip = selectableChips[currentChipIndex];
+            StartCoroutine(Stabilize());
         }
-        UpdatePositions();
     }
 
     public void PreviousChip()
     {
-        for (int i = 0; i < currentIdPos.Length; i++)
+        if (!move)
         {
-            currentIdPos[i]--;
-            if (currentIdPos[i] < 0)
+            move = true;
+            currentChipIndex--;
+            if (currentChipIndex < 0)
             {
-                currentIdPos[i] = selectableChips.Length + currentIdPos[i];
+                currentChipIndex = 0;
             }
+
+            selectedChip = selectableChips[currentChipIndex];
+            StartCoroutine(Stabilize());
         }
-        UpdatePositions();
     }
 
-    private void UpdatePositions()
+    private IEnumerator Stabilize()
     {
-        foreach (GameObject chipObj in selectableChips)
+        stabilized = true; // Что бы лишний раз не запускать сопрограмму
+        scrollRect.StopMovement();
+
+        float step = 0;
+        float offset = center.transform.position.x - selectedChip.transform.position.x;
+        float supposedPosition = chipContainer.transform.position.x + offset;
+        bool direction = (offset > 0) ? true : false; // true - right, false - left
+        
+        step = offset / 10;
+
+        move = true;
+
+        while (move)
         {
-            chipObj.SetActive(false);
-            chipObj.transform.localScale = new Vector3(1,1,1);
-        }
+            chipContainer.transform.position += new Vector3(step, 0,0);
 
-        int count = 0;
-
-        for (int i = 0; i < currentIdPos.Length; i++)
-        {
-            selectableChips[currentIdPos[i]].transform.position = chipPositions[i].position;
-            selectableChips[currentIdPos[i]].SetActive(true);
-
-            if(count == 1)
+            if (direction && chipContainer.transform.position.x >= supposedPosition) // right
             {
-                selectableChips[currentIdPos[i]].transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-
-                int chipId = Convert.ToInt32(selectableChips[currentIdPos[i]].GetComponent<ChipContainer>().ChipId);
-                string chipName = selectableChips[currentIdPos[i]].GetComponent<ChipContainer>().ChipName;
-                string chipMorale = selectableChips[currentIdPos[i]].GetComponent<ChipContainer>().Morale;
-
-                PlayerPrefs.SetInt("chipId", chipId);
-                Debug.Log("Selected chipId: " + chipId);
-                
-                ChipName.text = chipName;
-                ChipMorale.text = chipMorale;
-                
-                int morale = Convert.ToInt32(selectableChips[currentIdPos[i]].GetComponent<ChipContainer>().Morale);
-
-                if (morale <= 0)
-                {
-                    playButton.interactable = false;
-                }
-                else
-                {
-                    playButton.interactable = true;
-                }
+                chipContainer.transform.position = new Vector3(supposedPosition, chipContainer.transform.position.y, chipContainer.transform.position.z);
+                move = false;
+                stabilized = false;
             }
-            count++;
+            else if (!direction && chipContainer.transform.position.x <= supposedPosition)
+            {
+                chipContainer.transform.position = new Vector3(supposedPosition, chipContainer.transform.position.y, chipContainer.transform.position.z);
+                move = false;
+                stabilized = false;
+            }
+
+            yield return new WaitForSeconds(.01f);
         }
 
-        if (selectableChips.Length == 1)
-        {
-            selectableChips[0].transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-            selectableChips[0].transform.position = chipPositions[1].transform.position;
-
-            int chipId = Convert.ToInt32(selectableChips[0].GetComponent<ChipContainer>().ChipId);
-            string chipName = selectableChips[0].GetComponent<ChipContainer>().ChipName;
-            string chipMorale = selectableChips[0].GetComponent<ChipContainer>().Morale;
-
-            PlayerPrefs.SetInt("chipId", chipId);
-            Debug.Log("Selected chipId: " + chipId);
-
-            ChipName.text = chipName;
-            ChipMorale.text = chipMorale;
-        }
+        yield return null;
     }
+
 }

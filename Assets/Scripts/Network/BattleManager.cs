@@ -105,7 +105,6 @@ public class BattleManager : NetworkBehaviour
                         }
                         else if (otherPlayer.PlayerImpact.JokerName == "Audit") ///////
                         {
-                            // ���������� ����� ���������, � ���� ��������
                             currentPlayer.SetAudit(otherPlayer.HandCards);
                             otherPlayer.ResetAudit();
                             currentPlayer.PlayerImpact.JokerName = "Audit";
@@ -180,8 +179,6 @@ public class BattleManager : NetworkBehaviour
                         else
                         {
                             queueCapital += otherPlayer.PlayerImpact.CapitalDamage;
-                        
-                            // ���������� �������� ����������� ������
                             currentPlayer.PlayerImpact.CapitalHealth = otherPlayer.PlayerImpact.CapitalDamage; 
                         }
                        break;
@@ -248,6 +245,8 @@ public class BattleManager : NetworkBehaviour
 
                     default:
                         currentPlayer.PlayerImpact.JokerName = "";
+                        currentPlayer.PlayerImpact.CapitalDamage = capAttack;
+                        currentPlayer.PlayerImpact.CapitalHealth = capHealth;
                         queueCapital += capHealth;
                         queueEnergy += engHealth;
                         otherCapital -= capAttack;

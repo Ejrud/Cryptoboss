@@ -209,8 +209,8 @@ public class AuthController : MonoBehaviour
             }
             else
             { 
-                StartCoroutine(SetAlert("Incorrect login or password", true));
-                Debug.Log("Incorrect login or password");
+                StartCoroutine(SetAlert("Server error", true));
+                Debug.Log("Server error");
                 Debug.Log(www.error);
             }
         }
