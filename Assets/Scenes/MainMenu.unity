@@ -26320,13 +26320,10 @@ MonoBehaviour:
   user: {fileID: 11400000, guid: b02e5e1c3ebc65845bee169c994fef68, type: 2}
   selectableChipPrefab: {fileID: 5387668747560272853, guid: bd645f178bea1bb4eb0a1b8f0efbe953, type: 3}
   offset: 5
-  timeToStop: 1
+  timeToStop: 0.2
+  slidingChip: {fileID: 1792044437}
   scrollRect: {fileID: 1792044434}
   center: {fileID: 689290692}
-  chipPositions:
-  - {fileID: 0}
-  - {fileID: 1995290634}
-  - {fileID: 0}
   chipContainer: {fileID: 1740263714}
   ChipName: {fileID: 1384728598}
   ChipMorale: {fileID: 1866591194}
@@ -31771,6 +31768,7 @@ GameObject:
   - component: {fileID: 1792044436}
   - component: {fileID: 1792044435}
   - component: {fileID: 1792044434}
+  - component: {fileID: 1792044437}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -31868,6 +31866,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1792044432}
   m_CullTransparentMesh: 1
+--- !u!114 &1792044437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1792044432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f22975724335cbc4c8df3d98e07920a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AcceptMove: 0
 --- !u!1 &1795628660
 GameObject:
   m_ObjectHideFlags: 0

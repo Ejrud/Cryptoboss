@@ -438,18 +438,37 @@ public class Session : MonoBehaviour
             int[] pId_3 = { PlayerNets[1].ChipId, PlayerNets[3].ChipId, PlayerNets[0].ChipId }; // 2
             int[] pId_4 = { PlayerNets[0].ChipId, PlayerNets[2].ChipId, PlayerNets[1].ChipId }; // 3
 
-            PlayerNets[0].LoadRivalChip(pId_1, "two");
-            PlayerNets[1].LoadRivalChip(pId_2, "two");
-            PlayerNets[2].LoadRivalChip(pId_3, "two");
-            PlayerNets[3].LoadRivalChip(pId_4, "two");
+            string[] names_1 = { PlayerNets[0].UserName, PlayerNets[1].UserName, PlayerNets[2].UserName, PlayerNets[3].UserName};
+            string[] chipNames_1 = { "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].UserName, "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].ChipId};
+            PlayerNets[0].LoadRivalChip(pId_1, "two", names_1, chipNames_1);
+
+            string[] names_2 = { PlayerNets[1].UserName, PlayerNets[2].UserName, PlayerNets[3].UserName, PlayerNets[0].UserName};
+            string[] chipNames_2 = { "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].UserName, "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].ChipId};
+            PlayerNets[1].LoadRivalChip(pId_2, "two", names_2, chipNames_2);
+
+            string[] names_3 = { PlayerNets[2].UserName, PlayerNets[3].UserName, PlayerNets[0].UserName, PlayerNets[1].UserName};
+            string[] chipNames_3 = { "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].UserName, "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId};
+            PlayerNets[2].LoadRivalChip(pId_3, "two", names_3, chipNames_3);
+
+            string[] names_4 = { PlayerNets[3].UserName, PlayerNets[0].UserName, PlayerNets[1].UserName, PlayerNets[2].UserName};
+            string[] chipNames_4 = { "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].UserName, "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].ChipId};
+            PlayerNets[3].LoadRivalChip(pId_4, "two", names_4, chipNames_4);
         }
         else
         {
             int[] pId_1 = { PlayerNets[1].ChipId };
             int[] pId_2 = { PlayerNets[0].ChipId };
 
-            PlayerNets[0].LoadRivalChip(pId_1, "one");
-            PlayerNets[1].LoadRivalChip(pId_2, "one");
+            string[] names_1 = { PlayerNets[0].UserName, PlayerNets[1].UserName};
+            string[] chipNames_1 = { "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId};
+            PlayerNets[0].LoadRivalChip(pId_1, "one", names_1, chipNames_1);
+
+            string[] names_2 = { PlayerNets[1].UserName, PlayerNets[0].UserName};
+            string[] chipNames_2 = { "#" + PlayerNets[1].ChipId, "#" + PlayerNets[0].ChipId};
+            PlayerNets[1].LoadRivalChip(pId_2, "one", names_2, chipNames_2);
+
+            Debug.Log(names_1[0] + " " + names_1[1]);
+            Debug.Log(names_2[0] + " " + names_2[1]);
         }
 
         while (!chipIdRecieved)

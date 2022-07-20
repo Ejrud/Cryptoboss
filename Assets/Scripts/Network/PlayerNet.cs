@@ -13,6 +13,7 @@ public class PlayerNet : NetworkBehaviour
 {
     [Header("Player parameters")]
     public string Wallet;
+    public string UserName;
     public string GameMode;
     public int ChipId;
     public CardData[] CardCollection;
@@ -131,9 +132,12 @@ public class PlayerNet : NetworkBehaviour
             // Wallet = PlayerPrefs.GetString("Wallet");
             ChipId = PlayerPrefs.GetInt("chipId");
             GameMode = PlayerPrefs.GetString("GameMode");
-            chipRepresentation.SetUpWindows(GameMode);
+            UserName = user.UserName;
+            string[] names = {"", "", "", ""};
+            string[] chipNames = {"", "", "", ""};
+            chipRepresentation.SetUpWindows(names, chipNames, GameMode);
             
-            CmdSendWalletAndId(Wallet, ChipId, ChipReceived);
+            CmdSendWalletAndId(Wallet, ChipId, ChipReceived, user.UserName);
 
             CalculateResults(); // Локально у игроков висчитывать результаты игры
 
@@ -265,11 +269,12 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [Command] // 
-    public void CmdSendWalletAndId(string wallet, int chipId, bool received)
+    public void CmdSendWalletAndId(string wallet, int chipId, bool received, string name)
     {
         Wallet = wallet;
         ChipId = chipId;
         ChipReceived = received;
+        UserName = name;
     }
 
     [Command]
@@ -473,7 +478,7 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public async void LoadRivalChip(int[] rivalChipId, string gameMode) // 
+    public async void LoadRivalChip(int[] rivalChipId, string gameMode, string[] names, string[] chipNames) // 
     {
         if(hasAuthority)
         {
@@ -491,14 +496,14 @@ public class PlayerNet : NetworkBehaviour
 
                 if(textureRequest.error != null) //
                 {
-                    LoadRivalChip(rivalChipId, gameMode);
+                    LoadRivalChip(rivalChipId, gameMode, names, chipNames);
                     return;
                 }
                 Debug.Log("Load complete");
             }
 
             ChipReceived = true;
-            CmdSendWalletAndId(Wallet, ChipId, ChipReceived);
+            CmdSendWalletAndId(Wallet, ChipId, ChipReceived, UserName);
 
             if (gameMode == "one")
             {
@@ -530,7 +535,7 @@ public class PlayerNet : NetworkBehaviour
                 StopGame("Game mode not selected", "", 0f, "0", false, false);
             }
 
-            chipRepresentation.SetUpWindows(gameMode);
+            chipRepresentation.SetUpWindows(names, chipNames, gameMode);
         }
     }
 

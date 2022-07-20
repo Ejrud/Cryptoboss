@@ -13,6 +13,7 @@ public class SelectChip : MonoBehaviour
     [Header("Slider settings")]
     [SerializeField] private float offset = 2.5f;
     [SerializeField] private float timeToStop = 2f;
+    [SerializeField] private  SlidingChips slidingChip;
 
     [Header("UI")]
     [SerializeField] private ScrollRect scrollRect;
@@ -78,13 +79,13 @@ public class SelectChip : MonoBehaviour
     {
         if (selectableChips.Length > 0)
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0)) //  && slidingChip.AcceptMove
             {
                 timer = timeToStop;
                 stabilized = false;
             }
 
-            if (timer <= 0 && !stabilized)
+            if (timer <= 0 && !stabilized && scrollRect.velocity.magnitude < 100f)
             {
                 stabilized = true;
                 StartCoroutine(Stabilize());
@@ -109,7 +110,7 @@ public class SelectChip : MonoBehaviour
 
                 selectableChips[i].transform.localScale = new Vector3(currentScale,currentScale,currentScale);
 
-                if (selectableChips[i].transform.position.x > center.position.x - offset / 4 && selectableChips[i].transform.position.x < center.position.x + offset / 4)
+                if (selectableChips[i].transform.position.x > center.position.x - offset / 2 && selectableChips[i].transform.position.x < center.position.x + offset / 2)
                 {
                     int chipId = Convert.ToInt32(selectableChips[i].GetComponent<ChipContainer>().ChipId);
                     string chipName = selectableChips[i].GetComponent<ChipContainer>().ChipName;
@@ -172,6 +173,7 @@ public class SelectChip : MonoBehaviour
 
             selectedChip = selectableChips[currentChipIndex];
             StartCoroutine(Stabilize());
+            
         }
     }
 
@@ -185,7 +187,7 @@ public class SelectChip : MonoBehaviour
         float supposedPosition = chipContainer.transform.position.x + offset;
         bool direction = (offset > 0) ? true : false; // true - right, false - left
         
-        step = offset / 10;
+        step = offset / 15;
 
         move = true;
 
