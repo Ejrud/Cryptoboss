@@ -132,7 +132,7 @@ public class Session : MonoBehaviour
         
         for (int i = 0; i < PlayerNets.Length; i++)
         {
-            if (PlayerNets[i].UsedCount > 2)
+            if (PlayerNets[i].UsedCount > 2) // Если у игрока количество карт меньше или равно 2 то подбираются новые карты
             {
                 continue;
             }
@@ -142,20 +142,57 @@ public class Session : MonoBehaviour
 
             if (PlayerNets[i].FirstStart)
             {
+                List<string> useJokers = new List<string>();
+                int offset = 0;
+
                 for (int j = 0; j < 5; j++)
                 {
-                    PlayerNets[i].HandCards[j] = PlayerNets[i].CardCollection[j];
+                    if (PlayerNets[i].CardCollection[j + offset].Type == "joker")
+                    {
+                        if (useJokers.Count < 2) // Если джокеров меньше 2 то проверять на повтор
+                        {
+                            while (useJokers.Contains(PlayerNets[i].CardCollection[j + offset].Name))
+                            {
+                                offset++;
+                            }
+                            useJokers.Add(PlayerNets[i].CardCollection[j + offset].Name);
+                        }
+                        else // Если джокеров больше 2 то скипать
+                        {
+                            while (PlayerNets[i].CardCollection[j + offset].Type == "joker")
+                            {
+                                offset++;
+                            }
+                        }
+                    }
+                    
+                    PlayerNets[i].HandCards[j] = PlayerNets[i].CardCollection[j + offset];
                     PlayerNets[i].HandCards[j].Used = false;
                 }
             }
             else
             {
+                int jokers = 0;
+                for (int k = 0; k < PlayerNets[i].HandCards.Length; k++)
+                {
+                    if (!PlayerNets[i].HandCards[k].Used && PlayerNets[i].HandCards[k].Type == "joker") // количество джокеров в руке
+                    {
+                        jokers++;
+                    }
+                }
+
+                Debug.Log("jokers count " + jokers);
+
                 for (int j = 0; j < PlayerNets[i].CardCollection.Length; j++)
                 {
                     bool repeat = false;
                     for (int k = 0; k < PlayerNets[i].HandCards.Length; k++)
                     {
-                        if (PlayerNets[i].CardCollection[j].Guid == PlayerNets[i].HandCards[k].Guid)
+                        if (PlayerNets[i].CardCollection[j].Guid == PlayerNets[i].HandCards[k].Guid) // Если guid повторяется с картами в руке, то карта не добавляется
+                        {
+                            repeat = true;
+                        }
+                        if (PlayerNets[i].CardCollection[j].Type == "joker" && PlayerNets[i].CardCollection[j].Name == PlayerNets[i].HandCards[k].Name)
                         {
                             repeat = true;
                         }
@@ -166,11 +203,25 @@ public class Session : MonoBehaviour
                     }
                 }
 
+                int offset = 0;
+
                 for (int j = 0; j < 5; j++)
                 {
                     if (!PlayerNets[i].HandCards[j].Used) continue;
+
+                    if (Cards[j + offset].Type == "joker" && jokers >= 2) // Если joker и больше 2, то скипаем
+                    {
+                        while (Cards[j + offset].Type == "joker")
+                        {
+                            offset++;
+                        }
+                    }
+                    else if (Cards[j].Type == "joker")
+                    {
+                         jokers++;
+                    }
                     
-                    PlayerNets[i].HandCards[j] = Cards[j];
+                    PlayerNets[i].HandCards[j] = Cards[j + offset];
                     PlayerNets[i].HandCards[j].Used = false;
                 }
             }
@@ -313,24 +364,24 @@ public class Session : MonoBehaviour
         }
 
         // 
-        using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form))
-        { 
-            yield return www.SendWebRequest();
+        // using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form))
+        // { 
+        //     yield return www.SendWebRequest();
 
-            if (www.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.downloadHandler.text);
-                DataBaseResult results = JsonConvert.DeserializeObject<DataBaseResult>(www.downloadHandler.text);
-                Debug.Log("Reward = " + results.bossy);
-            }
-            else
-            { 
-                // PlayerNets[0].StopGame("Server error", "", 0f, "0", false, false);
-                // PlayerNets[1].StopGame("Server error", "", 0f, "0", false, false);
-                Debug.Log("Incorrect data");
-                Debug.Log(www.error);
-            }
-        }
+        //     if (www.result == UnityWebRequest.Result.Success)
+        //     {
+        //         Debug.Log(www.downloadHandler.text);
+        //         DataBaseResult results = JsonConvert.DeserializeObject<DataBaseResult>(www.downloadHandler.text);
+        //         Debug.Log("Reward = " + results.bossy);
+        //     }
+        //     else
+        //     { 
+        //         // PlayerNets[0].StopGame("Server error", "", 0f, "0", false, false);
+        //         // PlayerNets[1].StopGame("Server error", "", 0f, "0", false, false);
+        //         Debug.Log("Incorrect data");
+        //         Debug.Log(www.error);
+        //     }
+        // }
         yield return null;
     }
 

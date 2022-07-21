@@ -91,7 +91,7 @@ public class NetworkController : NetworkManager
 
         foreach (PlayerNet playerNet in Players)
         {
-            if (playerNet.Wallet == player.Wallet)
+            if (playerNet.Wallet == player.Wallet || playerNet.ChipId == player.ChipId)
             {
                 allowed = false;
                 Destroy(player.gameObject);
