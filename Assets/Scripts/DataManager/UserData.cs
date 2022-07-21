@@ -182,12 +182,17 @@ public class UserData : MonoBehaviour
     public void ExitFromAccount()
     {
         ResetUser();
-        // SceneManager.LoadScene(0);
 
         #if UNITY_ANDROID
+        user.Authorized = false;
         Application.Quit();
         #endif
         #if UNITY_WEBGL
+        user.Authorized = false;
+        SceneManager.LoadScene(0);
+        #endif
+        #if UNITY_EDITOR
+        user.Authorized = false;
         SceneManager.LoadScene(0);
         #endif
     }

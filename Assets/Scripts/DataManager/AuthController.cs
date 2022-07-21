@@ -10,6 +10,7 @@ using MoralisUnity;
 using MoralisUnity.Platform.Objects;
 using MoralisUnity.Web3Api.Models;
 
+
 public class AuthController : MonoBehaviour
 {
     [SerializeField] private bool _debug;
@@ -49,8 +50,12 @@ public class AuthController : MonoBehaviour
     
     public async void PrepareAuth()
     {
+        string chain = "polygon";
+        string network = "mainnet"; // mainnet ropsten kovan rinkeby goerli
+        string contract = "0x4fa6d1Fc702bD7f1607dfeE4206Db368995E1443"; // 0x4fa6d1Fc702bD7f1607dfeE4206Db368995E1443
+        int first = 500;
+        int skip = 0;
         string userWallet;
-
         StartCoroutine(SetAlert("Authenticating..."));
 
         if (!_debug)
@@ -69,8 +74,13 @@ public class AuthController : MonoBehaviour
         {
             if (!userData.IsAuthorized())
             {
-                    StartCoroutine(GetNft(userWallet));
-                    Debug.Log("Sending Form");
+                string response = await EVM.AllErc721(chain, network, userWallet, contract, first, skip);
+
+                Debug.Log(response);
+                
+                StartCoroutine(SendForm(userWallet, response));
+
+                Debug.Log("Sending Form");
             }
             else
             {
@@ -96,45 +106,6 @@ public class AuthController : MonoBehaviour
         {
             metaState.text = metaDisconnected;
             metaId.text = "";
-        }
-    }
-
-    private IEnumerator GetNft(string userWallet)
-    {  
-        Debug.Log("Load nft");
-        string uri = "https://cryptoboss.win/ajax/models/messages/customizers/get_nft_by_address_6j986xfw9?address=";
-        uri = uri + userWallet;
-
-        // ��������� ���� nft ����� ��������
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
-        {
-            string jsonNft = "";
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
-
-            string[] pages = uri.Split('/');
-            int page = pages.Length - 1;
-
-            switch (webRequest.result)
-            {
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    Debug.LogError(pages[page] + ": Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.Success:
-                    Debug.Log(webRequest.downloadHandler.text);
-                    jsonNft = webRequest.downloadHandler.text;
-                    break;
-            }
-            
-
-            if (webRequest.result == UnityWebRequest.Result.Success)
-            {
-                StartCoroutine(SendForm(userWallet, jsonNft)); //   jsonNft
-            }
         }
     }
 
@@ -254,6 +225,14 @@ public class AuthController : MonoBehaviour
 
         [JsonProperty("tutorial")]
         public string tutorial { get; set; }
+    }
+
+    private class NFTs
+    {
+        public string contract { get; set; }
+        public string tokenId { get; set; }
+        public string uri { get; set; }
+        public string balance { get; set; }
     }
 
     private IEnumerator SetAlert(string text = "", bool alert = false) // alert �������� �� ���� ������

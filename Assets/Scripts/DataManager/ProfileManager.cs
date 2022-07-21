@@ -9,6 +9,7 @@ public class ProfileManager : MonoBehaviour
 {
     [SerializeField] private User user;
     [SerializeField] private UserData userData;
+    [SerializeField] private int nameLength = 18;
 
     [Header("UI")]
     [SerializeField] private InputField userName;
@@ -36,9 +37,20 @@ public class ProfileManager : MonoBehaviour
     private IEnumerator SendForm()
     {
         WWWForm form = new WWWForm();
+
+        string name = userName.text;
+
+        if (name.Length > nameLength)
+        {
+            name = name.Remove(nameLength);
+        }
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            yield return null;
+        }
         
-        form.AddField("UserName", userName.text);
-        form.AddField("UserWallet", userWallet.text);
+        form.AddField("UserName", name);
+        form.AddField("UserWallet", user.Wallet);
         form.AddField("Id", Convert.ToInt32(user.UserID));
 
         using (UnityWebRequest www = UnityWebRequest.Post(editUrl, form))
@@ -47,9 +59,7 @@ public class ProfileManager : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                user.UserName = userName.text;
-                user.Wallet = userWallet.text;
-
+                user.UserName = name;
                 userData.UpdateUI();
                 Debug.Log("Name or wallet is changed");
                 Debug.Log(www.downloadHandler.text);
@@ -63,7 +73,7 @@ public class ProfileManager : MonoBehaviour
         yield return null;
     }
 
-    // При включении объекта обновляются поля
+    // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
     private void OnEnable()
     {
         userName.text = user.UserName;
