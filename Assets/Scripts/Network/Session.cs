@@ -175,8 +175,6 @@ public class Session : MonoBehaviour
                 }
             }
 
-            Debug.Log("Player prepared");
-
             PlayerNets[i].FirstStart = false;
             PlayerNets[i].UpdateRoundCards(PlayerNets[i].HandCards);
             PlayerNets[i].CloseWindowWaitingForPlayers();
@@ -413,6 +411,7 @@ public class Session : MonoBehaviour
 
             if (walletRecieved == PlayerNets.Length)
             {
+                yield return new WaitForSeconds(1f);
                 StartCoroutine(Preparation());
                 WalletsRecieved = true;
             }
@@ -466,9 +465,6 @@ public class Session : MonoBehaviour
             string[] names_2 = { PlayerNets[1].UserName, PlayerNets[0].UserName};
             string[] chipNames_2 = { "#" + PlayerNets[1].ChipId, "#" + PlayerNets[0].ChipId};
             PlayerNets[1].LoadRivalChip(pId_2, "one", names_2, chipNames_2);
-
-            Debug.Log(names_1[0] + " " + names_1[1]);
-            Debug.Log(names_2[0] + " " + names_2[1]);
         }
 
         while (!chipIdRecieved)
@@ -525,7 +521,7 @@ public class Session : MonoBehaviour
                 if (www.result == UnityWebRequest.Result.Success)
                 {
                     string json = www.downloadHandler.text;
-                    Debug.Log(json);
+                    // Debug.Log(json);
                     List<Cards> dbCard = JsonConvert.DeserializeObject<List<Cards>>(json);
                     
                     PlayerNets[i].CardCollection = GetCardDeck(dbCard);
@@ -544,12 +540,12 @@ public class Session : MonoBehaviour
                 if (www.result == UnityWebRequest.Result.Success)
                 {
                     string json = www.downloadHandler.text;
-                    Debug.Log(json);
+                    // Debug.Log(json);
                     List<UserHealth> health = JsonConvert.DeserializeObject<List<UserHealth>>(json);
 
                     PlayerNets[i].MaxHealth = Convert.ToInt32(health[0].capital_max);
 
-                    Debug.Log($"Player {i + 1} health: " + PlayerNets[i].MaxHealth);
+                    // Debug.Log($"Player {i + 1} health: " + PlayerNets[i].MaxHealth);
                 }
                 else
                 { 
@@ -576,8 +572,8 @@ public class Session : MonoBehaviour
                 timer.AwaitTime = Convert.ToInt32(gameParams[0].reconnect_time);
                 timer.OriginalTime = timer.RoundTimer;
                 accrualUrl = gameParams[0].accural_link;
-                Debug.Log("Session timer = " + timer.RoundTimer);
-                Debug.Log(accrualUrl);
+                // Debug.Log("Session timer = " + timer.RoundTimer);
+                // Debug.Log(accrualUrl);
             }
             else
             { 

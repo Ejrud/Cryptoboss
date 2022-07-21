@@ -37,7 +37,7 @@ public class GameProcessManagement : NetworkBehaviour
         {
             if(!oldSession)
             {
-                Debug.Log("Create new session");
+                // Debug.Log("Create new session");
 
                 Session session = Instantiate(sessionObject, Vector3.zero, Quaternion.identity).GetComponent<Session>();
                 session.transform.SetParent(allSessions);
@@ -69,6 +69,6 @@ public class GameProcessManagement : NetworkBehaviour
     public void RemoveSession(Session session)
     {
         this.sessions.Remove(session);
-        Debug.Log("Session removed");
+        // Debug.Log("Session removed");
     }
 }

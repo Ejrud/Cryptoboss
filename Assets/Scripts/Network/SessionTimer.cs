@@ -80,7 +80,7 @@ public class SessionTimer : NetworkBehaviour
 
     public void StartTimer()
     {
-        Debug.Log("Timer started");
+        // Debug.Log("Timer started");
         StopAllCoroutines();
         StartCoroutine(TimerMethod());
     }

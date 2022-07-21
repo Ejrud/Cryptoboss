@@ -133,12 +133,9 @@ public class PlayerNet : NetworkBehaviour
             ChipId = PlayerPrefs.GetInt("chipId");
             GameMode = PlayerPrefs.GetString("GameMode");
             UserName = user.UserName;
-            string[] names = {"", "", "", ""};
-            string[] chipNames = {"", "", "", ""};
-            chipRepresentation.SetUpWindows(names, chipNames, GameMode);
+            Debug.Log(UserName);
             
-            CmdSendWalletAndId(Wallet, ChipId, ChipReceived, user.UserName);
-
+            CmdSendWalletAndId(Wallet, ChipId, ChipReceived, UserName);
             CalculateResults(); // Локально у игроков висчитывать результаты игры
 
             Texture chipTexture = lastTexture;
@@ -264,7 +261,7 @@ public class PlayerNet : NetworkBehaviour
         GameMode = gameMode;
         Wallet = wallet;
         this.ChipId = chipId;
-        Debug.Log(GameMode);
+        // Debug.Log(GameMode);
         FindObjectOfType<NetworkController>().SetDistribution(this); // cringe
     }
 
@@ -482,6 +479,7 @@ public class PlayerNet : NetworkBehaviour
     {
         if(hasAuthority)
         {
+            // names[0] = UserName;
             Debug.Log("Load textures...");
             rivalChipTexture = new Texture2D[rivalChipId.Length];
             // В зависимости от режима будут загружаться фишки других игроков последний индекс массива - фишка сокомандника
