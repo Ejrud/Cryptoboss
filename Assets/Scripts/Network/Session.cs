@@ -125,7 +125,7 @@ public class Session : MonoBehaviour
         }
     }
 
-    public void PrepareNextRound(bool correction = false)
+    public void PrepareNextRound(bool correction)
     {
         SetNextIndexQueue(correction);
         SavePlayers();
@@ -181,8 +181,6 @@ public class Session : MonoBehaviour
                     }
                 }
 
-                Debug.Log("jokers count " + jokers);
-
                 for (int j = 0; j < PlayerNets[i].CardCollection.Length; j++)
                 {
                     bool repeat = false;
@@ -204,6 +202,8 @@ public class Session : MonoBehaviour
                 }
 
                 int offset = 0;
+                
+                List<string> handCards = new List<string>();
 
                 for (int j = 0; j < 5; j++)
                 {
@@ -218,11 +218,17 @@ public class Session : MonoBehaviour
                     }
                     else if (Cards[j].Type == "joker")
                     {
-                         jokers++;
+                        while (Cards[j + offset].Type == "joker" && handCards.Contains(Cards[j + offset].Name)) // Проверка на повторяющиеся джокеры
+                        {
+                            offset++;
+                        }
+                         
+                        jokers++;
                     }
                     
                     PlayerNets[i].HandCards[j] = Cards[j + offset];
                     PlayerNets[i].HandCards[j].Used = false;
+                    handCards.Add(Cards[j + offset].Name);
                 }
             }
 
@@ -387,7 +393,7 @@ public class Session : MonoBehaviour
 
     public void EndRound()
     {   
-        PrepareNextRound();
+        PrepareNextRound(false);
     }
 
     public void SavePlayers()
@@ -717,7 +723,7 @@ public class Session : MonoBehaviour
             }
         }
 
-        PrepareNextRound();
+        PrepareNextRound(false);
 
         gameStarted = true;
         // Ready = true;
@@ -733,6 +739,10 @@ public class Session : MonoBehaviour
             CardData card = new CardData();
 
             card.Name = dbCards[i].name;
+
+            string name = card.Name;
+            card.Name = name.Substring(0, 1).ToUpper() + name.Remove(0, 1).ToLower();
+
             card.Type = dbCards[i].type;
             card.EnergyDamage = Convert.ToInt32(dbCards[i].loss_energy);
             card.CapitalDamage = Convert.ToInt32(dbCards[i].loss_capital);

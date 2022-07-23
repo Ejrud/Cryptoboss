@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using System;
 
-public class ChipFrameData : MonoBehaviour, IPointerDownHandler
+public class ChipFrameData : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private RawImage chipTexture;
     [SerializeField] private Text chipName;
@@ -25,6 +25,7 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler
     private Text chipCapitalTxt;
     private Text chipMoraleTxt;
     private Text chipRatingTxt;
+    private Vector2 startPos;
 
 
     public void Init(ShowingChipsController chipController, ChipParameters chipParam, Text capitalTxt, Text moraleTxt, Text ratingTxt, bool selectable = false)
@@ -58,13 +59,20 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler
             SceneManager.LoadScene(1);
         }
     }
-
-    public void OnPointerDown(PointerEventData eventData) // При нажатии на фишку выводится список карт конкретной фишки 
+    
+    public void OnPointerDown(PointerEventData eventData) 
     {
-        if (!selectable)
-        { 
+        startPos = eventData.position;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        // Если главное меню, то показывать характеристики карт в отдельном окне
+        if (startPos == eventData.position && !selectable)
+        {
             chipController.ResetChips();
             GlobalEventManager.SendCards(chipData.CardDeck);
+            GlobalEventManager.SendChipData(chipData);
 
             chipBgImage.color = Color.white;
             chipTexture.color = Color.white;

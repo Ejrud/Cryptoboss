@@ -5,6 +5,9 @@ public class ChipParameters
 {
     public int Id;
     public string ChipName;
+    public string Description;
+    public string Species;
+    public string Role;
     // ����������� �����
     public Texture ChipTexture;
     // ����� �����

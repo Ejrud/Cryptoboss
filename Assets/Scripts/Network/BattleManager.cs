@@ -71,6 +71,8 @@ public class BattleManager : NetworkBehaviour
             {
                 PlayerNet currentPlayer = session.PlayerNets[playerQueueIndex];
                 PlayerNet otherPlayer = session.PlayerNets[rivalIndex];
+
+                Debug.Log("Card name " + session.PlayerNets[playerQueueIndex].HandCards[cardId].Name);
                 
                 switch (session.PlayerNets[playerQueueIndex].HandCards[cardId].Name)
                 {

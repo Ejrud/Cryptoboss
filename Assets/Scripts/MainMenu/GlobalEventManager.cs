@@ -8,6 +8,7 @@ public class GlobalEventManager : MonoBehaviour
     public static UnityEvent<CardData[]> OnSelectCards = new UnityEvent<CardData[]>();
     public static UnityEvent<CardData> OnSelectSingleCard = new UnityEvent<CardData>();
     public static UnityEvent<Texture[]> OnLoadNftTexture = new UnityEvent<Texture[]>();
+    public static UnityEvent<ChipParameters> OnSelectChip = new UnityEvent<ChipParameters>();
 
     public static void SendCards(CardData[] cards) // Card[] cards
     {
@@ -22,5 +23,10 @@ public class GlobalEventManager : MonoBehaviour
     public static void SendNftTexture(Texture[] nftTexture)
     { 
         OnLoadNftTexture.Invoke(nftTexture);
+    }
+
+    public static void SendChipData(ChipParameters chipData)
+    {
+        OnSelectChip.Invoke(chipData);
     }
 }

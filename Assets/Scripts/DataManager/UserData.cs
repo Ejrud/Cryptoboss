@@ -33,7 +33,7 @@ public class UserData : MonoBehaviour
     // private List<DbCards> nullCards;
     private string pathToSave;
     private string saveFileName = "Data";
-    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/ // https://cryptoboss.win/game/back/
+    private string seUrl = "http://a0664627.xsph.ru/cryptoboss_back/"; // http://a0664627.xsph.ru/cryptoboss_back/ // https://cryptoboss.win/game/back/
 
     private void Start()
     {
@@ -97,7 +97,7 @@ public class UserData : MonoBehaviour
             
             SetCard(user.ChipParam[i].ChipName, i); //
 
-            Debug.Log("CryptoBoss #" + tokenIds[i]);
+            // Debug.Log("CryptoBoss #" + tokenIds[i]);
 
             // Загрузка данных фишки
 
@@ -109,8 +109,11 @@ public class UserData : MonoBehaviour
             user.ChipParam[i].Capital = chipParam[0].capital_current;
             user.ChipParam[i].Morale = chipParam[0].energy_current;
             user.ChipParam[i].Rating = chipParam[0].rating;
+            user.ChipParam[i].Description = chipParam[0].description;
+            user.ChipParam[i].Species = chipParam[0].species;
+            user.ChipParam[i].Role = chipParam[0].role;
 
-            Debug.Log(www.downloadHandler.text);
+            // Debug.Log(www.downloadHandler.text);
 
             if(!user.Authorized)
             {
@@ -220,7 +223,10 @@ public class UserData : MonoBehaviour
     {
         public string capital_current { get; set; }
         public string energy_current { get; set; }
+        public string description { get; set; }
         public string rating { get; set; }
+        public string species { get; set; }
+        public string role { get; set; }
     }
 
     private float UpdateLoading(float currentLoad, float loadStep)

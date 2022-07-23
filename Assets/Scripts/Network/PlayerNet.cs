@@ -298,6 +298,7 @@ public class PlayerNet : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
     public void ResetAudit()
     {
         if (hasAuthority)
@@ -325,7 +326,9 @@ public class PlayerNet : NetworkBehaviour
             {
                 ChipImage.color = Color.white;
                 RivalChipImage.color = Color.gray;
-                turnVisualize.SetTurn();
+
+                if (Morale >= 1)
+                    turnVisualize.SetTurn(); // Cringe
 
                 if (GameMode == "two")
                 {
