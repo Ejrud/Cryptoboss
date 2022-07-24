@@ -26,7 +26,7 @@ public class SelectChip : MonoBehaviour
     private GameObject[] selectableChips = new GameObject[0];
     private GameObject selectedChip;
     private bool chipsLoaded;
-    private bool stabilized = false;
+    private bool stabilize = false;
     private bool move;
     
 
@@ -70,9 +70,12 @@ public class SelectChip : MonoBehaviour
         
         selectedChip = selectableChips[0];
         currentChipIndex = 0;
+        timer = 0;
         chipsLoaded = true;
-        timer = timeToStop;
+        stabilize = true;
         // UpdatePositions();
+
+        scrollRect.velocity = new Vector2(10000, 0);
     }
 
     private void Update()
@@ -82,12 +85,11 @@ public class SelectChip : MonoBehaviour
             if (Input.GetMouseButton(0)) //  && slidingChip.AcceptMove
             {
                 timer = timeToStop;
-                stabilized = false;
+                stabilize = true;
             }
 
-            if (timer <= 0 && !stabilized && scrollRect.velocity.magnitude < 100f)
+            if (timer <= 0 && scrollRect.velocity.magnitude < 100f && stabilize)
             {
-                stabilized = true;
                 StartCoroutine(Stabilize());
             }
 
@@ -132,6 +134,7 @@ public class SelectChip : MonoBehaviour
                         PlayerPrefs.SetInt("chipId", chipId);
                         selectedChip = selectableChips[i];
                         currentChipIndex = i;
+                        Debug.Log(currentChipIndex);
                         // Debug.Log("Selected chipId: " + chipId);
                         // Debug.Log("Morale updated");
                     }
@@ -146,40 +149,40 @@ public class SelectChip : MonoBehaviour
     }
     public void NextChip()
     {
-        if (!move)
+        currentChipIndex++;
+        if (currentChipIndex > selectableChips.Length - 1)
         {
-            move = true;
-            currentChipIndex++;
-            if (currentChipIndex >= selectableChips.Length - 1)
-            {
-                currentChipIndex = selectableChips.Length - 1;
-            }
-
-            selectedChip = selectableChips[currentChipIndex];
-            StartCoroutine(Stabilize());
+            currentChipIndex = selectableChips.Length - 1;
         }
+        else
+        {
+            selectedChip = selectableChips[currentChipIndex];
+            stabilize = true;
+            timer = 0;
+        }
+
+        Debug.Log(currentChipIndex);
     }
 
     public void PreviousChip()
     {
-        if (!move)
+        currentChipIndex--;
+        if (currentChipIndex < 0)
         {
-            move = true;
-            currentChipIndex--;
-            if (currentChipIndex < 0)
-            {
-                currentChipIndex = 0;
-            }
-
-            selectedChip = selectableChips[currentChipIndex];
-            StartCoroutine(Stabilize());
-            
+            currentChipIndex = 0;
         }
+        else
+        {
+            selectedChip = selectableChips[currentChipIndex];
+            stabilize = true;
+            timer = 0;
+        }
+
+        Debug.Log(currentChipIndex);
     }
 
     private IEnumerator Stabilize()
     {
-        stabilized = true; // Что бы лишний раз не запускать сопрограмму
         scrollRect.StopMovement();
 
         float step = 0;
@@ -187,7 +190,7 @@ public class SelectChip : MonoBehaviour
         float supposedPosition = chipContainer.transform.position.x + offset;
         bool direction = (offset > 0) ? true : false; // true - right, false - left
         
-        step = offset / 15;
+        step = offset / 100;
 
         move = true;
 
@@ -199,17 +202,17 @@ public class SelectChip : MonoBehaviour
             {
                 chipContainer.transform.position = new Vector3(supposedPosition, chipContainer.transform.position.y, chipContainer.transform.position.z);
                 move = false;
-                stabilized = false;
             }
             else if (!direction && chipContainer.transform.position.x <= supposedPosition)
             {
                 chipContainer.transform.position = new Vector3(supposedPosition, chipContainer.transform.position.y, chipContainer.transform.position.z);
                 move = false;
-                stabilized = false;
             }
 
             yield return new WaitForSeconds(.01f);
         }
+
+        stabilize = false;
 
         yield return null;
     }
