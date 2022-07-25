@@ -7594,6 +7594,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textTurn: {fileID: 3320445435491804160}
   text: Your turn
+  turnOpacity:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0041389717
+      value: 0.9984331
+      inSlope: 0.019173088
+      outSlope: 0.019173088
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.07850105
+    - serializedVersion: 3
+      time: 1
+      value: -0.0014190674
+      inSlope: -2.74229
+      outSlope: -2.74229
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.053375807
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6948056290246766314
 GameObject:
   m_ObjectHideFlags: 0

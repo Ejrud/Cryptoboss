@@ -8,6 +8,7 @@ public class TurnVisualize : MonoBehaviour
     [Header("Links")]
     [SerializeField] private Text textTurn;
     [SerializeField] private string text = "Your turn";
+    [SerializeField] private AnimationCurve turnOpacity;
 
     private Color textDefaultColor;
 
@@ -26,13 +27,15 @@ public class TurnVisualize : MonoBehaviour
         textTurn.gameObject.SetActive(true);
         textTurn.text = text;
 
-        float apogee = 4f;
-        float timer = apogee;
+        float apogee = 2f;
+        float timer = 0;
 
-        while (timer > 0)
+        while (timer < apogee)
         {
-            textTurn.color = new Vector4(textTurn.color.r, textTurn.color.g, textTurn.color.b, timer/apogee);
-            timer -= Time.deltaTime;
+            Debug.Log(turnOpacity.Evaluate(timer / apogee));
+
+            textTurn.color = new Vector4(textTurn.color.r, textTurn.color.g, textTurn.color.b, turnOpacity.Evaluate(timer / apogee));
+            timer += Time.deltaTime;
             yield return new WaitForFixedUpdate();
         }
 

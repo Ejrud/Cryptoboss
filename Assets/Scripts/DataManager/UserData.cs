@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 public class UserData : MonoBehaviour
 {
     [Header("Links")]
+    [SerializeField] private Tutorial _tutorial;
     [SerializeField] private SelectChip selectChip;
     [SerializeField] private User user;
 
@@ -146,6 +147,9 @@ public class UserData : MonoBehaviour
         loadScreen.SetActive(false);
 
         user.Authorized = true;
+
+        _tutorial.gameObject.SetActive(true);
+        _tutorial.StartTutorial(user.UserName);
 
         UpdateUI();
     }

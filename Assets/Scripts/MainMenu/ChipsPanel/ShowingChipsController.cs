@@ -37,6 +37,8 @@ public class ShowingChipsController : MonoBehaviour
             chipFrame.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             chipFrameData[i] = chipFrame.GetComponent<ChipFrameData>();
         }
+
+        chipFrameData[0].SelectFirstChip();
     }
 
     public void ResetChips(bool first = false)

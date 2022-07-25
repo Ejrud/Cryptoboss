@@ -68,14 +68,9 @@ public class SelectChip : MonoBehaviour
             }
         }
         
-        selectedChip = selectableChips[0];
-        currentChipIndex = 0;
         timer = 0;
-        chipsLoaded = true;
         stabilize = true;
-        // UpdatePositions();
-
-        scrollRect.velocity = new Vector2(10000, 0);
+        scrollRect.velocity = new Vector2(10000, 0); // узнать сколько силы нужно дать для перемещения на 1 фишку
     }
 
     private void Update()

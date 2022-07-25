@@ -27,7 +27,6 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     private Text chipRatingTxt;
     private Vector2 startPos;
 
-
     public void Init(ShowingChipsController chipController, ChipParameters chipParam, Text capitalTxt, Text moraleTxt, Text ratingTxt, bool selectable = false)
     {
         this.selectable = selectable;
@@ -51,6 +50,21 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
         chipBgImage.sprite = chipDefault;
     }
+
+    public void SelectFirstChip()
+    {
+        chipController.ResetChips();
+        GlobalEventManager.SendCards(chipData.CardDeck);
+        GlobalEventManager.SendChipData(chipData);
+
+        chipBgImage.color = Color.white;
+        chipTexture.color = Color.white;
+
+        chipCapitalTxt.text = chipCapital;
+        chipMoraleTxt.text = chipMorale;
+        chipRatingTxt.text = chipRating;
+    }
+
     public void SetChipForGame()
     {
         if (selectable)
