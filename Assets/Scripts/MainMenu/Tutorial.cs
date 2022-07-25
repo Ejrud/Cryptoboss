@@ -13,6 +13,10 @@ public class Tutorial : MonoBehaviour, IPointerDownHandler
     [SerializeField] private RectTransform _teddyTransform; // 
     [SerializeField] private Text _description;
     [SerializeField] private GameObject _clicklTextObj;
+
+    [Header("DescriptionPositions")]
+    [SerializeField] private Transform _descriptionTransform;
+    [SerializeField] private Transform[] _positions; // 0 - default position 1 - offset position
     private Transform _oldTransform; // Изначальный transform выделяемого элемента
     private GameObject NextSlide;
     private GameObject PreviousSlide;
@@ -49,6 +53,7 @@ public class Tutorial : MonoBehaviour, IPointerDownHandler
             }
             else
             {
+                _tutorial = false;
                 _selectedElement.SetParent(_previousTransform);
                 gameObject.SetActive(false);
             }
@@ -57,23 +62,32 @@ public class Tutorial : MonoBehaviour, IPointerDownHandler
 
     public void Next()
     {
-        _slideIndex++;
-        _inactiveCurrentSlide = false;
-        SetNextSlide();
+        if (_tutorial)
+        {
+            _slideIndex++;
+            _inactiveCurrentSlide = false;
+            SetNextSlide();
+        }
     }
 
     private void SetNextSlide()
     {
+        // Text offset
+        if (slides[_slideIndex].Offset)
+            _descriptionTransform.position = _positions[1].position;
+        else
+            _descriptionTransform.position = _positions[0].position;
+        
+        // Hide bear
         if (slides[_slideIndex].Hide)
             _teddyTransform.gameObject.SetActive(false);
         else
             _teddyTransform.gameObject.SetActive(true);
 
-        if (_previousTransform != null && _selectedElement != null) // Возврат в изначальный transform
-        {
+        // Return to default transform
+        if (_previousTransform != null && _selectedElement != null) 
             _selectedElement.SetParent(_previousTransform);
-        }
-
+        
         if (_prepareNextSlide)
         {
             NextSlide.SetActive(true);
@@ -150,6 +164,7 @@ public class Slide
     public bool Hide;
     public bool _reverseTeddy;
     public bool Inactive;
+    public bool Offset; 
     public Transform PreviousTransform;
     public Transform DescribedTransform;
     public string[] text;

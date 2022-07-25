@@ -34,7 +34,7 @@ public class UserData : MonoBehaviour
     // private List<DbCards> nullCards;
     private string pathToSave;
     private string saveFileName = "Data";
-    private string seUrl = "http://a0664627.xsph.ru/cryptoboss_back/"; // http://a0664627.xsph.ru/cryptoboss_back/ // https://cryptoboss.win/game/back/
+    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/ // https://cryptoboss.win/game/back/
 
     private void Start()
     {
