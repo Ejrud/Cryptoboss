@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ShowingChipsController : MonoBehaviour
 {
+    [SerializeField] private Tutorial tutorial;
     [SerializeField] private GameObject chipsViewportContent;
 
     [Header("Default user")]

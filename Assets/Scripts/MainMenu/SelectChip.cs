@@ -14,6 +14,7 @@ public class SelectChip : MonoBehaviour
     [SerializeField] private float offset = 2.5f;
     [SerializeField] private float timeToStop = 2f;
     [SerializeField] private  SlidingChips slidingChip;
+    [SerializeField] private float pow = 50;
 
     [Header("UI")]
     [SerializeField] private ScrollRect scrollRect;
@@ -33,7 +34,7 @@ public class SelectChip : MonoBehaviour
     private int currentChipIndex = 0;
 
     private float timer = 0;
-
+    
     // �������� ���� ����� ������������ � ������� ����
     public void Init(List<ChipParameters> chipParam)
     {
@@ -70,11 +71,22 @@ public class SelectChip : MonoBehaviour
         
         timer = 0;
         stabilize = true;
-        scrollRect.velocity = new Vector2(10000, 0); // узнать сколько силы нужно дать для перемещения на 1 фишку
+        selectedChip = selectableChips[user.SelectedChipId];
+
+        StartCoroutine(SelectPlayedChip());
+
+        Debug.Log("offset  = " + offset);
     }
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            timer = 0;
+            stabilize = true;
+            selectedChip = selectableChips[user.SelectedChipId];
+        }
+
         if (selectableChips.Length > 0)
         {
             if (Input.GetMouseButton(0)) //  && slidingChip.AcceptMove
@@ -85,7 +97,9 @@ public class SelectChip : MonoBehaviour
 
             if (timer <= 0 && scrollRect.velocity.magnitude < 100f && stabilize)
             {
-                StartCoroutine(Stabilize());
+                stabilize = false;
+                float offset = center.transform.position.x - selectedChip.transform.position.x;
+                StartCoroutine(Stabilize(offset));
             }
 
             for (int i = 0; i < selectableChips.Length; i++)
@@ -127,6 +141,7 @@ public class SelectChip : MonoBehaviour
                         }
 
                         PlayerPrefs.SetInt("chipId", chipId);
+                        PlayerPrefs.SetInt("chipIndex", i);
                         selectedChip = selectableChips[i];
                         currentChipIndex = i;
                         Debug.Log(currentChipIndex);
@@ -176,16 +191,16 @@ public class SelectChip : MonoBehaviour
         Debug.Log(currentChipIndex);
     }
 
-    private IEnumerator Stabilize()
+    private IEnumerator Stabilize(float offset)
     {
+        Debug.Log("Stabilize");
         scrollRect.StopMovement();
 
         float step = 0;
-        float offset = center.transform.position.x - selectedChip.transform.position.x;
         float supposedPosition = chipContainer.transform.position.x + offset;
         bool direction = (offset > 0) ? true : false; // true - right, false - left
         
-        step = offset / 100;
+        step = offset / 15;
 
         move = true;
 
@@ -212,4 +227,12 @@ public class SelectChip : MonoBehaviour
         yield return null;
     }
 
+    private IEnumerator SelectPlayedChip()
+    {
+        yield return new WaitForSeconds(.5f);
+        timer = 0;
+        stabilize = true;
+        selectedChip = selectableChips[user.SelectedChipId];
+        yield return null;
+    } 
 }

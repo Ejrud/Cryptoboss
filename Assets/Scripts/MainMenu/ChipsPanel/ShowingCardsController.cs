@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ShowingCardsController : MonoBehaviour
 {
+    [SerializeField] private Tutorial tutorial;
+
     [Header("Settings")]
     [SerializeField] private int _cardsCount = 120;
     [SerializeField] private User user;
@@ -42,6 +44,7 @@ public class ShowingCardsController : MonoBehaviour
             cardTransform.localScale = new Vector3(1, 1, 1);
             cardParameters[i] = cardTransform.GetComponent<CardParameters>();
             cardParameters[i].Session = false;
+            cardParameters[i].tutorial = tutorial;
         }
 
         PutAwayCards();

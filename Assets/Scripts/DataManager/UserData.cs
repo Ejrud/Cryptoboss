@@ -148,12 +148,18 @@ public class UserData : MonoBehaviour
 
         user.Authorized = true;
 
-        _tutorial.gameObject.SetActive(true);
-        _tutorial.StartTutorial(user.UserName);
+        _tutorial.gameObject.SetActive(false);
+
+        if (!user.Tutorial)
+        {
+            Debug.Log("Tutorial");
+            _tutorial.gameObject.SetActive(true);
+            _tutorial.PrepareTutorial();
+        }
 
         UpdateUI();
     }
-    public void SetUser(string userID, string userName, string email, string wallet, string score, string[] chipIds, List<DbCards> cards)
+    public void SetUser(string userID, string userName, string email, string wallet, string score, string[] chipIds, List<DbCards> cards, string tutorial)
     {
         user.UserID = userID;
         user.UserName = userName;
@@ -161,6 +167,7 @@ public class UserData : MonoBehaviour
         user.Wallet = wallet;
         user.Score = score;
         user.cards = cards;
+        user.Tutorial = (tutorial == "1") ? true : false;
 
         PlayerPrefs.SetString("Wallet", user.Wallet);
         LoadNfts(chipIds);
@@ -179,6 +186,8 @@ public class UserData : MonoBehaviour
         user.Authorized = false;
         user.Balance = "";
         user.Mute = false;
+        user.SelectedChipId = 0;
+        user.Tutorial = false;
         // user.cards = nullCards;
 
         authWindow.SetActive(true);

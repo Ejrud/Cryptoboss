@@ -7,6 +7,8 @@ using TMPro;
 
 public class CardDescription : MonoBehaviour, IPointerDownHandler
 {
+    [SerializeField] private Tutorial tutorial;
+
     [Header("Descriptions")]
     [SerializeField] private string[] _descriptions; // 0 - turn around/ 1 - liq/ 2 - correc/ 3 - piv 100 2/  4 - piv 2 100/ 5 - scam/ 6 - hedge/ 7 - audit/ 8 - to the moon/ 9 - pump
 
@@ -102,6 +104,16 @@ public class CardDescription : MonoBehaviour, IPointerDownHandler
     // ��������� ���� ���� � ������� ���� ���� ��������� ������� �� �����
     public void OnPointerDown(PointerEventData eventData)
     {
+        cardDescriptionObj.SetActive(false);
+    }
+
+    public void CloseDescription()
+    {
+        if (tutorial._tutorial)
+        {
+            tutorial.Next();
+        }
+
         cardDescriptionObj.SetActive(false);
     }
 }

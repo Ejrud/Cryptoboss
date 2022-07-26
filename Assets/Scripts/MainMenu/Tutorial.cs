@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 using UnityEngine.EventSystems;
 
 public class Tutorial : MonoBehaviour, IPointerDownHandler
 {
+    [SerializeField] private User user;
+    [SerializeField] private UserData userData;
     [SerializeField] private Slide[] slides;
+    [SerializeField] private int nameLength = 18;
 
     [Header("UI")]
+    [SerializeField] private InputField userName;
     [SerializeField] private Transform _frontLayerTransform; // Необходим для выделения объекта среди других элементов интерфейса
     [SerializeField] private RectTransform _teddyTransform; // 
     [SerializeField] private Text _description;
     [SerializeField] private GameObject _clicklTextObj;
+    [SerializeField] private GameObject _NickNameWindow;
 
     [Header("DescriptionPositions")]
     [SerializeField] private Transform _descriptionTransform;
@@ -21,7 +28,7 @@ public class Tutorial : MonoBehaviour, IPointerDownHandler
     private GameObject NextSlide;
     private GameObject PreviousSlide;
     private string _userName;
-    private bool _tutorial;
+    public bool _tutorial;
     private bool _prepareNextSlide;
     private bool _returnToMain;
     private bool _inactiveCurrentSlide;
@@ -29,14 +36,21 @@ public class Tutorial : MonoBehaviour, IPointerDownHandler
     // return object
     private Transform _previousTransform;
     private Transform _selectedElement;
+    private string editUrl = "https://cryptoboss.win/game/back/editProfile.php"; // a0664627.xsph.ru/cryptoboss_back/editProfile.php   // https://cryptoboss.win/game/back/editProfile.php
 
     private void Start()
     {
         gameObject.SetActive(false);
     }
 
+    public void PrepareTutorial()
+    {
+        _NickNameWindow.SetActive(true);
+    }
+
     public void StartTutorial(string userName)
     {
+        _NickNameWindow.SetActive(false);
         _userName = userName;
         _tutorial = true;
         SetNextSlide();
@@ -152,6 +166,49 @@ public class Tutorial : MonoBehaviour, IPointerDownHandler
             _description.text = slides[_slideIndex].text[0] + _userName + slides[_slideIndex].text[1];
         }
 
+    }
+
+    public void SetName()
+    {
+        StartCoroutine(SendForm());
+    }
+
+    private IEnumerator SendForm()
+    {
+        WWWForm form = new WWWForm();
+
+        string name = userName.text;
+
+        if (name.Length > nameLength)
+        {
+            name = name.Remove(nameLength);
+        }
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            yield return null;
+        }
+        
+        form.AddField("UserName", name);
+        form.AddField("UserWallet", user.Wallet);
+        form.AddField("Id", Convert.ToInt32(user.UserID));
+
+        using (UnityWebRequest www = UnityWebRequest.Post(editUrl, form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                user.UserName = name;
+                userData.UpdateUI();
+                StartTutorial(user.UserName);
+            }
+            else
+            {
+                Debug.Log(www.error);
+            }
+        }
+
+        yield return null;
     }
 }
 

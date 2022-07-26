@@ -31,6 +31,7 @@ public class UIManager : MonoBehaviour
 
     public void PanelActivate(GameObject objectToClose) // 
     {
+        user.SelectedChipId = PlayerPrefs.GetInt("chipIndex");
         objectToClose.SetActive(!objectToClose.activeSelf);
     }
 

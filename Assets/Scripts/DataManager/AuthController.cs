@@ -169,7 +169,7 @@ public class AuthController : MonoBehaviour
                     Debug.Log(newJson);
                     List<DbCards> card = JsonConvert.DeserializeObject<List<DbCards>>("[" + newJson + "]"); // Dictionary<string, string>
 
-                    userData.SetUser(userParam.id, userParam.name, userParam.email, userParam.metamask_wallet, userParam.raiting, chipIds, card);
+                    userData.SetUser(userParam.id, userParam.name, userParam.email, userParam.metamask_wallet, userParam.raiting, chipIds, card, userParam.tutorial);
                     PlayerPrefs.SetString("Wallet", userParam.metamask_wallet);
                     gameObject.SetActive(false);
                 }

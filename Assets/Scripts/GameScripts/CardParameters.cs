@@ -7,6 +7,7 @@ using TMPro;
 
 public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
+    public Tutorial tutorial;
     public bool Selected = false; // Необходим для игрового процесса (Если карта выбрана, то ее нельзя повторно выбрать)
     public bool Session = true; // Если карта используется не в игровой сессии, то показываются ее характеристики  главном меню
     public bool Audited = false; // 
@@ -129,6 +130,10 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (tutorial._tutorial)
+        {
+            tutorial.Next();
+        }
         // Если главное меню, то показывать характеристики карт в отдельном окне
         if (!Session && startPos == eventData.position)
         {

@@ -914,7 +914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Selected: 0
-  Session: 1
+  Session: 0
   Audited: 0
   Card:
     Used: 0

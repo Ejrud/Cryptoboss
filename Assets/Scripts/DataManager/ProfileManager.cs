@@ -20,13 +20,9 @@ public class ProfileManager : MonoBehaviour
 
     public void UpdateUser()
     {
-        if (!string.IsNullOrWhiteSpace(userName.text) || !string.IsNullOrWhiteSpace(userWallet.text))
+        if (!string.IsNullOrWhiteSpace(userName.text) && userName.text != user.UserName)
         {
-            if (userName.text != user.UserName || userWallet.text != user.Wallet)
-            {
-                StartCoroutine(SendForm());
-            }
-            
+            StartCoroutine(SendForm());
         }
         else
         {
