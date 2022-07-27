@@ -112,7 +112,7 @@ public class CardDescription : MonoBehaviour, IPointerDownHandler
         if (tutorial._tutorial)
         {
             tutorial.Next();
-        }
+        } 
 
         cardDescriptionObj.SetActive(false);
     }

@@ -24,6 +24,7 @@ public class PlayerNet : NetworkBehaviour
     public int HedgeFundCount = 0;
 
     public PlayerNet Friend;
+    public EmotionNet emotions;
 
     public Impact PlayerImpact = new Impact();
     public bool TurnAround;
@@ -97,6 +98,7 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private RawImage[] rivalChipImages_3; // Изображения на экране презентации, и в игровом процессе
     [SerializeField] private Texture lastTexture;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private EmotionController emotionController;
     private Texture2D[] rivalChipTexture;
     
     private NetworkController controller;
@@ -285,7 +287,21 @@ public class PlayerNet : NetworkBehaviour
         PlayerImpact.CapitalDamage = HandCards[selectedCardId].CapitalDamage;
         PlayerImpact.CapitalHealth = HandCards[selectedCardId].CapitalEarnings;
         PlayerImpact.JokerName = HandCards[selectedCardId].Name;
-        
+    }
+
+    [Command]
+    public void CmdSendEmotion(int index)
+    {
+        emotions.PlayEmotion(index);
+    }
+
+    [ClientRpc]
+    public void RpcRecieveEmotion(int index, string gameMode)
+    {
+        if (hasAuthority)
+        {
+            emotionController.RecieveEmotion(index, gameMode);
+        }
     }
 
     [ClientRpc]
@@ -623,12 +639,14 @@ public class PlayerNet : NetworkBehaviour
             float division = 1000;
             float ratingPlus = 1;
 
-            float cof = (currentRating + winRating) / (division + ratingPlus);
+            float cof = (currentRating + winRating) / (division + ratingPlus);    //    0.35 = (344 + 10) / 1001
             // decimal bossyDef = Convert.ToDecimal(bossyParam[0].bossy_count);
 
-            bossyReward = 10 + (10 * cof); // (float)bossyDef
+            bossyReward = 10 + (10 * cof); // (float)bossyDef   13.5 = 10 + (10 * x)  =   3.5 = 10 * x   0.35
         }   
     }
+
+
 
     private void OnDestroy()
     {

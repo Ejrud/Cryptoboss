@@ -32,8 +32,6 @@ public class TurnVisualize : MonoBehaviour
 
         while (timer < apogee)
         {
-            Debug.Log(turnOpacity.Evaluate(timer / apogee));
-
             textTurn.color = new Vector4(textTurn.color.r, textTurn.color.g, textTurn.color.b, turnOpacity.Evaluate(timer / apogee));
             timer += Time.deltaTime;
             yield return new WaitForFixedUpdate();

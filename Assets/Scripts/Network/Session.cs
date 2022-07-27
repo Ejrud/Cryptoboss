@@ -25,8 +25,6 @@ public class Session : MonoBehaviour
 
     public bool DataSaved;
     public bool AwaitPlayer;
-
-    [SerializeField] private ChipData debugData;
     private bool gameStarted = false;
     private bool chipIdRecieved;
     private bool playerIndexRecieved = false;
@@ -37,6 +35,7 @@ public class Session : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private float energyRecovery = 0.5f;
+    [SerializeField] private EmotionNet _emotions;
     
     public void Init(PlayerNet[] players, GameProcessManagement manager, bool RepeatConnect = false) 
     {
@@ -75,6 +74,11 @@ public class Session : MonoBehaviour
                 PlayerStatsHolder stats = new PlayerStatsHolder();
                 StatsHolder.Add(stats);
             }
+        }
+
+        foreach (PlayerNet player in PlayerNets)
+        {
+            player.emotions = _emotions;
         }
     }
 

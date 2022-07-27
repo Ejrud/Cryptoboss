@@ -130,14 +130,17 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (tutorial._tutorial)
+        if (!Session)
         {
-            tutorial.Next();
-        }
-        // Если главное меню, то показывать характеристики карт в отдельном окне
-        if (!Session && startPos == eventData.position)
-        {
-            GlobalEventManager.SendSingleCard(Card);
+            if (tutorial._tutorial)
+            {
+                tutorial.Next();
+            }
+            // Если главное меню, то показывать характеристики карт в отдельном окне
+            if (startPos == eventData.position)
+            {
+                GlobalEventManager.SendSingleCard(Card);
+            }
         }
     }
 
