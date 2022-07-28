@@ -69,9 +69,8 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
             if (!parameters.Selected) 
             {
                 cardManager.OnCardSelect(rectTransform);
+                parameters.Selected = true;
             }
-
-            parameters.Selected = true;
         }
         else
         {
@@ -114,7 +113,6 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
             yield return new WaitForFixedUpdate();
         }
 
-        parameters.Selected = false;
         yield return null;
     }
 }

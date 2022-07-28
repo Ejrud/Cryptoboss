@@ -81,24 +81,29 @@ public class NetworkController : NetworkManager
     }
 
     // Когда игрок определит режим игры, про произойдет сортировка
-    public void SetDistribution(PlayerNet player)
+    public void SetDistribution(PlayerNet player, bool hasEnergy)
     {
         CheckPlayers(); // Удаление пустых слотов 
 
         bool repeatConnect = false; 
-        bool allowed = true;
         Session oldSession = new Session();
+
+        if (!hasEnergy)
+        {
+            Destroy(player.gameObject);
+            return;
+        }
 
         foreach (PlayerNet playerNet in Players)
         {
             if (playerNet.Wallet == player.Wallet || playerNet.ChipId == player.ChipId)
             {
-                allowed = false;
                 Destroy(player.gameObject);
+                return;
             }
         }
 
-        if (allowed && player)
+        if (player)
         {
             Players.Add(player);
 
@@ -106,8 +111,6 @@ public class NetworkController : NetworkManager
             {
                 for (int i = 0; i < session.PlayerNets.Length; i++)
                 {
-                    Debug.Log(session.StatsHolder[i].ChipId +  "    " + player.ChipId);
-
                     if (session.StatsHolder[i].ChipId == player.ChipId)
                     {
                         session.PlayerNets[i] = player;

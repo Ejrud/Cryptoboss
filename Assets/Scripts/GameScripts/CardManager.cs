@@ -225,8 +225,8 @@ public class CardManager : NetworkBehaviour
                 if(rivalCards[i].Selected)
                 {
                     rivalCards[i].gameObject.SetActive(true);
-                    rivalCards[i].GetComponent<CardHandler>().ReturnCard();
                     rivalCards[i].Selected = false;
+                    rivalCards[i].GetComponent<CardHandler>().ReturnCard();
                     rivalCards[i].CloseCard(); // Скрыть карту если она изначально была показана аудитом
                 }
                 else

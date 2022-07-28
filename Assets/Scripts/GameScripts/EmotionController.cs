@@ -9,11 +9,14 @@ public class EmotionController : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private Image _playerEmotion;
+    [SerializeField] private Image[] _playerEffects;
     [SerializeField] private Image _rivalEmotion;
+    [SerializeField] private Image[] _rivalEffects;
     [SerializeField] private GameObject _emojiWindow;
 
     [Header("Emotions")]
-    [SerializeField] private Sprite[] _emotions;
+
+    [SerializeField] private List<Emoji> emoji;
 
     private Animator _animator;
     private bool _animated;
@@ -33,7 +36,13 @@ public class EmotionController : MonoBehaviour
 
     public void SendEmotion(int index)
     {
-        _playerEmotion.sprite = _emotions[index];
+        _playerEmotion.sprite = emoji[index].Emotion;
+
+        for (int i = 0; i < _playerEffects.Length; i++)
+        {
+            _playerEffects[i].sprite = emoji[index].Effect;
+        }
+
         AnimatePlayerEmotion();
         _animated = true;
         _player.CmdSendEmotion(index);
@@ -44,7 +53,12 @@ public class EmotionController : MonoBehaviour
     {
         if (gameMode == "one" && !_animated)
         {
-            _rivalEmotion.sprite = _emotions[index];
+            _rivalEmotion.sprite = emoji[index].Emotion;
+
+        for (int i = 0; i < _rivalEffects.Length; i++)
+        {
+            _rivalEffects[i].sprite = emoji[index].Effect;
+        }
             AnimateRivalEmotion();
         }
 
@@ -65,5 +79,13 @@ public class EmotionController : MonoBehaviour
     {
         Debug.Log("Animate rival emotion");
         _animator.SetTrigger("RivalEmoji");
+    }
+
+    [System.Serializable]
+    public class Emoji
+    {
+        public string Name;
+        public Sprite Emotion; // main
+        public Sprite Effect;
     }
 }

@@ -48,7 +48,7 @@ public class PlayerNet : NetworkBehaviour
     public int SelectedCardId;
     public int UsedCount;
     
-    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/
+    private string seUrl = "http://a0664627.xsph.ru/cryptoboss_back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/
 
     private int currentRating;
     private float bossyReward;
@@ -258,13 +258,34 @@ public class PlayerNet : NetworkBehaviour
         SceneManager.LoadScene(menuSceneIndex);
     }
     [Command]
-    public void CmdSendGameMode(string gameMode, string wallet, int chipId)
+    public async void CmdSendGameMode(string gameMode, string wallet, int chipId)
     {
+        bool hasEnergy = false;
+        WWWForm form = new WWWForm();
+        form.AddField("Guid", $"CryptoBoss #{chipId}");
+
+        using (UnityWebRequest request = UnityWebRequest.Post(seUrl + "checkEnergy.php", form))
+        {
+            await request.SendWebRequest();
+            
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                if (request.downloadHandler.text == "true")
+                {
+                    hasEnergy = true;
+                }
+            }
+            else
+            {
+                hasEnergy = false;
+            }
+        }
+
         GameMode = gameMode;
         Wallet = wallet;
         this.ChipId = chipId;
         // Debug.Log(GameMode);
-        FindObjectOfType<NetworkController>().SetDistribution(this); // cringe
+        FindObjectOfType<NetworkController>().SetDistribution(this, hasEnergy); // cringe
     }
 
     [Command] // 
