@@ -42,6 +42,8 @@ public class SessionTimer : NetworkBehaviour
                 }
                 else
                 {
+                    isStoped = true;
+
                     bool[] playerWins = new bool[session.PlayerNets.Length];
 
                     for (int i = 0; i < session.PlayerNets.Length; i++)

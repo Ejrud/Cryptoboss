@@ -144,7 +144,6 @@ public class SelectChip : MonoBehaviour
                         PlayerPrefs.SetInt("chipIndex", i);
                         selectedChip = selectableChips[i];
                         currentChipIndex = i;
-                        Debug.Log(currentChipIndex);
                         // Debug.Log("Selected chipId: " + chipId);
                         // Debug.Log("Morale updated");
                     }
@@ -193,7 +192,6 @@ public class SelectChip : MonoBehaviour
 
     private IEnumerator Stabilize(float offset)
     {
-        Debug.Log("Stabilize");
         scrollRect.StopMovement();
 
         float step = 0;

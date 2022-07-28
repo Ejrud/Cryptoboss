@@ -28,7 +28,7 @@ public class Session : MonoBehaviour
     private bool gameStarted = false;
     private bool chipIdRecieved;
     private bool playerIndexRecieved = false;
-    private bool stopGame;
+    private bool rewardProcess = false;
 
     private string seUrl = "https://cryptoboss.win/game/back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
     private string accrualUrl = "a0664627.xsph.ru/cryptoboss_back/";
@@ -88,6 +88,7 @@ public class Session : MonoBehaviour
         {
             if (PlayerNets[0] == null || PlayerNets[1] == null && gameStarted)
             {
+                Finished = true;
                 FinishTheGame(false, false, true);
             }
             else if (PlayerNets[PlayerIndexQueue].CardSelected)
@@ -120,11 +121,13 @@ public class Session : MonoBehaviour
         {
             if (PlayerNets[0] == null && PlayerNets[1] == null)
             {
-                if (gameStarted && !Rewarded)
+                if (gameStarted && !Rewarded && !rewardProcess)
                 {
+                    rewardProcess = true;
                     FinishTheGame(false, false);
                 }
-                Destroy(gameObject);
+                if (Rewarded)
+                    Destroy(gameObject);
             }
         }
     }
@@ -297,14 +300,13 @@ public class Session : MonoBehaviour
                 winnerGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
                 looseGuid = "CryptoBoss #" + StatsHolder[0].ChipId;
             }
-            else if (!PlayerNets[0].Win && !PlayerNets[1].Win)
+            else
             {
                 left = true;
                 winnerGuid = "CryptoBoss #" + StatsHolder[0].ChipId;
                 looseGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
             }
 
-            Rewarded = true;
             StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode, left));
 
             for(int i = 0; i < PlayerNets.Length; i++)
@@ -335,6 +337,8 @@ public class Session : MonoBehaviour
 
     private IEnumerator SetReward(string winnerWallet, string winnerGuid, string looseGuid, string mode, bool left)
     {
+        rewardProcess = true;
+
         foreach (PlayerNet player in PlayerNets)
         {
             player.LoadReward();
@@ -349,6 +353,7 @@ public class Session : MonoBehaviour
 
         if(left)
         {
+            Debug.Log("Leave");
             form.AddField("Leave", "true");
         }
 
@@ -381,8 +386,7 @@ public class Session : MonoBehaviour
             if (www.result == UnityWebRequest.Result.Success)
             {
                 Debug.Log(www.downloadHandler.text);
-                DataBaseResult results = JsonConvert.DeserializeObject<DataBaseResult>(www.downloadHandler.text);
-                Debug.Log("Reward = " + results.bossy);
+                Debug.Log("Success");
             }
             else
             { 
@@ -392,6 +396,9 @@ public class Session : MonoBehaviour
                 Debug.Log(www.error);
             }
         }
+
+        Rewarded = true;
+
         yield return null;
     }
 
