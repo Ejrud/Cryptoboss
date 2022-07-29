@@ -18373,6 +18373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tutorial: {fileID: 498783228}
+  _tutorialObj: {fileID: 498783227}
   selectChip: {fileID: 1412351066}
   user: {fileID: 11400000, guid: b02e5e1c3ebc65845bee169c994fef68, type: 2}
   nameTxt: {fileID: 890953810}
@@ -28920,7 +28921,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -63.76}
+  m_AnchoredPosition: {x: 0, y: -63.75995}
   m_SizeDelta: {x: 0, y: -127.52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1434728718

@@ -74,7 +74,6 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         }
         else
         {
-            // ������� � ����������� ���������
             ReturnCard();
         }
     }
@@ -112,6 +111,8 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
             yield return new WaitForFixedUpdate();
         }
+
+        parameters.Selected = false;
 
         yield return null;
     }

@@ -13,6 +13,7 @@ public class UserData : MonoBehaviour
 {
     [Header("Links")]
     [SerializeField] private Tutorial _tutorial;
+    [SerializeField] private GameObject _tutorialObj;
     [SerializeField] private SelectChip selectChip;
     [SerializeField] private User user;
 
@@ -148,12 +149,12 @@ public class UserData : MonoBehaviour
 
         user.Authorized = true;
 
-        _tutorial.gameObject.SetActive(false);
+        _tutorialObj.SetActive(false);
 
         if (!user.Tutorial)
         {
             Debug.Log("Tutorial");
-            _tutorial.gameObject.SetActive(true);
+            _tutorialObj.SetActive(true);
             _tutorial.PrepareTutorial();
         }
 

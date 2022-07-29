@@ -15,6 +15,7 @@ public class TurnVisualize : MonoBehaviour
     private void Start()
     {
         textDefaultColor = textTurn.color;
+        textTurn.color = new Vector4(textTurn.color.r, textTurn.color.g, textTurn.color.b, 0);
     }
 
     public void SetTurn()

@@ -116,6 +116,37 @@ public class Session : MonoBehaviour
                 PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[0].MaxEnergy);
                 PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[1].MaxEnergy);
             }
+            else
+            {
+                int handCount = 0;
+                int intensiveCount = 0;
+                for (int i = 0; i < PlayerNets[PlayerIndexQueue].HandCards.Length; i++) // количество карт в руке
+                {
+                    // подсчет карт в руке
+                    if (!PlayerNets[PlayerIndexQueue].HandCards[i].Used) 
+                    {
+                        handCount++;
+
+                        // подсчет карт с превышением энергии
+                        if (PlayerNets[PlayerIndexQueue].HandCards[i].EnergyDamage > PlayerNets[PlayerIndexQueue].Morale)
+                        {
+                            intensiveCount++;
+                        }
+                    }
+                }
+
+                // Если количество карт в руке будет совпадать с количеством карт с энергией больше текущей морали
+                if (intensiveCount >= handCount)
+                {
+                    SetNextIndexQueue();
+                
+                    PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[0].MaxEnergy);
+                    PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[1].MaxEnergy);
+                }
+
+                Debug.Log("Hand count "+ handCount);
+                Debug.Log("Intensive count "+ intensiveCount);
+            }
         }
         else
         {
