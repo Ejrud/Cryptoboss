@@ -7857,6 +7857,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb90d89f00d7e214e80931dc3c98a625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _authControllerObj: {fileID: 1082058685}
+  _selectAreaObj: {fileID: 202990379}
+  _userData: {fileID: 1059100640}
   sceneLoadController: {fileID: 185771840}
   areas:
   - {fileID: 1483245727}
@@ -18689,7 +18692,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1082058686
 RectTransform:
   m_ObjectHideFlags: 0
@@ -35144,7 +35147,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1082058687}
         m_TargetAssemblyTypeName: AuthController, Assembly-CSharp
-        m_MethodName: PrepareAuth
+        m_MethodName: DebugPrepare
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

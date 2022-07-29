@@ -15,8 +15,9 @@ public class CardManager : NetworkBehaviour
 
     [Header("Card transition setings")]
     [SerializeField] private Transform[] playerCardPositions;
+    [SerializeField] private Transform[] playerStackCardPositions;
     [SerializeField] private Transform[] rivalCardPositions;
-    [SerializeField] private Transform[] auditPositions;
+    [SerializeField] private Transform[] rivalStackCardPositions;
 
     [Header("Card table")]
     [SerializeField] private Transform tablePosition;
@@ -30,8 +31,10 @@ public class CardManager : NetworkBehaviour
     [SerializeField] private PlayerNet playerNet;
     public bool Animate = false;
     public bool CardSelected = false;
-
     private Vector2 _screenSize;
+
+    private Transform[] playerCurrentPositions;
+    private Transform[] rivalCurrentPositions;
 
     private void Start()
     {
@@ -44,6 +47,9 @@ public class CardManager : NetworkBehaviour
         {
             stk.gameObject.SetActive(false);
         }
+
+        playerCurrentPositions = playerCardPositions;
+        rivalCurrentPositions = rivalStackCardPositions;
 
         StartCoroutine(UpdateCardPositions(false, true));
     }
@@ -58,6 +64,22 @@ public class CardManager : NetworkBehaviour
             StartCoroutine(UpdateCardPositions());
             Debug.Log("Screen was resized");
         }
+    }
+
+    public void SetCardPositions(bool myTurn)
+    {
+        if (myTurn)
+        {
+            playerCurrentPositions = playerCardPositions;
+            rivalCurrentPositions = rivalStackCardPositions;
+        }
+        else
+        {
+            playerCurrentPositions = playerStackCardPositions;
+            rivalCurrentPositions = rivalCardPositions;
+        }
+
+        StartCoroutine(UpdateCardPositions());
     }
 
     public void LocalUpdate()
@@ -169,15 +191,6 @@ public class CardManager : NetworkBehaviour
             if (rivalCards[i].Audited) audit = true; 
         } 
 
-        if (audit)
-        {
-            cellPosition = auditPositions;
-        }
-        else
-        {
-            cellPosition = rivalCardPositions;
-        }
-
         // Смещение карт в пустые ячейки
         int selectedCount = 0;
 
@@ -189,7 +202,7 @@ public class CardManager : NetworkBehaviour
                 {
                     if (j + 1 == rivalCards.Length) continue;
 
-                    rivalCards[j + 1].GetComponent<CardHandler>().CardDisplacement = cellPosition[j - selectedCount].position;
+                    rivalCards[j + 1].GetComponent<CardHandler>().CardDisplacement = rivalCurrentPositions[j - selectedCount].position;
                     rivalCards[j + 1].GetComponent<CardHandler>().IndexPosition = j - selectedCount;
                 }
                 selectedCount++;
@@ -220,7 +233,7 @@ public class CardManager : NetworkBehaviour
             
             for (int i = 0; i < rivalCards.Length; i++)
             {
-                rivalCards[i].GetComponent<CardHandler>().CardDisplacement = cellPosition[i].position;
+                rivalCards[i].GetComponent<CardHandler>().CardDisplacement = rivalCurrentPositions[i].position;
                 
                 if(rivalCards[i].Selected)
                 {
@@ -260,7 +273,7 @@ public class CardManager : NetworkBehaviour
                 playerCards[i].Selected = false;
                 playerCards[i].gameObject.SetActive(true);
 
-                playerCards[i].GetComponent<CardHandler>().CardDisplacement = playerCardPositions[i].transform.position;
+                playerCards[i].GetComponent<CardHandler>().CardDisplacement = playerCurrentPositions[i].transform.position;
 
                 playerCards[i].SetCardEffects(playerNet.HandCards[i], i);
                 playerCards[i].GetComponent<CardHandler>().ReturnCard();
@@ -350,7 +363,7 @@ public class CardManager : NetworkBehaviour
         SetStackUnit(stackUnits[stack.Length - 1], card);
     }
 
-    public void SetStackUnit(Transform stackUnit, CardData playerCard)
+    private void SetStackUnit(Transform stackUnit, CardData playerCard)
     {
         stackUnit.TryGetComponent<CardParameters>(out CardParameters cardParam);
 
@@ -360,31 +373,16 @@ public class CardManager : NetworkBehaviour
         }
     }
 
-    public void SelectRandomCard()
-    {
-        // Выбор рандомной карты (если таймер дойдет до 0)
-    }
-
     private IEnumerator UpdateCardPositions(bool audit = false, bool reset = false, bool dontPlayer = false)
     {
-        Transform[] rivalPositions = new Transform[0];
         yield return new WaitForSeconds(.1f); // ГОвнокод
 
         if (reset)
         {
-            for (int i = 0; i < playerCardPositions.Length; i++)
+            for (int i = 0; i < playerCurrentPositions.Length; i++)
             {
                 playerCards[i].GetComponent<CardHandler>().IndexPosition = i;
             }
-        }
-
-        if (audit)
-        {
-            rivalPositions = auditPositions;
-        }
-        else
-        {
-            rivalPositions = rivalCardPositions;
         }
             
         for (int i = 0; i < playerCards.Length; i++)
@@ -393,7 +391,7 @@ public class CardManager : NetworkBehaviour
 
             if (!dontPlayer)
             {
-                cardHand.CardDisplacement = playerCardPositions[cardHand.IndexPosition].transform.position;
+                cardHand.CardDisplacement = playerCurrentPositions[cardHand.IndexPosition].transform.position;
             
                 if (!playerCards[i].Selected)
                 {
@@ -402,7 +400,7 @@ public class CardManager : NetworkBehaviour
             }
 
             cardHand = rivalCards[i].GetComponent<CardHandler>();
-            cardHand.CardDisplacement = rivalPositions[i].transform.position;
+            cardHand.CardDisplacement = rivalCurrentPositions[i].transform.position;
             
             if (!rivalCards[i].Selected)
             {
@@ -410,9 +408,34 @@ public class CardManager : NetworkBehaviour
             }
         }
 
+        int selectedCount = 0;
+
+        for (int i = 0; i < rivalCards.Length; i++)
+        {
+            if (rivalCards[i].Selected)
+            {
+                for (int j = i; j < rivalCards.Length; j++)
+                {
+                    if (j + 1 == rivalCards.Length) continue;
+
+                    rivalCards[j + 1].GetComponent<CardHandler>().CardDisplacement = rivalCurrentPositions[j - selectedCount].position;
+                    rivalCards[j + 1].GetComponent<CardHandler>().IndexPosition = j - selectedCount;
+                }
+                selectedCount++;
+            }
+        }
+
+        for (int i = 0; i < rivalCards.Length; i++)
+        {
+            if (!rivalCards[i].Selected)
+            {
+                rivalCards[i].GetComponent<CardHandler>().ReturnCard();
+            }
+        }
+
         if (audit)
         {
-            AuditCardOffset(rivalPositions);
+            AuditCardOffset(rivalCurrentPositions);
         }
 
         yield return null;
@@ -429,7 +452,7 @@ public class CardManager : NetworkBehaviour
                 {
                     if (j + 1 == playerCards.Length) continue;
 
-                    playerCards[j + 1].GetComponent<CardHandler>().CardDisplacement = playerCardPositions[j - selectedCount].position;
+                    playerCards[j + 1].GetComponent<CardHandler>().CardDisplacement = playerCurrentPositions[j - selectedCount].position;
                     playerCards[j + 1].GetComponent<CardHandler>().IndexPosition = j - selectedCount;
                 }
                 selectedCount++;

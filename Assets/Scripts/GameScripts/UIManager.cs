@@ -2,9 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Relog links")]
+    [SerializeField] private GameObject _authControllerObj;
+    [SerializeField] private GameObject _selectAreaObj;
+    [SerializeField] private UserData _userData; 
+
+
     [SerializeField] private SceneLoadController sceneLoadController;
     [SerializeField] private RectTransform[] areas;
 
@@ -60,9 +67,39 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public void LoadGame()
+    public async void LoadGame()
     {
-        sceneLoadController.LoadGame(sceneToLoad);
+        string chain = "polygon";
+        string network = "mainnet"; // mainnet ropsten kovan rinkeby goerli
+        string contract = "0x4fa6d1Fc702bD7f1607dfeE4206Db368995E1443"; // 0x4fa6d1Fc702bD7f1607dfeE4206Db368995E1443
+        int first = 500;
+        int skip = 0;
+        string userWallet = user.Wallet;
+
+        string response = await EVM.AllErc721(chain, network, userWallet, contract, first, skip);
+
+        try
+        {
+            NFTs[] erc721s = JsonConvert.DeserializeObject<NFTs[]>(response);
+
+            if (erc721s.Length == user.ChipParam.Count)
+            {
+                sceneLoadController.LoadGame(sceneToLoad);
+            }
+            else
+            {
+                // Reloggin
+                _authControllerObj.SetActive(true);
+                _selectAreaObj.SetActive(false);
+                _userData.ResetUser();
+
+               _authControllerObj.GetComponent<AuthController>().PrepareAuth(userWallet, true);
+            }
+        }
+        catch
+        {
+           print("Error: " + response);
+        }
     }
 
     private void ClicksCounter() // 
@@ -145,5 +182,13 @@ public class UIManager : MonoBehaviour
         //     ClicksCounter();
         // }
 
+    }
+
+    private class NFTs
+    {
+        public string contract { get; set; }
+        public string tokenId { get; set; }
+        public string uri { get; set; }
+        public string balance { get; set; }
     }
 }

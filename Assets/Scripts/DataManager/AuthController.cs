@@ -47,8 +47,13 @@ public class AuthController : MonoBehaviour
         defaultColor = alertText.color;
         alertColor = Color.red;
     }
+
+    public void DebugPrepare()
+    {
+        PrepareAuth();
+    }
     
-    public async void PrepareAuth()
+    public async void PrepareAuth(string wallet = "", bool relog = false)
     {
         string chain = "polygon";
         string network = "mainnet"; // mainnet ropsten kovan rinkeby goerli
@@ -56,15 +61,21 @@ public class AuthController : MonoBehaviour
         int first = 500;
         int skip = 0;
         string userWallet;
-        StartCoroutine(SetAlert("Authenticating..."));
 
-        if (!_debug)
+        if (!_debug && !relog)
         {
+            StartCoroutine(SetAlert("Authenticating..."));
             MoralisUser user = await Moralis.GetUserAsync();
             userWallet = user.ethAddress;
         }
+        else if (relog)
+        {
+            StartCoroutine(SetAlert("Update chips..."));
+            userWallet = wallet;
+        }
         else
         {
+            StartCoroutine(SetAlert("Debug mode..."));
             userWallet = inputPass.text;
         }
 

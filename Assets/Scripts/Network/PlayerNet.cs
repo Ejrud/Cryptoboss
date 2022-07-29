@@ -359,6 +359,8 @@ public class PlayerNet : NetworkBehaviour
         {
             MyTurn = turn;
 
+            cardManager.SetCardPositions(MyTurn);
+
             if (MyTurn)
             {
                 ChipImage.color = Color.white;
@@ -493,15 +495,6 @@ public class PlayerNet : NetworkBehaviour
             exitWindowText.text = text;
             bossyText.text = charIncrement + bossy;
             raitingText.text = charIncrement + raiting;
-        }
-    }
-
-    [ClientRpc]
-    public void TimerEnded()
-    {
-        if(hasAuthority) //
-        {
-            cardManager.SelectRandomCard();
         }
     }
 
@@ -665,21 +658,6 @@ public class PlayerNet : NetworkBehaviour
 
             bossyReward = 10 + (10 * cof); // (float)bossyDef   13.5 = 10 + (10 * x)  =   3.5 = 10 * x   0.35
         }   
-    }
-
-
-
-    private void OnDestroy()
-    {
-        if (isServer)
-        {
-            // controller.RemovePlayer(this);
-
-            // if (GameMode == "two") // Если кгрок выходит во время поиска игры в режиме 2 на 2, то убрать его из очереди
-            // {
-            //     FindObjectOfType<NetworkController>().OnPlayerTwoModeDisconnect(this.gameObject);
-            // }
-        }
     }
 
     private void OnApplicationQuit()

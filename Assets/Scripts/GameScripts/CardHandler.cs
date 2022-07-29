@@ -20,6 +20,7 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     private float zPosition;
     private bool acceptMove = false;
     private bool hold = false;
+    private bool inactive;
 
     private void Start()
     {
@@ -48,8 +49,9 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (active && !cardManager.CardSelected && !cardManager.Animate)
+        if (active && !cardManager.CardSelected && !cardManager.Animate && !cardManager.CardSelected && !inactive)
         {
+            inactive = true;
             cardManager.CardSelected = true;
             Vector2 pointerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             offset = pointerPos - new Vector2(selfTransform.position.x, selfTransform.position.y);
@@ -59,22 +61,23 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Vector3 pos = rectTransform.position;
-
-        acceptMove = false;
-        cardManager.CardSelected = false;
-
-        if (pos.x > CardDisplacement.x + deadZone || pos.x < CardDisplacement.x - deadZone || pos.y > CardDisplacement.y + deadZone || pos.y < CardDisplacement.y - deadZone)
+        if (acceptMove)
         {
-            if (!parameters.Selected) 
+            acceptMove = false;
+
+            Vector3 pos = rectTransform.position;
+
+            cardManager.CardSelected = false;
+
+            if (pos.x > CardDisplacement.x + deadZone || pos.x < CardDisplacement.x - deadZone || pos.y > CardDisplacement.y + deadZone || pos.y < CardDisplacement.y - deadZone && !parameters.Selected)
             {
-                cardManager.OnCardSelect(rectTransform);
                 parameters.Selected = true;
+                cardManager.OnCardSelect(rectTransform);
             }
-        }
-        else
-        {
-            ReturnCard();
+            else
+            {
+                ReturnCard();
+            }
         }
     }
 
@@ -84,7 +87,6 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         StartCoroutine(SetStartPosition());
     }
 
-    // ���� ����� �� ������������� � ����� �� ������� �� � ����������� �����
     private IEnumerator SetStartPosition()
     {
         Vector3 startPos = rectTransform.transform.position;
@@ -113,6 +115,7 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
         }
 
         parameters.Selected = false;
+        inactive = false;
 
         yield return null;
     }
