@@ -1,11 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
+using NotificationSamples;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Notifications")]
+    [SerializeField] private GameNotificationsManager _gameNotificationsManager;
+    [SerializeField] private string[] _notificationStr = {
+        "The other players are waiting for you to play!",
+        "You are close to next place on the leaders chart!",
+        "You have untapped energy. Don't waste your time. Let's play!",
+        "Your bossy bag get bored. Let's fill it up"
+        };
+
     [Header("Relog links")]
     [SerializeField] private GameObject _authControllerObj;
     [SerializeField] private GameObject _selectAreaObj;
@@ -34,6 +45,9 @@ public class UIManager : MonoBehaviour
     {
         sceneToLoad = 1;
         PlayerPrefs.SetString("GameMode", "one"); // Менять при выборе сцены
+
+        GameNotificationChannel channel = new GameNotificationChannel("Cryptoboss", "Cryptoboss", "Just a notification");
+        _gameNotificationsManager.Initialize(channel);
     }
 
     public void PanelActivate(GameObject objectToClose) // 
@@ -44,6 +58,7 @@ public class UIManager : MonoBehaviour
 
     public void QuitMethod() // 
     {
+        CreateNotification();
         Application.Quit();
     }
 
@@ -102,39 +117,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void ClicksCounter() // 
+    public void CreateNotification()
     {
-        switch (Clicks)
+        string title = "Cryptoboss";
+        string body = _notificationStr[0];
+        DateTime time = DateTime.Now.AddSeconds(1f);
+
+        IGameNotification notification = _gameNotificationsManager.CreateNotification();
+        if (notification != null)
         {
-            case -3:
-                sceneToLoad = 1;
-                Clicks = 0;
-                break;
-
-            case -2:
-                sceneToLoad = 2;
-                break;
-
-            case -1:
-                sceneToLoad = 3;
-                break;
-
-            case 0:
-                sceneToLoad = 1;
-                break;
-
-            case 1:
-                sceneToLoad = 2;
-                break;
-
-            case 2:
-                sceneToLoad = 3;
-                break;
-
-            case 3:
-                sceneToLoad = 1;
-                Clicks = 0;
-                break;
+            notification.Title = title;
+            notification.Body = body;
+            notification.DeliveryTime = time;
+            _gameNotificationsManager.ScheduleNotification(notification);
         }
     }
 
@@ -143,45 +138,6 @@ public class UIManager : MonoBehaviour
         areas[x].anchoredPosition = areas[y].anchoredPosition;
         areas[x].sizeDelta = areas[y].sizeDelta;
         areas[x] = areas[y];
-    }
-
-    public void NextArena(bool Right) // 
-    {
-        // if (Right)
-        // {
-        //     Clicks++;
-        //     pos = areas[0].anchoredPosition;
-        //     size = areas[0].sizeDelta;
-        //     areas[3] = areas[0];
-
-        //     ArenesMethod(0, 1);
-
-        //     ArenesMethod(1, 2);
-
-        //     areas[2].anchoredPosition = pos;
-        //     areas[2].sizeDelta = size;
-        //     areas[2] = areas[3];
-
-        //     ClicksCounter();
-        // }
-        // else
-        // {
-        //     Clicks--;
-        //     pos = areas[2].anchoredPosition;
-        //     size = areas[2].sizeDelta;
-        //     areas[3] = areas[2];
-
-        //     ArenesMethod(2, 1);
-
-        //     ArenesMethod(1, 0);
-
-        //     areas[0].anchoredPosition = pos;
-        //     areas[0].sizeDelta = size;
-        //     areas[0] = areas[3];
-
-        //     ClicksCounter();
-        // }
-
     }
 
     private class NFTs

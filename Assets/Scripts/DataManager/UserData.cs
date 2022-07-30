@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 public class UserData : MonoBehaviour
 {
     [Header("Links")]
+    [SerializeField] private NotificationManager _notificationManager;
     [SerializeField] private Tutorial _tutorial;
     [SerializeField] private GameObject _tutorialObj;
     [SerializeField] private SelectChip selectChip;
@@ -201,6 +202,12 @@ public class UserData : MonoBehaviour
         ResetUser();
 
         #if UNITY_ANDROID
+        _notificationManager.PrepareNotification();
+        user.Authorized = false;
+        Application.Quit();
+        #endif
+        #if UNITY_IOS
+        _notificationManager.PrepareNotification();
         user.Authorized = false;
         Application.Quit();
         #endif
