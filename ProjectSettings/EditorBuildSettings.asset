@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BattleArea.unity
     guid: 18d3237b0e4a26945b8f91a343bc5bfa
+  - enabled: 1
+    path: Assets/Scenes/Tutorial.unity
+    guid: 5954bfe26c5bc584c8fd6db8f8eaa6d3
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000

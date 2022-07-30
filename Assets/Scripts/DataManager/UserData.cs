@@ -223,10 +223,24 @@ public class UserData : MonoBehaviour
 
     public void UpdateUI()
     {
+        string balance = user.Balance;
+        int zIndex = 0;
+        for (int i = 0; i < balance.Length; i++)
+        {
+            if (balance[i] == '.')
+            {
+                zIndex = i+2;
+                if (zIndex < balance.Length)
+                    balance.Remove(zIndex);
+
+                break;
+            }
+        }
+
         nameTxt.text = user.UserName;
         pointsTxt.text = user.Score;
-        moneyTxt.text = user.Balance;
-        energyTxt.text = "10";
+        moneyTxt.text = balance;
+        energyTxt.text = "5";
         selectChip.Init(user.ChipParam);
     }
 

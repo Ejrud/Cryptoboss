@@ -22,6 +22,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _selectAreaObj;
     [SerializeField] private UserData _userData; 
 
+    [Header("Tutorial")]
+    [SerializeField] private Tutorial _tutorial;
+
 
     [SerializeField] private SceneLoadController sceneLoadController;
     [SerializeField] private RectTransform[] areas;
@@ -33,6 +36,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private User user;
 
     private int sceneToLoad; // Индекс загрузки сцены
+    private int tutorialScene = 2;
 
     private int Clicks; // 
 
@@ -99,7 +103,16 @@ public class UIManager : MonoBehaviour
 
             if (erc721s.Length == user.ChipParam.Count)
             {
-                sceneLoadController.LoadGame(sceneToLoad);
+                if (!_tutorial._tutorial)
+                {
+                    sceneLoadController.LoadGame(sceneToLoad);
+                }
+                else
+                {
+                    _tutorial._tutorial = false;
+                    user.Tutorial = true;
+                    sceneLoadController.LoadGame(tutorialScene);
+                }
             }
             else
             {
