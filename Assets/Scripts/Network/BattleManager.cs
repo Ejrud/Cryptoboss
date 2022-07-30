@@ -250,15 +250,16 @@ public class BattleManager : NetworkBehaviour
                         queueCapital += capHealth;
                         queueEnergy += engHealth;
                         otherCapital -= capAttack;
+                        otherEnergy -= engDamage;
                         break;
                 }
             }
             else
             {
                 queueCapital += capHealth;
-                queueEnergy -= cardCost;
                 queueEnergy += engHealth;
                 otherCapital -= capAttack;
+                otherEnergy -= engDamage;
             }
             
             queueEnergy -= cardCost;
