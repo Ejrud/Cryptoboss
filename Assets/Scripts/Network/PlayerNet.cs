@@ -48,7 +48,7 @@ public class PlayerNet : NetworkBehaviour
     public int SelectedCardId;
     public int UsedCount;
     
-    private string seUrl = "http://a0664627.xsph.ru/cryptoboss_back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/
+    private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/
 
     private int currentRating;
     private float bossyReward;

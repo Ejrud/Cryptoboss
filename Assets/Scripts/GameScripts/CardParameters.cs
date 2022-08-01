@@ -24,8 +24,9 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     [SerializeField] private Text cardName;
     [SerializeField] private TMP_Text capitalDamage;
     [SerializeField] private TMP_Text capitalHealth;
-    [SerializeField] private TMP_Text energyCost;
+    [SerializeField] private TMP_Text energyDamage;
     [SerializeField] private TMP_Text energyHealth;
+    [SerializeField] private TMP_Text cardCost;
 
     [Header("Sprites")]
     [SerializeField] private Sprite[] typeSprites; // 0 - damage, 1 - heal, 3 - energy, 4 - turn, 5-lique, 6-corr, 7-piv (eng), 8-piv (capit), 9-scam, 10-hedg fund 11- audit, 12, to moon, 13-pump
@@ -107,15 +108,17 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         {
             capitalDamage.text = "-" + Card.CapitalDamage.ToString();
             capitalHealth.text = "+" + Card.CapitalEarnings.ToString();
-            energyCost.text = "-" + Card.CardCost.ToString();
+            energyDamage.text = "-" + Card.EnergyDamage.ToString();
             energyHealth.text = "+" + Card.EnergyHealth.ToString();
+            cardCost.text = "-" + Card.CardCost.ToString();
         }
         else
         {
             capitalDamage.text = "";
             capitalHealth.text = "";
-            energyCost.text = "";
+            energyDamage.text = "";
             energyHealth.text = "";
+            cardCost.text = "";
         }
 
         cardName.text = Card.Name;
@@ -125,22 +128,24 @@ public class CardParameters : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     #region CardParameters(MainMenu)
     public void OnPointerDown(PointerEventData eventData) 
     {
+        if (tutorial)
+        {
+            if (tutorial._tutorial && !tutorial.DisableButtons)
+            {
+                tutorial.Next();
+                GlobalEventManager.SendSingleCard(Card);
+            }
+        }
+        
         startPos = eventData.position;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!Session)
+        // Если главное меню, то показывать характеристики карт в отдельном окне
+        if (!Session && startPos == eventData.position && !tutorial._tutorial)
         {
-            if (tutorial._tutorial)
-            {
-                tutorial.Next();
-            }
-            // Если главное меню, то показывать характеристики карт в отдельном окне
-            if (startPos == eventData.position)
-            {
-                GlobalEventManager.SendSingleCard(Card);
-            }
+            GlobalEventManager.SendSingleCard(Card);
         }
     }
 

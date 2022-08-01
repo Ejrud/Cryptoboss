@@ -29,6 +29,7 @@ public class Tutorial : MonoBehaviour, IPointerDownHandler
     private GameObject PreviousSlide;
     private string _userName;
     public bool _tutorial;
+    public bool DisableButtons;
     private bool _prepareNextSlide;
     private bool _returnToMain;
     private bool _inactiveCurrentSlide;
@@ -78,6 +79,13 @@ public class Tutorial : MonoBehaviour, IPointerDownHandler
     {
         if (_tutorial)
         {
+            if (_slideIndex == 7 && _slideIndex == 8)
+            {
+                DisableButtons = true;
+            }
+            else
+                DisableButtons = false;
+
             _slideIndex++;
             _inactiveCurrentSlide = false;
             SetNextSlide();

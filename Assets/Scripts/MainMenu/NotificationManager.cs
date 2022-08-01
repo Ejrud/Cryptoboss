@@ -12,6 +12,7 @@ using UnityEngine;
 
 public class NotificationManager : MonoBehaviour
 {
+    
     private string[] _notificationStr = {
         "The other players are waiting for you to play!",
         "You are close to next place on the leaders chart!",
@@ -25,6 +26,11 @@ public class NotificationManager : MonoBehaviour
         "Hey!",
         "What's up?",
         };
+
+    private void Start()
+    {
+        PrepareNotification();
+    }
 
     public void PrepareNotification()
     {
