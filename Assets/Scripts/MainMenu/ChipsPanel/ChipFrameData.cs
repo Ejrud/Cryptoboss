@@ -26,13 +26,15 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     private Text chipMoraleTxt;
     private Text chipRatingTxt;
     private Vector2 startPos;
+    private int chipIndex;
 
-    public void Init(ShowingChipsController chipController, ChipParameters chipParam, Text capitalTxt, Text moraleTxt, Text ratingTxt, bool selectable = false)
+    public void Init(ShowingChipsController chipController, ChipParameters chipParam, Text capitalTxt, Text moraleTxt, Text ratingTxt, int chipIndex, bool selectable = false)
     {
         this.selectable = selectable;
         this.chipData = chipParam;
         this.chipName.text = this.chipData.ChipName;
         this.chipController = chipController;
+        this.chipIndex = chipIndex;
 
         chipCapital = chipParam.Capital;
         chipMorale = chipParam.Morale;
@@ -94,6 +96,8 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             chipCapitalTxt.text = chipCapital;
             chipMoraleTxt.text = chipMorale;
             chipRatingTxt.text = chipRating;
+
+            chipController.SelectedChipID = chipIndex;
         }
     }
 

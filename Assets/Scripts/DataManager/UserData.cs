@@ -154,7 +154,7 @@ public class UserData : MonoBehaviour
 
         if (!user.Tutorial)
         {
-            Debug.Log("Tutorial");
+            // Debug.Log("Tutorial");
             _tutorialObj.SetActive(true);
             _tutorial.PrepareTutorial();
         }

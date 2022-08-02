@@ -20,6 +20,8 @@ public class ShowingChipsController : MonoBehaviour
     [SerializeField] private Text chipRating;
 
     private ChipFrameData[] chipFrameData = new ChipFrameData[0];
+    public int SelectedChipID = 0;
+    private bool initialize = false;
 
     private void Start()
     {
@@ -34,12 +36,13 @@ public class ShowingChipsController : MonoBehaviour
             GameObject chipFrame = Instantiate(this.chipFrame, new Vector3(0, 0, 0), Quaternion.identity);
 
             chipFrame.transform.SetParent(chipsViewportContent.transform);
-            chipFrame.GetComponent<ChipFrameData>().Init(this, user.ChipParam[i], chipCapital, chipMorale, chipRating, false);
+            chipFrame.GetComponent<ChipFrameData>().Init(this, user.ChipParam[i], chipCapital, chipMorale, chipRating, i, false);
             chipFrame.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             chipFrameData[i] = chipFrame.GetComponent<ChipFrameData>();
         }
 
         chipFrameData[0].SelectFirstChip();
+        initialize = true;
     }
 
     public void ResetChips(bool first = false)
@@ -56,6 +59,8 @@ public class ShowingChipsController : MonoBehaviour
     private void OnEnable()
     {
         ResetChips(true);
+        if (initialize)
+            chipFrameData[SelectedChipID].SelectFirstChip();
     }
 }
 

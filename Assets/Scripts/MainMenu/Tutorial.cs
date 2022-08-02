@@ -39,11 +39,6 @@ public class Tutorial : MonoBehaviour, IPointerDownHandler
     private Transform _selectedElement;
     private string editUrl = "https://cryptoboss.win/game/back/editProfile.php"; // a0664627.xsph.ru/cryptoboss_back/editProfile.php   // https://cryptoboss.win/game/back/editProfile.php
 
-    private void Start()
-    {
-        gameObject.SetActive(false);
-    }
-
     public void PrepareTutorial()
     {
         _NickNameWindow.SetActive(true);
@@ -55,6 +50,14 @@ public class Tutorial : MonoBehaviour, IPointerDownHandler
         _userName = userName;
         _tutorial = true;
         SetNextSlide();
+    }
+
+    public void StopTutorial()
+    {
+        _tutorial = false;
+        if (_previousTransform)
+            _selectedElement.SetParent(_previousTransform);
+        gameObject.SetActive(false);
     }
     
     public void OnPointerDown(PointerEventData eventData)

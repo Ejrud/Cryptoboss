@@ -37,8 +37,6 @@ public class GameProcessManagement : NetworkBehaviour
         {
             if(!oldSession)
             {
-                // Debug.Log("Create new session");
-
                 Session session = Instantiate(sessionObject, Vector3.zero, Quaternion.identity).GetComponent<Session>();
                 session.transform.SetParent(allSessions);
 

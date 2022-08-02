@@ -74,8 +74,6 @@ public class SelectChip : MonoBehaviour
         selectedChip = selectableChips[user.SelectedChipId];
 
         StartCoroutine(SelectPlayedChip());
-
-        Debug.Log("offset  = " + offset);
     }
 
     private void Update()

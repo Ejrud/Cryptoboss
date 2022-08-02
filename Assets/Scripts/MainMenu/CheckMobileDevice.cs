@@ -19,7 +19,6 @@ public class CheckMobileDevice : MonoBehaviour
         }
         else
         {
-            Debug.Log("Thisi isn't mobile platform");
             _blockWindow.SetActive(false);
             _isMobile = false;
         }

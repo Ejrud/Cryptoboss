@@ -107,7 +107,7 @@ public class NetworkController : NetworkManager
         {
             Players.Add(player);
 
-            foreach (Session session in Sessions)
+            foreach (Session session in Sessions) // Подключение к прошлой сессии если игрок вышел
             {
                 for (int i = 0; i < session.PlayerNets.Length; i++)
                 {

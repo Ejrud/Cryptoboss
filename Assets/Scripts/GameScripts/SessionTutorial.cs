@@ -18,19 +18,23 @@ public class SessionTutorial : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonUp(0))
-        {
-            currentSlide++;
-            if (currentSlide <= _slides.Length-1)
-            {
-                ChangeSlide(currentSlide);
-            }
-            else
-            {
-                // Tutorial complete
-                SceneManager.LoadScene(_mainMenuIndex);
-            }
-        }
+        // if (Input.GetMouseButtonUp(0))
+        // {
+        //     currentSlide++;
+        //     if (currentSlide <= _slides.Length-1)
+        //     {
+        //         ChangeSlide(currentSlide);
+        //     }
+        //     else
+        //     {
+        //         // Tutorial complete
+        //         SceneManager.LoadScene(_mainMenuIndex);
+        //     }
+        // }
+    }
+    public void StopTutorial()
+    {
+        SceneManager.LoadScene(_mainMenuIndex);
     }
         
     private void ChangeSlide(int slideIndex)
