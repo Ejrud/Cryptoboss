@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour
                 _selectAreaObj.SetActive(false);
                 _userData.ResetUser();
 
-               _authControllerObj.GetComponent<AuthController>().PrepareAuth(userWallet, true);
+               _authControllerObj.GetComponent<AuthController>().Authorization(userWallet, true);
             }
         }
         catch

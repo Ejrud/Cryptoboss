@@ -10,7 +10,6 @@ using MoralisUnity;
 using MoralisUnity.Platform.Objects;
 using MoralisUnity.Web3Api.Models;
 
-
 public class AuthController : MonoBehaviour
 {
     [SerializeField] private bool _debug;
@@ -26,6 +25,8 @@ public class AuthController : MonoBehaviour
 
     [Header("Inputs")]
     [SerializeField] private InputField inputPass; // Password
+    [SerializeField] private GameObject MoralisConnectObj; // android
+    [SerializeField] private GameObject ChainsafeConnectObj; // Webgl and ios
 
 
     [Header("Meta interface")]
@@ -43,17 +44,30 @@ public class AuthController : MonoBehaviour
             inputPass.gameObject.SetActive(true);
         else
             inputPass.gameObject.SetActive(false);
+
+        #if UNITY_WEBGL
+            ChainsafeConnectObj.SetActive(true);
+            MoralisConnectObj.SetActive(false);
+        #endif
+        #if UNITY_IOS
+            ChainsafeConnectObj.SetActive(true);
+            MoralisConnectObj.SetActive(false);
+        #endif
+        #if UNITY_ANDROID
+            ChainsafeConnectObj.SetActive(false);
+            MoralisConnectObj.SetActive(true);
+        #endif
             
         defaultColor = alertText.color;
         alertColor = Color.red;
     }
 
-    public void DebugPrepare()
+    public void PrepareAuth() // For moralis
     {
-        PrepareAuth();
+        Authorization();
     }
     
-    public async void PrepareAuth(string wallet = "", bool relog = false)
+    public async void Authorization(string wallet = "", bool relog = false) // wallet и relog присваивается при повторном подключении (если у игрока меньше или больше фишек в кошельке чем в игре)
     {
         string chain = "polygon";
         string network = "mainnet"; // mainnet ropsten kovan rinkeby goerli
@@ -65,8 +79,19 @@ public class AuthController : MonoBehaviour
         if (!_debug && !relog)
         {
             StartCoroutine(SetAlert("Authenticating..."));
-            MoralisUser user = await Moralis.GetUserAsync();
-            userWallet = user.ethAddress;
+            #if UNITY_WEBGL
+                Debug.Log("ChainSafe connection...");
+                userWallet = PlayerPrefs.GetString("Account");
+            #endif
+            #if UNITY_IOS
+                Debug.Log("ChainSafe connection...");
+                userWallet = PlayerPrefs.GetString("Account");
+            #endif
+            #if UNITY_ANDROID
+                Debug.Log("Moralis connection...");
+                MoralisUser user = await Moralis.GetUserAsync();
+                userWallet = user.ethAddress;
+            #endif
         }
         else if (relog)
         {
@@ -87,10 +112,9 @@ public class AuthController : MonoBehaviour
             {
                 string response = await EVM.AllErc721(chain, network, userWallet, contract, first, skip);
 
-                Debug.Log(response);
+                // Debug.Log(response);
                 
                 StartCoroutine(SendForm(userWallet, response));
-
                 Debug.Log("Sending Form");
             }
             else
@@ -106,21 +130,7 @@ public class AuthController : MonoBehaviour
         }
     }
 
-    public void UpdateMetaState()
-    {
-        if (PlayerPrefs.GetString("Account") != "")
-        {
-            metaState.text = metaConnected;
-            metaId.text = PlayerPrefs.GetString("Account");
-        }
-        else
-        {
-            metaState.text = metaDisconnected;
-            metaId.text = "";
-        }
-    }
-
-    private IEnumerator SendForm(string userWallet, string jsonNft)           // �������� ����� �� �������
+    private IEnumerator SendForm(string userWallet, string jsonNft)
     {
         WWWForm form = new WWWForm();
 
@@ -142,33 +152,26 @@ public class AuthController : MonoBehaviour
             break;
         }
         
-        //����������� ������� �� Altrp ������
         using (UnityWebRequest www = UnityWebRequest.Post(server, form))   // server
         { 
             www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-            // www.SetRequestHeader("Content-Type", "application/json");  �� ������������� ������������
-            // www.SetRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"); // !!!
 
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.Success && www.downloadHandler.text != "false")
             {
-                Debug.Log("Server response: " + www.downloadHandler.text);
+                // Debug.Log("Server response: " + www.downloadHandler.text);
 
                 if (www.downloadHandler.text != "no_chips")
                 {
                     string message = www.downloadHandler.text;
-                    string[] array = message.Split('|'); // 0 - ������ ������������, 2 - ��� ��� �����, 5 - ������ ���� // , '[', ']'
+                    string[] array = message.Split('|'); // 0 -  2 -  5 -
 
-                    // �������� ������� ���������� ������������
                     UserDatas userParam = JsonConvert.DeserializeObject<UserDatas>(array[0]);
-                    // Debug.Log(userParam.name);
 
-                    // �������� ������� id �����
                     char[] delimiters = {'c', 'h', 'i', 'p', '"', 'C', 'r', 'y', 'p', 't', 'b', 'o', 's', ' ', '#', '}', ',', '{', 'B', ':', '[', ']'};
                     string[] chipIds = array[1].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
-                    // �������� ������� ���� ��� ����� �����
                     char[] delimiters2 = {'[', ']'};
                     string[] cardJson = array[2].Split(delimiters2, StringSplitOptions.RemoveEmptyEntries);
 
@@ -177,7 +180,7 @@ public class AuthController : MonoBehaviour
                     {
                         newJson += str;
                     }
-                    Debug.Log(newJson);
+                    // Debug.Log(newJson);
                     List<DbCards> card = JsonConvert.DeserializeObject<List<DbCards>>("[" + newJson + "]"); // Dictionary<string, string>
 
                     userData.SetUser(userParam.id, userParam.name, userParam.email, userParam.metamask_wallet, userParam.raiting, chipIds, card, userParam.tutorial);
@@ -200,7 +203,29 @@ public class AuthController : MonoBehaviour
         yield return null;
     }
 
-    
+    public async void ConnectWallet() // Chainsafe connection
+    {
+        int timestamp = (int)(System.DateTime.UtcNow.Subtract(new System.DateTime(1970, 1, 1))).TotalSeconds;
+        // set expiration time
+        int expirationTime = timestamp + 60;
+        // set message
+        string message = expirationTime.ToString();
+        // sign message
+        string signature = await Web3Wallet.Sign(message);
+        // verify account
+        string account = await EVM.Verify(message, signature);
+        int now = (int)(System.DateTime.UtcNow.Subtract(new System.DateTime(1970, 1, 1))).TotalSeconds;
+        // validate
+        if (account.Length == 42 && expirationTime >= now) {
+            // save account
+            PlayerPrefs.SetString("Account", account);
+            Authorization();
+        }
+        else
+        {
+            StartCoroutine(SetAlert("Wallet Error"));
+        }
+    }
 
     public void MoveToRegistration(GameObject regWindow)
     {
