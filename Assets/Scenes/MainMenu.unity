@@ -19379,7 +19379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4138c10488f4161419c6a90e649c3021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debug: 0
+  _debug: 1
   serverType: 0
   userData: {fileID: 1059100640}
   inputPass: {fileID: 1804687770}
@@ -36493,7 +36493,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1082058687}
         m_TargetAssemblyTypeName: AuthController, Assembly-CSharp
-        m_MethodName: DebugPrepare
+        m_MethodName: PrepareAuth
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

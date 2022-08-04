@@ -21,18 +21,20 @@ public class ChipRepresentation : MonoBehaviour
             team_1[0].text = names[0];
             team_2[0].text = names[1];
 
-            Debug.Log(names[0] + "    " + names[1]);
-
             chipNumber_1[0].text = chipNames[0];
             chipNumber_2[0].text = chipNames[1];
         }
         else if (gameMode == "two")
         {
-            for (int i = 0; i < team_1.Length; i++)
-            {
-                team_1[i].text = $"Player {i + 1}";
-                team_2[i].text = $"Player {i + 1}";
-            }
+            team_1[0].text = names[0];
+            team_1[1].text = names[2];
+            chipNumber_1[0].text = chipNames[0];
+            chipNumber_1[1].text = chipNames[2];
+
+            team_2[0].text = names[1];
+            team_2[1].text = names[3];
+            chipNumber_2[0].text = chipNames[1];
+            chipNumber_2[1].text = chipNames[3];
         }
         else if (gameMode == "three")
         {

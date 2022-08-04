@@ -144,8 +144,8 @@ public class Session : MonoBehaviour
                     PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[1].MaxEnergy);
                 }
 
-                Debug.Log("Hand count "+ handCount);
-                Debug.Log("Intensive count "+ intensiveCount);
+                // Debug.Log("Hand count "+ handCount);
+                // Debug.Log("Intensive count "+ intensiveCount);
             }
         }
         else
@@ -410,23 +410,23 @@ public class Session : MonoBehaviour
         }
 
         // 
-        using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form))
-        { 
-            yield return www.SendWebRequest();
+        // using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form))
+        // { 
+        //     yield return www.SendWebRequest();
 
-            if (www.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.downloadHandler.text);
-                Debug.Log("Success");
-            }
-            else
-            { 
-                // PlayerNets[0].StopGame("Server error", "", 0f, "0", false, false);
-                // PlayerNets[1].StopGame("Server error", "", 0f, "0", false, false);
-                Debug.Log("Incorrect data");
-                Debug.Log(www.error);
-            }
-        }
+        //     if (www.result == UnityWebRequest.Result.Success)
+        //     {
+        //         Debug.Log(www.downloadHandler.text);
+        //         Debug.Log("Success");
+        //     }
+        //     else
+        //     { 
+        //         // PlayerNets[0].StopGame("Server error", "", 0f, "0", false, false);
+        //         // PlayerNets[1].StopGame("Server error", "", 0f, "0", false, false);
+        //         Debug.Log("Incorrect data");
+        //         Debug.Log(www.error);
+        //     }
+        // }
 
         Rewarded = true;
 
@@ -471,11 +471,21 @@ public class Session : MonoBehaviour
                 PlayerIndexQueue = 0;
             }
         }
+        else if (correction)
+        {
+            PlayerIndexQueue += 2;
+
+            if (PlayerIndexQueue > PlayerNets.Length - 1)
+            {
+                PlayerIndexQueue = PlayerIndexQueue - PlayerNets.Length;
+            }
+        }
 
         playerIndexRecieved = false;
 
         for(int i = 0; i < PlayerNets.Length; i++)
         {
+            bool friendTurn = false;
             if (i == PlayerIndexQueue)
             {
                 PlayerNets[i].MyTurn = true;
@@ -485,7 +495,15 @@ public class Session : MonoBehaviour
                 PlayerNets[i].MyTurn = false;
             }
 
-            PlayerNets[i].SetTurn(PlayerNets[i].MyTurn);
+            if (GameMode == "two")
+            {
+                if (PlayerIndexQueue == PlayerNets[i].FriendIndex)
+                {
+                    friendTurn = true;
+                }
+            }
+
+            PlayerNets[i].SetTurn(PlayerNets[i].MyTurn, friendTurn, PlayerIndexQueue);
         }
     }
     
@@ -526,10 +544,10 @@ public class Session : MonoBehaviour
         // Если игроков более 2 на сессию, то помимо загрузки изображений, определить друзей. Последний индекс массива - друг (0, 2 - игроки 1  /vs/  1, 3 - игроки 2)
         if (PlayerNets.Length > 2)
         {
-            PlayerNets[0].Friend = PlayerNets[2];
-            PlayerNets[2].Friend = PlayerNets[0];
-            PlayerNets[1].Friend = PlayerNets[3];
-            PlayerNets[3].Friend = PlayerNets[1];
+            PlayerNets[0].Friend = PlayerNets[2]; PlayerNets[0].FriendIndex = 2;
+            PlayerNets[2].Friend = PlayerNets[0]; PlayerNets[2].FriendIndex = 0;
+            PlayerNets[1].Friend = PlayerNets[3]; PlayerNets[1].FriendIndex = 3;
+            PlayerNets[3].Friend = PlayerNets[1]; PlayerNets[3].FriendIndex = 1;
 
             int[] pId_1 = { PlayerNets[1].ChipId, PlayerNets[3].ChipId, PlayerNets[2].ChipId }; // 0
             int[] pId_2 = { PlayerNets[0].ChipId, PlayerNets[2].ChipId, PlayerNets[3].ChipId }; // 1
@@ -538,19 +556,19 @@ public class Session : MonoBehaviour
 
             string[] names_1 = { PlayerNets[0].UserName, PlayerNets[1].UserName, PlayerNets[2].UserName, PlayerNets[3].UserName};
             string[] chipNames_1 = { "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].UserName, "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].ChipId};
-            PlayerNets[0].LoadRivalChip(pId_1, "two", names_1, chipNames_1);
+            PlayerNets[0].LoadRivalChip(pId_1, "two", names_1, chipNames_1, new int[] { 1, 3 }); // new int[] - индексы соперников в массиве игроков (для корректного отображения "кто ходит")
 
             string[] names_2 = { PlayerNets[1].UserName, PlayerNets[2].UserName, PlayerNets[3].UserName, PlayerNets[0].UserName};
             string[] chipNames_2 = { "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].UserName, "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].ChipId};
-            PlayerNets[1].LoadRivalChip(pId_2, "two", names_2, chipNames_2);
+            PlayerNets[1].LoadRivalChip(pId_2, "two", names_2, chipNames_2, new int[] { 0, 2 });
 
             string[] names_3 = { PlayerNets[2].UserName, PlayerNets[3].UserName, PlayerNets[0].UserName, PlayerNets[1].UserName};
             string[] chipNames_3 = { "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].UserName, "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId};
-            PlayerNets[2].LoadRivalChip(pId_3, "two", names_3, chipNames_3);
+            PlayerNets[2].LoadRivalChip(pId_3, "two", names_3, chipNames_3, new int[] { 1, 3 });
 
             string[] names_4 = { PlayerNets[3].UserName, PlayerNets[0].UserName, PlayerNets[1].UserName, PlayerNets[2].UserName};
             string[] chipNames_4 = { "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].UserName, "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].ChipId};
-            PlayerNets[3].LoadRivalChip(pId_4, "two", names_4, chipNames_4);
+            PlayerNets[3].LoadRivalChip(pId_4, "two", names_4, chipNames_4, new int[] { 0, 2 });
         }
         else
         {
@@ -559,11 +577,11 @@ public class Session : MonoBehaviour
 
             string[] names_1 = { PlayerNets[0].UserName, PlayerNets[1].UserName};
             string[] chipNames_1 = { "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId};
-            PlayerNets[0].LoadRivalChip(pId_1, "one", names_1, chipNames_1);
+            PlayerNets[0].LoadRivalChip(pId_1, "one", names_1, chipNames_1, new int[] { 0, 1 }); // Заглушка
 
             string[] names_2 = { PlayerNets[1].UserName, PlayerNets[0].UserName};
             string[] chipNames_2 = { "#" + PlayerNets[1].ChipId, "#" + PlayerNets[0].ChipId};
-            PlayerNets[1].LoadRivalChip(pId_2, "one", names_2, chipNames_2);
+            PlayerNets[1].LoadRivalChip(pId_2, "one", names_2, chipNames_2, new int[] { 0, 1 });
         }
 
         while (!chipIdRecieved)
@@ -716,7 +734,7 @@ public class Session : MonoBehaviour
                 } 
             }
 
-            PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, 20, PlayerNets[1].Capital, 20, 20);     // Правило 3-х "п" похер, потом переделаем
+            PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, 20, PlayerNets[1].Capital, 20, 20);     // 
             PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, 20, PlayerNets[0].Capital, 20, 20);     // Синхронизированные капиталы игроков с инденксами:
             PlayerNets[2].UpdatePlayerCharacteristic(PlayerNets[2].Capital, 20, PlayerNets[1].Capital, 20, 20);     // (0, 2)      (1, 3)
             PlayerNets[3].UpdatePlayerCharacteristic(PlayerNets[3].Capital, 20, PlayerNets[0].Capital, 20, 20);

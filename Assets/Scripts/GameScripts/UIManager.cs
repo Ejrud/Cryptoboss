@@ -38,8 +38,6 @@ public class UIManager : MonoBehaviour
     private int sceneToLoad; // Индекс загрузки сцены
     private int tutorialScene = 2;
 
-    private int Clicks; // 
-
     private Vector2 pos; // 
     private Vector2 size; // 
 
@@ -48,7 +46,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         sceneToLoad = 1;
-        PlayerPrefs.SetString("GameMode", "one"); // Менять при выборе сцены
+        PlayerPrefs.SetString("GameMode", "two"); // Менять при выборе сцены
 
         GameNotificationChannel channel = new GameNotificationChannel("Cryptoboss", "Cryptoboss", "Just a notification");
         _gameNotificationsManager.Initialize(channel);

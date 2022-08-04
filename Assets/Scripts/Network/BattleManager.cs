@@ -39,12 +39,10 @@ public class BattleManager : NetworkBehaviour
 
             int rivalIndex = 0;
 
-            for (int i = 0; i < session.PlayerNets.Length; i++)
+            rivalIndex = playerQueueIndex - 1;
+            if (rivalIndex < 0)
             {
-                if (i != session.PlayerIndexQueue)
-                {
-                    rivalIndex = i;
-                }
+                rivalIndex = session.PlayerNets.Length - 1;
             }
 
             int otherCapital = session.PlayerNets[rivalIndex].Capital;
@@ -74,34 +72,45 @@ public class BattleManager : NetworkBehaviour
 
                 switch (session.PlayerNets[playerQueueIndex].HandCards[cardId].Name)
                 {
-                    case "Turn around": // ������������� ������� ������� ����� ������������� �� ������ ������ (� �������� ���������������� �� ������������ ��������)
+                    case "Turn around": // перенаправляет отрицательные эффекты последней карты противника на его же фишку
                         
                         if (otherPlayer.PlayerImpact.JokerName == "Scam")
                         {
                             currentPlayer.PlayerImpact.JokerName = "Scam";
-                            CardData[] selfCards = currentPlayer.HandCards;
-                            CardData[] rivalCards = otherPlayer.HandCards;
-                            
-                            for (int i = 0; i < 5; i++)
+
+                            int playerCount = (session.GameMode == "two") ? 2 : 1;
+
+                            for (int i = 0; i < playerCount; i++)
                             {
-                                selfCards[i].CapitalDamage *= 2;
-                                selfCards[i].CapitalEarnings *= 2;
-                                selfCards[i].EnergyHealth *= 2;
-                                
-                                rivalCards[i].CapitalDamage /= 2;
-                                rivalCards[i].CapitalEarnings /= 2;
-                                rivalCards[i].EnergyHealth /= 2;
+                                PlayerNet CurrentPlayer = (i != 1) ? currentPlayer : currentPlayer.Friend;
+                                PlayerNet RivalPlayer = (i != 1) ? otherPlayer : otherPlayer.Friend;
+
+                                CardData[] selfCards = CurrentPlayer.HandCards;
+                                CardData[] otherCards = RivalPlayer.HandCards;
+
+                                for (int j = 0; j < 5; j++)
+                                {
+                                    selfCards[i].CapitalDamage *= 2;
+                                    selfCards[i].CapitalEarnings *= 2;
+                                    selfCards[i].EnergyHealth *= 2;
+
+                                    otherCards[j].CapitalDamage /= 2;
+                                    otherCards[j].CapitalEarnings /= 2;
+                                    otherCards[j].EnergyHealth /= 2;
+                                }
+
+                                CurrentPlayer.HandCards = selfCards;
+                                CurrentPlayer.UpdateUICards(selfCards);
+
+                                RivalPlayer.HandCards = otherCards;
+                                RivalPlayer.UpdateUICards(otherCards);
                             }
-                            currentPlayer.HandCards = selfCards;
-                            currentPlayer.UpdateUICards(selfCards);
-                            
-                            otherPlayer.HandCards = rivalCards;
-                            otherPlayer.UpdateUICards(rivalCards);
                         }
                         else if (otherPlayer.PlayerImpact.JokerName == "Liquidation") ///////
                         {
                             currentPlayer.PlayerImpact.JokerName = "Liquidation";
-                            
+
+                            ////////////
                         }
                         else if (otherPlayer.PlayerImpact.JokerName == "Audit") ///////
                         {
@@ -112,15 +121,27 @@ public class BattleManager : NetworkBehaviour
                         else if (otherPlayer.PlayerImpact.JokerName == "To the moon")
                         {
                             currentPlayer.PlayerImpact.JokerName = "To the moon";
+
                             currentPlayer.ToTheMoon = false;
                             otherPlayer.ToTheMoon = true;
-                            
+
+                            if (session.GameMode == "two")
+                            {
+                                currentPlayer.Friend.ToTheMoon = false;
+                                otherPlayer.Friend.ToTheMoon = true;
+                            }
                         }
                         else if (otherPlayer.PlayerImpact.JokerName == "Pump")
                         {
                             currentPlayer.PlayerImpact.JokerName = "Pump";
                             currentPlayer.Pump = true;
                             otherPlayer.Pump = false;
+
+                            if (session.GameMode == "two")
+                            {
+                                currentPlayer.Friend.Pump = true;
+                                otherPlayer.Friend.Pump = false;
+                            }
                         }
                         else
                         {
@@ -129,14 +150,13 @@ public class BattleManager : NetworkBehaviour
                             queueCapital += otherPlayer.PlayerImpact.CapitalDamage;
                             otherCapital -= otherPlayer.PlayerImpact.CapitalDamage;
                         
-                            // ���������� �������� ����������� ������
                             currentPlayer.PlayerImpact.CapitalDamage = otherPlayer.PlayerImpact.CapitalDamage;
                             currentPlayer.PlayerImpact.CapitalHealth = otherPlayer.PlayerImpact.CapitalDamage;
                         }
 
                         break;
 
-                    case "Liquidation": // ������������� ��������� ����� ���������
+                    case "Liquidation": // блокирует последнюю карту противника
                         currentPlayer.PlayerImpact.JokerName = "Liquidation";
                         
                         if (otherPlayer.PlayerImpact.JokerName == "Scam")
@@ -183,46 +203,63 @@ public class BattleManager : NetworkBehaviour
                         }
                        break;
 
-                    case "Correction":  // ��������� ��������� ������ 1 ����� �� ����
+                    case "Correction":  // Блокирует опоннента кслать кароту на один ход +
                         correction = true;
                         break;
 
-                    case "Scam":        // � �������� ������� �������������� ���� ��������� ////////
-                        CardData[] otherCards = otherPlayer.HandCards;
-                        for (int i = 0; i < 5; i++)
+                    case "Scam":        // В половину урезает характеристики карт соперника +
+                        
+                        int count = (session.GameMode == "two") ? 2 : 1;
+
+                        for (int i = 0; i < count; i++)
                         {
-                            otherCards[i].CapitalDamage /= 2;
-                            otherCards[i].CapitalEarnings /= 2;
-                            otherCards[i].EnergyHealth /= 2;
+                            PlayerNet RivalPlayer = (i != 1) ? otherPlayer : otherPlayer.Friend;
+
+                            CardData[] otherCards = RivalPlayer.HandCards;
+
+                            for (int j = 0; j < 5; j++)
+                            {
+                                otherCards[j].CapitalDamage /= 2;
+                                otherCards[j].CapitalEarnings /= 2;
+                                otherCards[j].EnergyHealth /= 2;
+                            }
+                            RivalPlayer.HandCards = otherCards;
+                            RivalPlayer.UpdateUICards(otherCards);
                         }
-                        otherPlayer.HandCards = otherCards;
-                        otherPlayer.UpdateUICards(otherCards);
+
                         currentPlayer.PlayerImpact.JokerName = "Scam";
+
                         break;
 
-                    case "Hedge fund":  // ���� �� ������� � ������� 3 �����
+                    case "Hedge fund":  // В течении 3 раундов * на кол-во человек блокирует след карту джокер
                         session.PlayerNets[playerQueueIndex].HedgeFundCount = 3;
+
+                        if (session.GameMode == "two") session.PlayerNets[playerQueueIndex].Friend.HedgeFundCount = 3;
+
                         queueCapital += capHealth;
                         queueEnergy += engHealth;
                         otherCapital -= capAttack;
                         break;
 
-                    case "Audit":       // ��������� ������������� ���� ���������
+                    case "Audit":       // Просмотр карт соперника
                         currentPlayer.SetAudit(otherPlayer.HandCards);
                         break;
 
-                    case "To the moon": // ���� ���������� ����� ��������� � 2 ���� ������ �������
+                    case "To the moon": // Увеличивает стоимость карты противника в 2 раза
                         session.PlayerNets[playerQueueIndex].PlayerImpact.JokerName = "To The Moon";
                         session.PlayerNets[rivalIndex].ToTheMoon = true;
+
+                        if (session.GameMode == "two") session.PlayerNets[rivalIndex].Friend.ToTheMoon = true;
+
                         break;
 
-                    case "Pump":        // ����������� ����. ����� ������ � 2 ����
+                    case "Pump":        // Увеличивает характеристики след. карты в два раза 
                         currentPlayer.PlayerImpact.JokerName = "Pump";
                         currentPlayer.Pump = true;
                         break;
                     
                     case "Pivot":
-                        if (capAttack != 0) // � ������ ������ ������� �������� - ������� �������
+                        if (capAttack != 0) // обмен 100 жизней на 2 энергии или наоборот
                         {
                             queueCapital -= capAttack;
                             queueEnergy += capHealth;

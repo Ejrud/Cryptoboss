@@ -24,6 +24,7 @@ public class PlayerNet : NetworkBehaviour
     public int HedgeFundCount = 0;
 
     public PlayerNet Friend;
+    public int FriendIndex;
     public EmotionNet emotions;
 
     public Impact PlayerImpact = new Impact();
@@ -100,7 +101,7 @@ public class PlayerNet : NetworkBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private EmotionController emotionController;
     private Texture2D[] rivalChipTexture;
-    
+    private Dictionary<int, RawImage> rivalsRawImage = new Dictionary<int, RawImage>();
     private NetworkController controller;
     private List<BossyRewardParams> bossyParam = new List<BossyRewardParams>();
 
@@ -203,6 +204,18 @@ public class PlayerNet : NetworkBehaviour
         this.EnemyEnergy = EnemyEnergy;
         this.OriginMorale = Morale;
         this.MaxEnergy = maxEnergy;
+
+        if (GameMode == "two" && Friend != null)
+        {
+            Friend.Capital = Capital;
+            Friend.Morale = Morale;
+            Friend.EnemyCapital = EnemyCapitale;
+            Friend.EnemyEnergy = EnemyEnergy;
+            Friend.OriginMorale = Morale;
+            Friend.MaxEnergy = maxEnergy;
+
+            Friend.UpdateClientParameters(Capital, Morale, EnemyCapital, EnemyEnergy, MaxEnergy, MaxHealth);
+        }
 
         UpdateClientParameters(this.Capital, this.Morale, this.EnemyCapital, this.EnemyEnergy, this.MaxEnergy, this.MaxHealth);
     }
@@ -353,7 +366,7 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void SetTurn(bool turn)
+    public void SetTurn(bool turn, bool friendTurn, int queueIndex)
     {
         if (hasAuthority)
         {
@@ -379,7 +392,7 @@ public class PlayerNet : NetworkBehaviour
             {
                 if (GameMode == "two")
                 {
-                    if (Friend.MyTurn)
+                    if (friendTurn)
                     {
                         FriendChipImage.color = Color.white;
                         RivalChipImage.color = Color.gray;
@@ -388,8 +401,11 @@ public class PlayerNet : NetworkBehaviour
                     else
                     {
                         FriendChipImage.color = Color.gray;
-                        RivalChipImage.color = Color.white;
-                        FriendRivalChipImage.color = Color.white;
+                        RivalChipImage.color = Color.gray;
+                        FriendRivalChipImage.color = Color.gray;
+
+                        if (rivalsRawImage.Count != 0)
+                            rivalsRawImage[queueIndex].color = Color.white; // Помечать фишку соперника
                     }
                 }
                 else
@@ -424,6 +440,12 @@ public class PlayerNet : NetworkBehaviour
             CardSelected = false;
             cardManager.ReturnCards();
         }
+    }
+
+    [ClientRpc]
+    public void wet(GameObject friend)
+    {
+        Friend = friend.GetComponent<PlayerNet>();
     }
 
     [ClientRpc]
@@ -508,7 +530,7 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public async void LoadRivalChip(int[] rivalChipId, string gameMode, string[] names, string[] chipNames) // 
+    public async void LoadRivalChip(int[] rivalChipId, string gameMode, string[] names, string[] chipNames, int[] chipQueueIndex) // 
     {
         if(hasAuthority)
         {
@@ -527,10 +549,15 @@ public class PlayerNet : NetworkBehaviour
 
                 if(textureRequest.error != null) //
                 {
-                    LoadRivalChip(rivalChipId, gameMode, names, chipNames);
+                    LoadRivalChip(rivalChipId, gameMode, names, chipNames, chipQueueIndex);
                     return;
                 }
-                Debug.Log("Load complete");
+                // Debug.Log("Load complete");
+
+                if (i == 0)
+                    rivalsRawImage.Add(chipQueueIndex[i], RivalChipImage);
+                else if (i == 1)
+                    rivalsRawImage.Add(chipQueueIndex[i], rivalChipImages_2[1]);
             }
 
             ChipReceived = true;
