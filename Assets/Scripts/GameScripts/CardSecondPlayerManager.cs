@@ -4,116 +4,44 @@ using UnityEngine;
 
 public class CardSecondPlayerManager : MonoBehaviour
 {
-    [SerializeField] private GameObject playerCardsDeck;
-    [SerializeField] private GameObject rivalCardsDeck;
+    [Header("Cards")]
+    [SerializeField] private GameObject[] playerCards;
+    [SerializeField] private GameObject[] rivalCards;
 
-    [SerializeField] private CardParameters[] friendPlayerCards;
-    [SerializeField] private CardParameters[] friendRivalCards;
+    [Header("StackPositions")]
+    [SerializeField] private Transform[] playerStackCardPositions;
+    [SerializeField] private Transform[] rivalStackCardPositions;
 
-    private GameObject[] playerFriendCardsObj;
-    private GameObject[] rivalFriendCardsObj;
+    [Header("Save data")]
+    [SerializeField] private CardData[] playerCardDatas = new CardData[5]; 
+    private CardData[] rivalCardDatas;
 
-    public void Init(bool twoByTwo)
+    public void SwipePlayerCards(CardData[] cardData, bool player) // Передавать карты соперника и карты текущие карты игрока 
     {
-        playerFriendCardsObj = new GameObject[friendPlayerCards.Length];
-        rivalFriendCardsObj = new GameObject[friendRivalCards.Length];
-
-        for (int i = 0; i < friendPlayerCards.Length; i++)
+        for (int i = 0; i < 5; i++)
         {
-            playerFriendCardsObj[i] = friendPlayerCards[i].gameObject;
-            playerFriendCardsObj[i].SetActive(twoByTwo);
+            playerCardDatas[i] = cardData[i];
 
-            rivalFriendCardsObj[i] = friendRivalCards[i].gameObject;
-            rivalFriendCardsObj[i].SetActive(twoByTwo);
-        }
-    }
-
-    public void HideCards(bool active, bool player)
-    {
-        if (player)
-        {
-            for (int i = 0; i < friendPlayerCards.Length; i++)
+            if (cardData[i].Used)
             {
-                playerFriendCardsObj[i].SetActive(active);
+                playerCards[i].GetComponent<CardParameters>().Selected = true;
+                // playerCards[i].transform.position = playerStackPosition.position;
+                playerCards[i].SetActive(false);
             }
-
-            playerCardsDeck.SetActive(!active);
-        }
-        else
-        {
-            for (int i = 0; i < friendRivalCards.Length; i++)
+            else
             {
-                rivalFriendCardsObj[i].SetActive(active);
-            }
-            playerCardsDeck.SetActive(!active);
-        }
-        
-    }
+                playerCards[i].SetActive(true);
+                playerCards[i].transform.position = playerStackCardPositions[i].position;
 
-    public void UpdateRivalCards(Transform[] positions, bool friendTurn, bool audit = false) // Обновляет содержимое карт и смещает на необходимые позиции
-    {   
-        HideCards(friendTurn, false);
-
-        if (!friendTurn) return;
-
-        int selectedCount = 0;
-
-        for (int i = 0; i < friendRivalCards.Length; i++)
-        {
-            if (friendRivalCards[i].Selected)
-            {
-                for (int j = i; j < friendRivalCards.Length; j++)
-                {
-                    if (j + 1 == friendRivalCards.Length) continue;
-
-                    friendRivalCards[j + 1].GetComponent<CardHandler>().CardDisplacement = positions[j - selectedCount].position;
-                    friendRivalCards[j + 1].GetComponent<CardHandler>().IndexPosition = j - selectedCount;
-                }
-                selectedCount++;
-            }
-        }
-
-        for (int i = 0; i < friendRivalCards.Length; i++)
-        {
-            if (!friendRivalCards[i].Selected)
-            {
-                friendRivalCards[i].GetComponent<CardHandler>().ReturnCard();
+                CardParameters cardParameters = playerCards[i].GetComponent<CardParameters>();
+                cardParameters.SetCardEffects(cardData[i], i);
+                cardParameters.Selected = false;
             }
         }
     }
 
-    public void UpdatePlayerCards(Transform[] positions, CardData[] parameters, bool myTurn, bool friendTurn) // Обновляет содержимое карт и смещает на необходимые позиции
+    public void SetCurrentPlayerCards()
     {
-        HideCards(friendTurn, true); // Скрыть карты союзника если ход игрока
 
-        if (!friendTurn) return;
-
-        Debug.Log("Update friend cards");
-        int selectedCount = 0;
-
-        for (int i = 0; i < friendPlayerCards.Length; i++)
-        {   
-            friendPlayerCards[i].SetCardEffects(parameters[i], i);
-
-            if (friendPlayerCards[i].Selected)
-            {
-                for (int j = i; j < friendPlayerCards.Length; j++)
-                {
-                    if (j + 1 == friendPlayerCards.Length) continue;
-
-                    friendPlayerCards[j + 1].GetComponent<CardHandler>().CardDisplacement = positions[j - selectedCount].position;
-                    friendPlayerCards[j + 1].GetComponent<CardHandler>().IndexPosition = j - selectedCount;
-                }
-                selectedCount++;
-            }
-        }
-
-        for (int i = 0; i < friendPlayerCards.Length; i++)
-        {
-            if (!friendPlayerCards[i].Selected)
-            {
-                friendPlayerCards[i].GetComponent<CardHandler>().ReturnCard();
-            }
-        }
     }
 }

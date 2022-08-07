@@ -106,6 +106,7 @@ public class PlayerNet : NetworkBehaviour
     private Dictionary<int, RawImage> rivalsRawImage = new Dictionary<int, RawImage>();
     private NetworkController controller;
     private List<BossyRewardParams> bossyParam = new List<BossyRewardParams>();
+    private bool _frinedTurn = false;
 
     #endregion
 
@@ -368,13 +369,13 @@ public class PlayerNet : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void SetTurn(bool turn, bool friendTurn, int queueIndex)
+    public void SetTurn(bool turn, bool friendTurn, int queueIndex, CardData[] cards)
     {
         if (hasAuthority)
         {
             MyTurn = turn;
 
-            cardManager.SetCardPositions(MyTurn);
+            cardManager.SetCardPositions(MyTurn, cards, friendTurn);
 
             if (MyTurn)
             {
@@ -396,12 +397,14 @@ public class PlayerNet : NetworkBehaviour
                 {
                     if (friendTurn)
                     {
+                        _frinedTurn = true;
                         FriendChipImage.color = Color.white;
                         RivalChipImage.color = Color.gray;
                         FriendRivalChipImage.color = Color.gray;
                     }
                     else
                     {
+                        _frinedTurn = false;
                         FriendChipImage.color = Color.gray;
                         RivalChipImage.color = Color.gray;
                         FriendRivalChipImage.color = Color.gray;
@@ -426,7 +429,7 @@ public class PlayerNet : NetworkBehaviour
         if (hasAuthority) // 
         {
             RivalCard = rivalCard;
-            cardManager.RivalCardSelect(cardId, RivalCard);
+            cardManager.RivalCardSelect(cardId, RivalCard, _frinedTurn);
         }
     }
 
@@ -635,12 +638,12 @@ public class PlayerNet : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
-    public void UpdateFriendships(CardData[] playerData, CardData[] rivalData, bool myTurn, bool friendTurn, bool rivalFriendTurn)
-    {
-        if (hasAuthority)
-            cardManager.UpdateFriendships(playerData, rivalData, myTurn, friendTurn, rivalFriendTurn);
-    }
+    // [ClientRpc]
+    // public void UpdateFriendships(CardData[] playerData, CardData[] rivalData, bool myTurn, bool friendTurn, bool rivalFriendTurn)
+    // {
+    //     if (hasAuthority)
+    //         cardManager.UpdateFriendships(playerData, rivalData, myTurn, friendTurn, rivalFriendTurn);
+    // }
 
     private async void CalculateResults() 
     {

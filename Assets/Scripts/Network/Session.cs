@@ -29,6 +29,8 @@ public class Session : MonoBehaviour
     private bool chipIdRecieved;
     private bool playerIndexRecieved = false;
     private bool rewardProcess = false;
+    private bool Prepated = false;
+    
 
     private string seUrl = "https://cryptoboss.win/game/back/"; // a0664627.xsph.ru/cryptoboss_back/     //   https://cryptoboss.win/game/back/
     private string accrualUrl = "a0664627.xsph.ru/cryptoboss_back/";
@@ -84,7 +86,7 @@ public class Session : MonoBehaviour
 
     public void UpdateSession()
     {
-        if (!Finished)
+        if (!Finished && Prepated)
         {
             if (PlayerNets[0] == null || PlayerNets[1] == null && gameStarted)
             {
@@ -165,7 +167,6 @@ public class Session : MonoBehaviour
 
     public void PrepareNextRound(bool correction)
     {
-        SetNextIndexQueue(correction);
         SavePlayers();
         
         for (int i = 0; i < PlayerNets.Length; i++)
@@ -280,9 +281,11 @@ public class Session : MonoBehaviour
             for (int i = 0; i < PlayerNets.Length; i++)
             {
                 int rivalIndex = (i + 1 > PlayerNets.Length - 1) ? i+1 - PlayerNets.Length : i + 1;
-                PlayerNets[i].UpdateFriendships(PlayerNets[i].Friend.HandCards, PlayerNets[rivalIndex].Friend.HandCards, PlayerNets[i].MyTurn, PlayerNets[i].Friend.MyTurn, PlayerNets[rivalIndex].Friend.MyTurn);
+                // PlayerNets[i].UpdateFriendships(PlayerNets[i].Friend.HandCards, PlayerNets[rivalIndex].Friend.HandCards, PlayerNets[i].MyTurn, PlayerNets[i].Friend.MyTurn, PlayerNets[rivalIndex].Friend.MyTurn);
             }
         }
+
+        SetNextIndexQueue(correction); // Отображение карт
 
         SavePlayers();
         Ready = false;
@@ -490,18 +493,25 @@ public class Session : MonoBehaviour
         }
 
         playerIndexRecieved = false;
+        CardData[] handCards = new CardData[0];
 
-        for(int i = 0; i < PlayerNets.Length; i++)
+        for (int i = 0; i < PlayerNets.Length; i++)
         {
-            bool friendTurn = false;
             if (i == PlayerIndexQueue)
             {
                 PlayerNets[i].MyTurn = true;
+                handCards = PlayerNets[i].HandCards;
+                Debug.Log("Hand cards count " + handCards.Length);
             }
             else
             {
                 PlayerNets[i].MyTurn = false;
             }
+        }
+
+        for(int i = 0; i < PlayerNets.Length; i++)
+        {
+            bool friendTurn = false;
 
             if (GameMode == "two")
             {
@@ -511,8 +521,9 @@ public class Session : MonoBehaviour
                 }
             }
 
-            PlayerNets[i].SetTurn(PlayerNets[i].MyTurn, friendTurn, PlayerIndexQueue);
+            PlayerNets[i].SetTurn(PlayerNets[i].MyTurn, friendTurn, PlayerIndexQueue, handCards);
         }
+
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -794,6 +805,7 @@ public class Session : MonoBehaviour
         PrepareNextRound(false);
 
         gameStarted = true;
+        Prepated = true;
         // Ready = true;
         yield return null; 
     }

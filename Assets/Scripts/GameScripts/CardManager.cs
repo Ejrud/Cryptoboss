@@ -42,7 +42,7 @@ public class CardManager : NetworkBehaviour
     private void Start()
     {
         _secondPlayerManager = GetComponent<CardSecondPlayerManager>();
-        _secondPlayerManager.Init((playerNet.GameMode == "two") ? true : false);
+        // _secondPlayerManager.Init((playerNet.GameMode == "two") ? true : false);
 
         _screenSize = new Vector2(Screen.width, Screen.height);
         
@@ -72,12 +72,28 @@ public class CardManager : NetworkBehaviour
         }
     }
 
-    public void SetCardPositions(bool myTurn)
+    public void SetCardPositions(bool myTurn, CardData[] cards, bool friendTurn = false)
     {
         if (myTurn)
         {
+            _secondPlayerManager.SwipePlayerCards(cards, true);
             playerCurrentPositions = playerCardPositions;
             rivalCurrentPositions = rivalStackCardPositions;
+        }
+        else if (playerNet.GameMode == "two")
+        {
+            if (friendTurn)
+            {
+                Debug.Log("Show friend cards");
+                _secondPlayerManager.SwipePlayerCards(cards, true);
+                playerCurrentPositions = playerCardPositions;
+                rivalCurrentPositions = rivalStackCardPositions;
+            }
+            else
+            {
+                playerCurrentPositions = playerStackCardPositions;
+                rivalCurrentPositions = rivalCardPositions;
+            }
         }
         else
         {
@@ -171,14 +187,21 @@ public class CardManager : NetworkBehaviour
         }
     }
 
-    public void RivalCardSelect(int index, CardData card)
+    public void RivalCardSelect(int index, CardData card, bool friendTurn = false)
     {
-        rivalCards[index].Selected = true;
-        rivalCards[index].Audited = false;
-        StartCoroutine(RivalSelectIE(index, card));
+        if (!friendTurn)
+        {
+            rivalCards[index].Selected = true;
+            rivalCards[index].Audited = false;
+            StartCoroutine(RivalSelectIE(index, card));
+        }
+        else
+        {
+            StartCoroutine(CardSelectIE(playerCards[index].GetComponent<RectTransform>()));
+        }
     }
 
-    public IEnumerator RivalSelectIE(int index, CardData card)
+    public IEnumerator RivalSelectIE(int index, CardData card, bool friendTurn = false)
     {
         rivalCards[index].SetCardEffects(card, index);
         StartCoroutine(CardTransition(rivalCards[index].transform, rivalCards[index].transform.position, tablePosition.position));
@@ -295,11 +318,11 @@ public class CardManager : NetworkBehaviour
         ReposPlayerCards();
     }
 
-    public void UpdateFriendships(CardData[] playerData, CardData[] rivalData, bool myTurn, bool friendTurn, bool rivalFriendTurn)
-    {
-        _secondPlayerManager.UpdatePlayerCards(playerCardPositions, playerData, myTurn, friendTurn);
-        _secondPlayerManager.UpdateRivalCards(rivalCardPositions, rivalFriendTurn);
-    }
+    // public void UpdateFriendships(CardData[] playerData, CardData[] rivalData, bool myTurn, bool friendTurn, bool rivalFriendTurn)
+    // {
+    //     _secondPlayerManager.UpdatePlayerCards(playerCardPositions, playerData, myTurn, friendTurn);
+    //     _secondPlayerManager.UpdateRivalCards(rivalCardPositions, rivalFriendTurn);
+    // }
 
     // Перемещение карты
     private IEnumerator CardTransition(Transform currentTransform, Vector3 startPos, Vector3 endPos, bool reverse = false)
