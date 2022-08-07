@@ -84,7 +84,8 @@ public class CardHandler : MonoBehaviour, IPointerEnterHandler, IPointerDownHand
     public void ReturnCard()
     {
         gameObject.SetActive(true);
-        StartCoroutine(SetStartPosition());
+        if (gameObject.activeInHierarchy)
+            StartCoroutine(SetStartPosition());
     }
 
     private IEnumerator SetStartPosition()

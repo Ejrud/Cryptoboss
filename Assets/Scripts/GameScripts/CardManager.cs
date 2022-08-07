@@ -28,7 +28,8 @@ public class CardManager : NetworkBehaviour
     [SerializeField] private Transform[] stackUnits;
 
     [Header("Server components")]
-    [SerializeField] private PlayerNet playerNet;
+    [SerializeField] private PlayerNet playerNet;  
+    
     public bool Animate = false;
     public bool CardSelected = false;
     private Vector2 _screenSize;
@@ -36,8 +37,13 @@ public class CardManager : NetworkBehaviour
     private Transform[] playerCurrentPositions;
     private Transform[] rivalCurrentPositions;
 
+    [SerializeField] private CardSecondPlayerManager _secondPlayerManager;
+
     private void Start()
     {
+        _secondPlayerManager = GetComponent<CardSecondPlayerManager>();
+        _secondPlayerManager.Init((playerNet.GameMode == "two") ? true : false);
+
         _screenSize = new Vector2(Screen.width, Screen.height);
         
         canvas.worldCamera = Camera.main;
@@ -287,6 +293,12 @@ public class CardManager : NetworkBehaviour
         }
 
         ReposPlayerCards();
+    }
+
+    public void UpdateFriendships(CardData[] playerData, CardData[] rivalData, bool myTurn, bool friendTurn, bool rivalFriendTurn)
+    {
+        _secondPlayerManager.UpdatePlayerCards(playerCardPositions, playerData, myTurn, friendTurn);
+        _secondPlayerManager.UpdateRivalCards(rivalCardPositions, rivalFriendTurn);
     }
 
     // Перемещение карты

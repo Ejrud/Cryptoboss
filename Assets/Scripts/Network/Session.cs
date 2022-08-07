@@ -275,8 +275,16 @@ public class Session : MonoBehaviour
             PlayerNets[i].CloseWindowWaitingForPlayers();
         }
 
-        SavePlayers();
+        if (GameMode == "two")
+        {
+            for (int i = 0; i < PlayerNets.Length; i++)
+            {
+                int rivalIndex = (i + 1 > PlayerNets.Length - 1) ? i+1 - PlayerNets.Length : i + 1;
+                PlayerNets[i].UpdateFriendships(PlayerNets[i].Friend.HandCards, PlayerNets[rivalIndex].Friend.HandCards, PlayerNets[i].MyTurn, PlayerNets[i].Friend.MyTurn, PlayerNets[rivalIndex].Friend.MyTurn);
+            }
+        }
 
+        SavePlayers();
         Ready = false;
         timer.ResetTimer();
     }

@@ -41,6 +41,7 @@ public class PlayerNet : NetworkBehaviour
     public float EnemyEnergy;
     public float MaxEnergy;
     public bool Win = false;
+    [SyncVar]
     public bool MyTurn = false;
     public bool CardSelected;
     public bool ChipReceived;
@@ -89,6 +90,7 @@ public class PlayerNet : NetworkBehaviour
 
     [Header("Gameplay")]
     [SerializeField] private CardManager cardManager;
+    [SerializeField] private CardSecondPlayerManager cardSecondPlayerManager;
     [SerializeField] private int menuSceneIndex = 0;
     [SerializeField] private User user;
     [SerializeField] private RawImage[] userChipImages_1;  // Изображения на экране презентации, и в игровом процессе
@@ -631,6 +633,13 @@ public class PlayerNet : NetworkBehaviour
             GameMode = gameMode;
             CmdSendGameMode(gameMode, Wallet, chipId);
         }
+    }
+
+    [ClientRpc]
+    public void UpdateFriendships(CardData[] playerData, CardData[] rivalData, bool myTurn, bool friendTurn, bool rivalFriendTurn)
+    {
+        if (hasAuthority)
+            cardManager.UpdateFriendships(playerData, rivalData, myTurn, friendTurn, rivalFriendTurn);
     }
 
     private async void CalculateResults() 
