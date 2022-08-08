@@ -26,6 +26,7 @@ public class CardManager : NetworkBehaviour
     
     [SerializeField] private Transform[] stack;
     [SerializeField] private Transform[] stackUnits;
+    [SerializeField] private GameObject _friendCard;
 
     [Header("Server components")]
     [SerializeField] private PlayerNet playerNet;  
@@ -84,9 +85,9 @@ public class CardManager : NetworkBehaviour
         {
             if (friendTurn)
             {
-                Debug.Log("Show friend cards");
-                _secondPlayerManager.SwipePlayerCards(cards, true);
-                playerCurrentPositions = playerCardPositions;
+                // Debug.Log("Show friend cards");
+                // _secondPlayerManager.SwipePlayerCards(cards, true);
+                playerCurrentPositions = playerStackCardPositions;
                 rivalCurrentPositions = rivalStackCardPositions;
             }
             else
@@ -197,7 +198,10 @@ public class CardManager : NetworkBehaviour
         }
         else
         {
-            StartCoroutine(CardSelectIE(playerCards[index].GetComponent<RectTransform>()));
+            _friendCard.SetActive(true);
+            _friendCard.transform.position = playerCardPositions[0].position;
+            _friendCard.GetComponent<CardParameters>().SetCardEffects(card, 0);
+            StartCoroutine(CardTransition(_friendCard.transform, _friendCard.transform.position, tablePosition.position));
         }
     }
 

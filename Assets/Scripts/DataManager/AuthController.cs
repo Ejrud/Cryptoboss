@@ -112,7 +112,7 @@ public class AuthController : MonoBehaviour
             {
                 string response = await EVM.AllErc721(chain, network, userWallet, contract, first, skip);
 
-                // Debug.Log(response);
+                Debug.Log(response);
                 
                 StartCoroutine(SendForm(userWallet, response));
                 Debug.Log("Sending Form");

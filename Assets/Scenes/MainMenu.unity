@@ -19380,7 +19380,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _debug: 1
-  serverType: 0
+  serverType: 1
   userData: {fileID: 1059100640}
   inputPass: {fileID: 1804687770}
   MoralisConnectObj: {fileID: 1570636272}
@@ -38747,6 +38747,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1956981104}
   - component: {fileID: 1956981103}
+  - component: {fileID: 1956981105}
   m_Layer: 0
   m_Name: Notifications
   m_TagString: Untagged
@@ -38780,6 +38781,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1956981105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956981102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d54d8f0da8bb4e009adf11d334a8c134, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1958711404
 GameObject:
   m_ObjectHideFlags: 0

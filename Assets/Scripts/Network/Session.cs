@@ -327,6 +327,11 @@ public class Session : MonoBehaviour
             string winnerWallet = "";
             string winnerGuid = "";
             string looseGuid = ""; 
+
+            string winnerWallet_2 = "";
+            string winnerGuid_2 = "";
+            string looseGuid_2 = ""; 
+
             string mode = "one";
         
             if (PlayerNets[0].Win)
@@ -335,21 +340,44 @@ public class Session : MonoBehaviour
                 winnerGuid = "CryptoBoss #" + StatsHolder[0].ChipId;
                 looseGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
 
+                if (GameMode == "two")
+                {
+                    winnerWallet_2 = StatsHolder[2].Wallet;
+                    winnerGuid_2 = "CryptoBoss #" + StatsHolder[2].ChipId;
+                    looseGuid_2 = "CryptoBoss #" + StatsHolder[3].ChipId;
+                }
+
             }
             else if (PlayerNets[1].Win)
             {
                 winnerWallet = StatsHolder[1].Wallet;
                 winnerGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
                 looseGuid = "CryptoBoss #" + StatsHolder[0].ChipId;
+
+                if (GameMode == "two")
+                {
+                    winnerWallet_2 = StatsHolder[3].Wallet;
+                    winnerGuid_2 = "CryptoBoss #" + StatsHolder[3].ChipId;
+                    looseGuid_2 = "CryptoBoss #" + StatsHolder[2].ChipId;
+                }
             }
             else
             {
                 left = true;
                 winnerGuid = "CryptoBoss #" + StatsHolder[0].ChipId;
                 looseGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
+
+                if (GameMode == "two")
+                {
+                    winnerGuid_2 = "CryptoBoss #" + StatsHolder[2].ChipId;
+                    looseGuid_2 = "CryptoBoss #" + StatsHolder[3].ChipId;
+                }
             }
 
-            StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode, left));
+            if (GameMode != "two")
+                StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode, left));
+            else
+                StartCoroutine(SetReward(winnerWallet, winnerGuid, looseGuid, mode, left, winnerWallet_2, winnerGuid_2, looseGuid_2));
 
             for(int i = 0; i < PlayerNets.Length; i++)
             {
@@ -377,7 +405,7 @@ public class Session : MonoBehaviour
         yield return null;
     }
 
-    private IEnumerator SetReward(string winnerWallet, string winnerGuid, string looseGuid, string mode, bool left)
+    private IEnumerator SetReward(string winnerWallet, string winnerGuid, string looseGuid, string mode, bool left, string winnerWallet_2 = "", string winnerGuid_2 = "", string looseGuid_2 = "")
     {
         rewardProcess = true;
 
@@ -393,6 +421,13 @@ public class Session : MonoBehaviour
         form.AddField("LooseGuid_1", looseGuid);
         form.AddField("Mode", mode);
 
+        if (GameMode == "two")
+        {
+            form.AddField("WinGuid_2", winnerGuid);
+            form.AddField("WinWallet_2", winnerWallet);
+            form.AddField("LooseGuid_2", looseGuid);
+        }
+
         if(left)
         {
             Debug.Log("Leave");
@@ -403,41 +438,65 @@ public class Session : MonoBehaviour
         {
             PlayerNets[0].StopGame("YOU WIN", "+", 0f, "0", false, true);
             PlayerNets[1].StopGame("YOU LOSE", "-", 0f, "0", false, false);
+
+            if (GameMode == "two")
+            {
+                PlayerNets[2].StopGame("YOU WIN", "+", 0f, "0", false, true);
+                PlayerNets[3].StopGame("YOU LOSE", "-", 0f, "0", false, false);
+            }
         }
         else if (!PlayerNets[0].Win && PlayerNets[1].Win)
         {
             PlayerNets[1].StopGame("YOU WIN", "+", 0f, "0", false, true);
             PlayerNets[0].StopGame("YOU LOSE", "-", 0f , "0", false, false);
+
+            if (GameMode == "two")
+            {
+                PlayerNets[3].StopGame("YOU WIN", "+", 0f, "0", false, true);
+                PlayerNets[2].StopGame("YOU LOSE", "-", 0f, "0", false, false);
+            }
         }
         else if (!PlayerNets[0].Win && !PlayerNets[1].Win)
         {
             PlayerNets[0].StopGame("DRAW", "", 0f, "0", false, false);
             PlayerNets[1].StopGame("DRAW", "", 0f, "0", false, false);
+
+            if (GameMode == "two")
+            {
+                PlayerNets[2].StopGame("DRAW", "", 0f, "0", false, false);
+                PlayerNets[3].StopGame("DRAW", "", 0f, "0", false, false);
+            }
         }
         else
         {
             PlayerNets[0].StopGame("DRAW", "", 0f, "0", false, false);
             PlayerNets[1].StopGame("DRAW", "", 0f, "0", false, false);
+
+            if (GameMode == "two")
+            {
+                PlayerNets[2].StopGame("DRAW", "", 0f, "0", false, false);
+                PlayerNets[3].StopGame("DRAW", "", 0f, "0", false, false);
+            }
         }
 
         // 
-        // using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form))
-        // { 
-        //     yield return www.SendWebRequest();
+        using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrualTest.php", form))
+        { 
+            yield return www.SendWebRequest();
 
-        //     if (www.result == UnityWebRequest.Result.Success)
-        //     {
-        //         Debug.Log(www.downloadHandler.text);
-        //         Debug.Log("Success");
-        //     }
-        //     else
-        //     { 
-        //         // PlayerNets[0].StopGame("Server error", "", 0f, "0", false, false);
-        //         // PlayerNets[1].StopGame("Server error", "", 0f, "0", false, false);
-        //         Debug.Log("Incorrect data");
-        //         Debug.Log(www.error);
-        //     }
-        // }
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.downloadHandler.text);
+                Debug.Log("Success");
+            }
+            else
+            { 
+                // PlayerNets[0].StopGame("Server error", "", 0f, "0", false, false);
+                // PlayerNets[1].StopGame("Server error", "", 0f, "0", false, false);
+                Debug.Log("Incorrect data");
+                Debug.Log(www.error);
+            }
+        }
 
         Rewarded = true;
 
@@ -569,24 +628,24 @@ public class Session : MonoBehaviour
             PlayerNets[3].Friend = PlayerNets[1]; PlayerNets[3].FriendIndex = 1;
 
             int[] pId_1 = { PlayerNets[1].ChipId, PlayerNets[3].ChipId, PlayerNets[2].ChipId }; // 0
-            int[] pId_2 = { PlayerNets[0].ChipId, PlayerNets[2].ChipId, PlayerNets[3].ChipId }; // 1
-            int[] pId_3 = { PlayerNets[1].ChipId, PlayerNets[3].ChipId, PlayerNets[0].ChipId }; // 2
+            int[] pId_2 = { PlayerNets[2].ChipId, PlayerNets[0].ChipId, PlayerNets[3].ChipId }; // 1
+            int[] pId_3 = { PlayerNets[3].ChipId, PlayerNets[1].ChipId, PlayerNets[0].ChipId }; // 2
             int[] pId_4 = { PlayerNets[0].ChipId, PlayerNets[2].ChipId, PlayerNets[1].ChipId }; // 3
 
             string[] names_1 = { PlayerNets[0].UserName, PlayerNets[1].UserName, PlayerNets[2].UserName, PlayerNets[3].UserName};
-            string[] chipNames_1 = { "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].UserName, "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].ChipId};
+            string[] chipNames_1 = { "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].ChipId};
             PlayerNets[0].LoadRivalChip(pId_1, "two", names_1, chipNames_1, new int[] { 1, 3 }); // new int[] - индексы соперников в массиве игроков (для корректного отображения "кто ходит")
 
             string[] names_2 = { PlayerNets[1].UserName, PlayerNets[2].UserName, PlayerNets[3].UserName, PlayerNets[0].UserName};
-            string[] chipNames_2 = { "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].UserName, "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].ChipId};
+            string[] chipNames_2 = { "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].ChipId};
             PlayerNets[1].LoadRivalChip(pId_2, "two", names_2, chipNames_2, new int[] { 0, 2 });
 
             string[] names_3 = { PlayerNets[2].UserName, PlayerNets[3].UserName, PlayerNets[0].UserName, PlayerNets[1].UserName};
-            string[] chipNames_3 = { "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].UserName, "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId};
+            string[] chipNames_3 = { "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId};
             PlayerNets[2].LoadRivalChip(pId_3, "two", names_3, chipNames_3, new int[] { 1, 3 });
 
             string[] names_4 = { PlayerNets[3].UserName, PlayerNets[0].UserName, PlayerNets[1].UserName, PlayerNets[2].UserName};
-            string[] chipNames_4 = { "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].UserName, "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].ChipId};
+            string[] chipNames_4 = { "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].ChipId};
             PlayerNets[3].LoadRivalChip(pId_4, "two", names_4, chipNames_4, new int[] { 0, 2 });
         }
         else
