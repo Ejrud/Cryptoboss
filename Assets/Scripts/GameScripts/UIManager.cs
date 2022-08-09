@@ -47,7 +47,6 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         sceneToLoad = 1;
-        PlayerPrefs.SetString("GameMode", "two"); // Менять при выборе сцены
 
         GameNotificationChannel channel = new GameNotificationChannel("Cryptoboss", "Cryptoboss", "Just a notification");
         _gameNotificationsManager.Initialize(channel);
@@ -82,7 +81,6 @@ public class UIManager : MonoBehaviour
 
             _chipLoaded = true;
         }
-        
     }
 
     public async void LoadGame()

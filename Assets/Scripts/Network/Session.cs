@@ -513,7 +513,7 @@ public class Session : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log(www.downloadHandler.text);
+                // Debug.Log(www.downloadHandler.text);
                 Debug.Log("Success");
             }
             else
@@ -587,7 +587,6 @@ public class Session : MonoBehaviour
             {
                 PlayerNets[i].MyTurn = true;
                 handCards = PlayerNets[i].HandCards;
-                Debug.Log("Hand cards count " + handCards.Length);
             }
             else
             {
