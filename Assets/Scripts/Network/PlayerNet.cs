@@ -539,6 +539,7 @@ public class PlayerNet : NetworkBehaviour
     {
         if(hasAuthority)
         {
+            rivalsRawImage = new Dictionary<int, RawImage>();
             // names[0] = UserName;
             Debug.Log("Load textures...");
             rivalChipTexture = new Texture2D[rivalChipId.Length];

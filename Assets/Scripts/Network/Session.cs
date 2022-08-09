@@ -88,11 +88,19 @@ public class Session : MonoBehaviour
     {
         if (!Finished && Prepated)
         {
-            if (PlayerNets[0] == null || PlayerNets[1] == null && gameStarted)
+            bool isNull = false;
+
+            for (int i = 0; i < PlayerNets.Length; i++)
+            {
+                if (PlayerNets[i] == null && gameStarted) isNull = true;
+            }
+
+            if (isNull && gameStarted)
             {
                 Finished = true;
                 FinishTheGame(false, false, true);
             }
+        
             else if (PlayerNets[PlayerIndexQueue].CardSelected)
             {
                 PlayerNets[PlayerIndexQueue].CardSelected = false;
@@ -113,10 +121,24 @@ public class Session : MonoBehaviour
             else if (PlayerNets[PlayerIndexQueue].Morale < 1) // 
             {
                 PlayerNets[PlayerIndexQueue].Morale += energyRecovery;
+
+                if (GameMode == "two")
+                {
+                    PlayerNets[PlayerIndexQueue].Friend.Morale += energyRecovery;
+                }
+
                 SetNextIndexQueue();
                 
                 PlayerNets[0].UpdatePlayerCharacteristic(PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[0].MaxEnergy);
                 PlayerNets[1].UpdatePlayerCharacteristic(PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[1].MaxEnergy);
+
+                if (GameMode == "two")
+                {
+                    PlayerNets[2].UpdatePlayerCharacteristic(PlayerNets[2].Capital, PlayerNets[2].Morale, PlayerNets[1].Capital, PlayerNets[1].Morale, PlayerNets[2].MaxEnergy);
+                    PlayerNets[3].UpdatePlayerCharacteristic(PlayerNets[3].Capital, PlayerNets[3].Morale, PlayerNets[0].Capital, PlayerNets[0].Morale, PlayerNets[3].MaxEnergy);
+                }
+
+                Debug.Log("Player morale = " + PlayerNets[PlayerIndexQueue].Friend.Morale);
             }
             else
             {
@@ -307,7 +329,8 @@ public class Session : MonoBehaviour
 
     public IEnumerator FinishTheGameIE(bool playerWin_1, bool playerWin_2, bool playerDisconnected = false)
     {
-        yield return new WaitForSeconds(3f);
+        if (!playerDisconnected)
+            yield return new WaitForSeconds(3f);
 
         Ready = false;
         Finished = true;
@@ -398,8 +421,10 @@ public class Session : MonoBehaviour
             timer.AwaitPlayer();
             AwaitPlayer = true;
 
-            PlayerNets[0].StopGame("Other player disconnected", "", 0f, "0", true, false);
-            PlayerNets[1].StopGame("Other player disconnected", "", 0f, "0", true, false);
+            for (int i = 0; i < PlayerNets.Length; i++)
+            {
+                PlayerNets[i].StopGame("Other player disconnected", "", 0f, "0", true, false);
+            }
         }
 
         yield return null;
@@ -423,9 +448,11 @@ public class Session : MonoBehaviour
 
         if (GameMode == "two")
         {
-            form.AddField("WinGuid_2", winnerGuid);
-            form.AddField("WinWallet_2", winnerWallet);
-            form.AddField("LooseGuid_2", looseGuid);
+            form.AddField("WinGuid_2", winnerGuid_2);
+            form.AddField("WinWallet_2", winnerWallet_2);
+            form.AddField("LooseGuid_2", looseGuid_2);
+
+            // Debug.Log($"{winnerGuid_2}, {winnerWallet_2}, {looseGuid_2}");
         }
 
         if(left)
@@ -480,7 +507,7 @@ public class Session : MonoBehaviour
         }
 
         // 
-        using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrualTest.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form))
         { 
             yield return www.SendWebRequest();
 

@@ -19380,7 +19380,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _debug: 1
-  serverType: 1
+  serverType: 0
   userData: {fileID: 1059100640}
   inputPass: {fileID: 1804687770}
   MoralisConnectObj: {fileID: 1570636272}

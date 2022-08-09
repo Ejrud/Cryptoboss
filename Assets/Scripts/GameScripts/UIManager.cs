@@ -41,7 +41,8 @@ public class UIManager : MonoBehaviour
     private Vector2 pos; // 
     private Vector2 size; // 
 
-    private bool chipLoaded;
+    private bool _chipLoaded;
+    private bool _loadingData;
 
     private void Start()
     {
@@ -68,7 +69,7 @@ public class UIManager : MonoBehaviour
     {
         selectChipWindow.SetActive(true);
 
-        if (!chipLoaded)
+        if (!_chipLoaded)
         {
             for (int i = 0; i < user.ChipParam.Count; i++)
             {
@@ -79,52 +80,58 @@ public class UIManager : MonoBehaviour
                 chipFrame.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             }
 
-            chipLoaded = true;
+            _chipLoaded = true;
         }
         
     }
 
     public async void LoadGame()
     {
-        string chain = "polygon";
-        string network = "mainnet"; // mainnet ropsten kovan rinkeby goerli
-        string contract = "0x4fa6d1Fc702bD7f1607dfeE4206Db368995E1443"; // 0x4fa6d1Fc702bD7f1607dfeE4206Db368995E1443
-        int first = 500;
-        int skip = 0;
-        string userWallet = user.Wallet;
-
-        string response = await EVM.AllErc721(chain, network, userWallet, contract, first, skip);
-
-        try
+        if (!_loadingData)
         {
-            NFTs[] erc721s = JsonConvert.DeserializeObject<NFTs[]>(response);
+            _loadingData = true;
+            string chain = "polygon";
+            string network = "mainnet"; // mainnet ropsten kovan rinkeby goerli
+            string contract = "0x4fa6d1Fc702bD7f1607dfeE4206Db368995E1443"; // 0x4fa6d1Fc702bD7f1607dfeE4206Db368995E1443
+            int first = 500;
+            int skip = 0;
+            string userWallet = user.Wallet;
 
-            if (erc721s.Length == user.ChipParam.Count)
+            string response = await EVM.AllErc721(chain, network, userWallet, contract, first, skip);
+
+            try
             {
-                if (!_tutorial._tutorial)
+                NFTs[] erc721s = JsonConvert.DeserializeObject<NFTs[]>(response);
+
+                if (erc721s.Length == user.ChipParam.Count)
                 {
-                    sceneLoadController.LoadGame(sceneToLoad);
+                    if (!_tutorial._tutorial)
+                    {
+                        sceneLoadController.LoadGame(sceneToLoad);
+                    }
+                    else
+                    {
+                        _tutorial._tutorial = false;
+                        user.Tutorial = true;
+                        sceneLoadController.LoadGame(tutorialScene);
+                    }
                 }
                 else
                 {
-                    _tutorial._tutorial = false;
-                    user.Tutorial = true;
-                    sceneLoadController.LoadGame(tutorialScene);
+                    // Reloggin
+                    _authControllerObj.SetActive(true);
+                    _selectAreaObj.SetActive(false);
+                    _userData.ResetUser();
+
+                _authControllerObj.GetComponent<AuthController>().Authorization(userWallet, true);
                 }
             }
-            else
+            catch
             {
-                // Reloggin
-                _authControllerObj.SetActive(true);
-                _selectAreaObj.SetActive(false);
-                _userData.ResetUser();
-
-               _authControllerObj.GetComponent<AuthController>().Authorization(userWallet, true);
+            print("Error: " + response);
             }
-        }
-        catch
-        {
-           print("Error: " + response);
+
+            _loadingData = false;
         }
     }
 
