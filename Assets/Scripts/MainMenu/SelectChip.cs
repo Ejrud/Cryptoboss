@@ -71,20 +71,13 @@ public class SelectChip : MonoBehaviour
         
         timer = 0;
         stabilize = true;
-        selectedChip = selectableChips[user.SelectedChipId];
+        selectedChip = selectableChips[user.SelectedChip];
 
         StartCoroutine(SelectPlayedChip());
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            timer = 0;
-            stabilize = true;
-            selectedChip = selectableChips[user.SelectedChipId];
-        }
-
         if (selectableChips.Length > 0)
         {
             if (Input.GetMouseButton(0)) //  && slidingChip.AcceptMove
@@ -138,7 +131,8 @@ public class SelectChip : MonoBehaviour
                             playButton.interactable = true;
                         }
 
-                        PlayerPrefs.SetInt("chipId", chipId);
+                        user.chipGuid_1 = chipId;
+
                         PlayerPrefs.SetInt("chipIndex", i);
                         selectedChip = selectableChips[i];
                         currentChipIndex = i;
@@ -228,7 +222,7 @@ public class SelectChip : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         timer = 0;
         stabilize = true;
-        selectedChip = selectableChips[user.SelectedChipId];
+        selectedChip = selectableChips[user.SelectedChip];
         yield return null;
     } 
 }

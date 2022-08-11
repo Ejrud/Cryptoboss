@@ -7,9 +7,13 @@ public class ShowingChipsController : MonoBehaviour
 {
     [SerializeField] private Tutorial tutorial;
     [SerializeField] private GameObject chipsViewportContent;
+    [SerializeField] private GameObject _playBtn;
 
     [Header("Default user")]
-    [SerializeField] private User user;
+    public User user;
+    public ChipFrameData[] SelectedChipFrames = new ChipFrameData[2];
+    public int Cell = 0;
+
 
     [Header("Chip prefab")]
     [SerializeField] private GameObject chipFrame;
@@ -18,6 +22,7 @@ public class ShowingChipsController : MonoBehaviour
     [SerializeField] private Text chipCapital;
     [SerializeField] private Text chipMorale;
     [SerializeField] private Text chipRating;
+    public bool Selecting = false;
 
     private ChipFrameData[] chipFrameData = new ChipFrameData[0];
     public int SelectedChipID = 0;
@@ -25,7 +30,7 @@ public class ShowingChipsController : MonoBehaviour
 
     private void Start()
     {
-        ShowChips(user); // ��� ����������� ������������ ������� ���� scriptableObject � ������� ������������ �������
+        _playBtn.SetActive(false);
     }
 
     public void ShowChips(User user)
@@ -42,6 +47,7 @@ public class ShowingChipsController : MonoBehaviour
         }
 
         chipFrameData[0].SelectFirstChip();
+
         initialize = true;
     }
 
@@ -56,12 +62,45 @@ public class ShowingChipsController : MonoBehaviour
         }
     }
 
+    public void ResetSelectingMode()
+    {
+        Selecting = false;
+    }
+
+    public void VisiblePlayButton(bool active)
+    {
+        _playBtn.SetActive(active);
+    }
+
     private void OnEnable()
     {
-        ResetChips(true);
-        if (initialize)
-            chipFrameData[SelectedChipID].SelectFirstChip();
+        if (!initialize)
+            ShowChips(user);
+
+        if (!Selecting)
+        {
+            Debug.Log("Select first chip");
+            chipFrameData[0].SelectFirstChip();
+        }
+        else
+        {
+            ResetChips();
+
+            user.chipGuid_2 = 0;
+            user.chipGuid_3 = 0;
+
+            foreach (ChipFrameData chip in chipFrameData)
+            {
+                if (chip.chipData.Id == user.chipGuid_1)
+                {
+                    chip.SelectFirstChip();
+                    
+                    break;
+                }
+            }
+        }
     }
+
 }
 
 

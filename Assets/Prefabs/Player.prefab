@@ -7097,7 +7097,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8952490505084643344
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7211,7 +7211,7 @@ MonoBehaviour:
   Wallet: 
   UserName: 
   GameMode: 
-  ChipId: 0
+  ChipId: 
   CardCollection: []
   HandCards:
   - Used: 0
@@ -11602,7 +11602,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4254665844944450434
 RectTransform:
   m_ObjectHideFlags: 0

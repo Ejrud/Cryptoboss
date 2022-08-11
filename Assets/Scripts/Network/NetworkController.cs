@@ -96,7 +96,7 @@ public class NetworkController : NetworkManager
 
         foreach (PlayerNet playerNet in Players)
         {
-            if (playerNet.Wallet == player.Wallet || playerNet.ChipId == player.ChipId)
+            if (playerNet.Wallet == player.Wallet || playerNet.ChipId[0] == player.ChipId[0])
             {
                 Destroy(player.gameObject);
                 return;
@@ -111,8 +111,17 @@ public class NetworkController : NetworkManager
             {
                 for (int i = 0; i < session.PlayerNets.Length; i++)
                 {
-                    if (session.StatsHolder[i].ChipId == player.ChipId)
+                    if (session.StatsHolder[i].ChipId[0] == player.ChipId[0])
                     {
+                        if (session.GameMode == "three")
+                        {
+                            if (session.StatsHolder[i].ChipId[1] != player.ChipId[1] || session.StatsHolder[i].ChipId[2] != player.ChipId[2])
+                            {
+                                Destroy(player.gameObject);
+                                return;
+                            }
+                        }
+
                         session.PlayerNets[i] = player;
 
                         List<GameObject> players = new List<GameObject>();

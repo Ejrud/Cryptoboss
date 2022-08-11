@@ -14,7 +14,7 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     [SerializeField] private Sprite chipSelected;
     [SerializeField] private Sprite chipDefault;
 
-    private ChipParameters chipData;
+    public ChipParameters chipData;
     private ShowingChipsController chipController;
     private bool selectable;
 
@@ -27,6 +27,8 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     private Text chipRatingTxt;
     private Vector2 startPos;
     private int chipIndex;
+    private bool selected;
+    private bool used;
 
     public void Init(ShowingChipsController chipController, ChipParameters chipParam, Text capitalTxt, Text moraleTxt, Text ratingTxt, int chipIndex, bool selectable = false)
     {
@@ -65,14 +67,10 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         chipCapitalTxt.text = chipCapital;
         chipMoraleTxt.text = chipMorale;
         chipRatingTxt.text = chipRating;
-    }
 
-    public void SetChipForGame()
-    {
-        if (selectable)
+        if (chipController.Selecting) // Если эта фишка была выброана в главном меню то ее нельзя выбрать или убрать
         {
-            PlayerPrefs.SetInt("chipId", chipData.Id);
-            SceneManager.LoadScene(1);
+            selected = true;
         }
     }
     
@@ -83,9 +81,50 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (selected && chipController.Selecting) return; // Если эта фишка была выбрана ренне в главном меню, то ее нельзя выбрать
+
         // Если главное меню, то показывать характеристики карт в отдельном окне
         if (startPos == eventData.position && !selectable)
         {
+            if (chipController.Selecting)
+            {
+                if (chipController.user.chipGuid_2 == chipData.Id && chipController.user.chipGuid_3 != chipData.Id)
+                {
+                    chipController.user.chipGuid_2 = 0;
+                    Reset();
+                }
+                else if (chipController.user.chipGuid_2 == 0 && chipController.user.chipGuid_3 != chipData.Id)
+                {
+                    chipController.user.chipGuid_2 = chipData.Id;
+                    Reset(true); // Подсветить фишку
+                    GlobalEventManager.SendCards(chipData.CardDeck);
+                }
+
+                else if (chipController.user.chipGuid_3 == chipData.Id && chipController.user.chipGuid_2 != chipData.Id)
+                {
+                    chipController.user.chipGuid_3 = 0;
+                    Reset();
+                }
+                else if (chipController.user.chipGuid_3 == 0 && chipController.user.chipGuid_2 != chipData.Id)
+                {
+                    chipController.user.chipGuid_3 = chipData.Id;
+                    Reset(true); // Подсветить фишку
+                    GlobalEventManager.SendCards(chipData.CardDeck);
+                }
+
+                if (chipController.user.chipGuid_1 != 0)
+                    if (chipController.user.chipGuid_2 != 0)
+                        if (chipController.user.chipGuid_3 != 0)
+                        {
+                            chipController.VisiblePlayButton(true);
+                            return;
+                        }
+                            
+                chipController.VisiblePlayButton(false);
+
+                return;
+            }
+
             chipController.ResetChips();
             GlobalEventManager.SendCards(chipData.CardDeck);
             GlobalEventManager.SendChipData(chipData);
@@ -96,13 +135,13 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             chipCapitalTxt.text = chipCapital;
             chipMoraleTxt.text = chipMorale;
             chipRatingTxt.text = chipRating;
-
-            chipController.SelectedChipID = chipIndex;
         }
     }
 
     public void Reset(bool first = false)
     {
+        selected = false;
+
         if (first)
         {
             chipTexture.color = Color.white;

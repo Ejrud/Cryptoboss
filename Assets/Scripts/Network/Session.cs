@@ -360,40 +360,40 @@ public class Session : MonoBehaviour
             if (PlayerNets[0].Win)
             {
                 winnerWallet = StatsHolder[0].Wallet;
-                winnerGuid = "CryptoBoss #" + StatsHolder[0].ChipId;
-                looseGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
+                winnerGuid = "CryptoBoss #" + StatsHolder[0].ChipId[0];
+                looseGuid = "CryptoBoss #" + StatsHolder[1].ChipId[0];
 
                 if (GameMode == "two")
                 {
                     winnerWallet_2 = StatsHolder[2].Wallet;
-                    winnerGuid_2 = "CryptoBoss #" + StatsHolder[2].ChipId;
-                    looseGuid_2 = "CryptoBoss #" + StatsHolder[3].ChipId;
+                    winnerGuid_2 = "CryptoBoss #" + StatsHolder[2].ChipId[0];
+                    looseGuid_2 = "CryptoBoss #" + StatsHolder[3].ChipId[0];
                 }
 
             }
             else if (PlayerNets[1].Win)
             {
                 winnerWallet = StatsHolder[1].Wallet;
-                winnerGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
-                looseGuid = "CryptoBoss #" + StatsHolder[0].ChipId;
+                winnerGuid = "CryptoBoss #" + StatsHolder[1].ChipId[0];
+                looseGuid = "CryptoBoss #" + StatsHolder[0].ChipId[0];
 
                 if (GameMode == "two")
                 {
                     winnerWallet_2 = StatsHolder[3].Wallet;
-                    winnerGuid_2 = "CryptoBoss #" + StatsHolder[3].ChipId;
-                    looseGuid_2 = "CryptoBoss #" + StatsHolder[2].ChipId;
+                    winnerGuid_2 = "CryptoBoss #" + StatsHolder[3].ChipId[0];
+                    looseGuid_2 = "CryptoBoss #" + StatsHolder[2].ChipId[0];
                 }
             }
             else
             {
                 left = true;
-                winnerGuid = "CryptoBoss #" + StatsHolder[0].ChipId;
-                looseGuid = "CryptoBoss #" + StatsHolder[1].ChipId;
+                winnerGuid = "CryptoBoss #" + StatsHolder[0].ChipId[0];
+                looseGuid = "CryptoBoss #" + StatsHolder[1].ChipId[0];
 
                 if (GameMode == "two")
                 {
-                    winnerGuid_2 = "CryptoBoss #" + StatsHolder[2].ChipId;
-                    looseGuid_2 = "CryptoBoss #" + StatsHolder[3].ChipId;
+                    winnerGuid_2 = "CryptoBoss #" + StatsHolder[2].ChipId[0];
+                    looseGuid_2 = "CryptoBoss #" + StatsHolder[3].ChipId[0];
                 }
             }
 
@@ -507,7 +507,7 @@ public class Session : MonoBehaviour
         }
 
         // 
-        using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post("https://cryptoboss.win/game/back/" + "accrual.php", form)) // accrualUrl
         { 
             yield return www.SendWebRequest();
 
@@ -653,39 +653,60 @@ public class Session : MonoBehaviour
             PlayerNets[1].Friend = PlayerNets[3]; PlayerNets[1].FriendIndex = 3;
             PlayerNets[3].Friend = PlayerNets[1]; PlayerNets[3].FriendIndex = 1;
 
-            int[] pId_1 = { PlayerNets[1].ChipId, PlayerNets[3].ChipId, PlayerNets[2].ChipId }; // 0
-            int[] pId_2 = { PlayerNets[2].ChipId, PlayerNets[0].ChipId, PlayerNets[3].ChipId }; // 1
-            int[] pId_3 = { PlayerNets[3].ChipId, PlayerNets[1].ChipId, PlayerNets[0].ChipId }; // 2
-            int[] pId_4 = { PlayerNets[0].ChipId, PlayerNets[2].ChipId, PlayerNets[1].ChipId }; // 3
+            int[] pId_1 = { PlayerNets[1].ChipId[0], PlayerNets[3].ChipId[0], PlayerNets[2].ChipId[0] }; // 0
+            int[] pId_2 = { PlayerNets[2].ChipId[0], PlayerNets[0].ChipId[0], PlayerNets[3].ChipId[0] }; // 1
+            int[] pId_3 = { PlayerNets[3].ChipId[0], PlayerNets[1].ChipId[0], PlayerNets[0].ChipId[0] }; // 2
+            int[] pId_4 = { PlayerNets[0].ChipId[0], PlayerNets[2].ChipId[0], PlayerNets[1].ChipId[0] }; // 3
 
             string[] names_1 = { PlayerNets[0].UserName, PlayerNets[1].UserName, PlayerNets[2].UserName, PlayerNets[3].UserName};
-            string[] chipNames_1 = { "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].ChipId};
+            string[] chipNames_1 = { "#" + PlayerNets[0].ChipId[0], "#" + PlayerNets[1].ChipId[0], "#" + PlayerNets[2].ChipId[0], "#" + PlayerNets[3].ChipId[0]};
             PlayerNets[0].LoadRivalChip(pId_1, "two", names_1, chipNames_1, new int[] { 1, 3 }); // new int[] - индексы соперников в массиве игроков (для корректного отображения "кто ходит")
 
             string[] names_2 = { PlayerNets[1].UserName, PlayerNets[2].UserName, PlayerNets[3].UserName, PlayerNets[0].UserName};
-            string[] chipNames_2 = { "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].ChipId};
+            string[] chipNames_2 = { "#" + PlayerNets[1].ChipId[0], "#" + PlayerNets[2].ChipId[0], "#" + PlayerNets[3].ChipId[0], "#" + PlayerNets[0].ChipId[0]};
             PlayerNets[1].LoadRivalChip(pId_2, "two", names_2, chipNames_2, new int[] { 0, 2 });
 
             string[] names_3 = { PlayerNets[2].UserName, PlayerNets[3].UserName, PlayerNets[0].UserName, PlayerNets[1].UserName};
-            string[] chipNames_3 = { "#" + PlayerNets[2].ChipId, "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId};
+            string[] chipNames_3 = { "#" + PlayerNets[2].ChipId[0], "#" + PlayerNets[3].ChipId[0], "#" + PlayerNets[0].ChipId[0], "#" + PlayerNets[1].ChipId[0]};
             PlayerNets[2].LoadRivalChip(pId_3, "two", names_3, chipNames_3, new int[] { 1, 3 });
 
             string[] names_4 = { PlayerNets[3].UserName, PlayerNets[0].UserName, PlayerNets[1].UserName, PlayerNets[2].UserName};
-            string[] chipNames_4 = { "#" + PlayerNets[3].ChipId, "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId, "#" + PlayerNets[2].ChipId};
+            string[] chipNames_4 = { "#" + PlayerNets[3].ChipId[0], "#" + PlayerNets[0].ChipId[0], "#" + PlayerNets[1].ChipId[0], "#" + PlayerNets[2].ChipId[0]};
             PlayerNets[3].LoadRivalChip(pId_4, "two", names_4, chipNames_4, new int[] { 0, 2 });
         }
         else
         {
-            int[] pId_1 = { PlayerNets[1].ChipId };
-            int[] pId_2 = { PlayerNets[0].ChipId };
+            string gameMode = "one";
+
+            int[] pId_1 = { PlayerNets[1].ChipId[0] };
+            int[] pId_2 = { PlayerNets[0].ChipId[0] };
 
             string[] names_1 = { PlayerNets[0].UserName, PlayerNets[1].UserName};
-            string[] chipNames_1 = { "#" + PlayerNets[0].ChipId, "#" + PlayerNets[1].ChipId};
-            PlayerNets[0].LoadRivalChip(pId_1, "one", names_1, chipNames_1, new int[] { 0, 1 }); // Заглушка
+            string[] chipNames_1 = { "#" + PlayerNets[0].ChipId[0], "#" + PlayerNets[1].ChipId[0]};
 
             string[] names_2 = { PlayerNets[1].UserName, PlayerNets[0].UserName};
-            string[] chipNames_2 = { "#" + PlayerNets[1].ChipId, "#" + PlayerNets[0].ChipId};
-            PlayerNets[1].LoadRivalChip(pId_2, "one", names_2, chipNames_2, new int[] { 0, 1 });
+            string[] chipNames_2 = { "#" + PlayerNets[1].ChipId[0], "#" + PlayerNets[0].ChipId[0]};
+
+            if (GameMode == "three") // Если режим 3 на 3, то передавать игрокам индексы всех 6 фишек
+            {
+                gameMode = "three";
+
+                chipNames_1 = new string[] { 
+                    "#" + PlayerNets[0].ChipId[0], "#" + PlayerNets[0].ChipId[1], "#" + PlayerNets[0].ChipId[2],
+                    "#" + PlayerNets[1].ChipId[0], "#" + PlayerNets[1].ChipId[1], "#" + PlayerNets[1].ChipId[2] 
+                };
+
+                chipNames_2 = new string[] { 
+                    "#" + PlayerNets[1].ChipId[0], "#" + PlayerNets[1].ChipId[1], "#" + PlayerNets[1].ChipId[2],
+                    "#" + PlayerNets[0].ChipId[0], "#" + PlayerNets[0].ChipId[1], "#" + PlayerNets[0].ChipId[2] 
+                };
+
+                pId_1 = new int[] { PlayerNets[1].ChipId[0], PlayerNets[1].ChipId[1], PlayerNets[1].ChipId[2] };
+                pId_2 = new int[] { PlayerNets[0].ChipId[0], PlayerNets[0].ChipId[1], PlayerNets[0].ChipId[2] };
+            }
+
+            PlayerNets[0].LoadRivalChip(pId_1, gameMode, names_1, chipNames_1, new int[] { 0, 1 }); // Заглушка
+            PlayerNets[1].LoadRivalChip(pId_2, gameMode, names_2, chipNames_2, new int[] { 0, 1 });
         }
 
         while (!chipIdRecieved)
@@ -733,7 +754,7 @@ public class Session : MonoBehaviour
         for (int i = 0; i < PlayerNets.Length; i++)
         {
             WWWForm form = new WWWForm();
-            form.AddField("guid", "CryptoBoss #" + PlayerNets[i].ChipId); // 
+            form.AddField("guid", "CryptoBoss #" + PlayerNets[i].ChipId[0]); // 
 
             using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "get_cards.php", form)) // Загрузка карт
             { 
@@ -985,7 +1006,7 @@ public class Session : MonoBehaviour
     {
         public bool RepeatConnect;
         public string Wallet;
-        public int ChipId;
+        public int[] ChipId;
         public int Capital;
         public float Morale;
         public CardData[] HandCards;

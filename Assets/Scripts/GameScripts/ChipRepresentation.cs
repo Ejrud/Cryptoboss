@@ -40,6 +40,24 @@ public class ChipRepresentation : MonoBehaviour
         {
             team_1[0].text = names[0];
             team_2[0].text = names[1];
+
+            team_1[1].gameObject.SetActive(false);
+            team_1[2].gameObject.SetActive(false);
+            team_2[1].gameObject.SetActive(false);
+            team_2[2].gameObject.SetActive(false);
+
+            chipNumber_1[0].text = chipNames[0];
+            chipNumber_1[1].text = chipNames[1];
+            chipNumber_1[2].text = chipNames[2];
+
+            chipNumber_2[0].text = chipNames[3];
+            chipNumber_2[1].text = chipNames[4];
+            chipNumber_2[2].text = chipNames[5];
+
+            for (int i = 0; i < 6; i++)
+            {
+                Debug.Log(chipNames[i]);
+            }
         }
     }
 }

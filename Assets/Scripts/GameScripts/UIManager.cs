@@ -30,9 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private RectTransform[] areas;
 
     // about chips
-    [SerializeField] private GameObject selectChipWindow;
-    [SerializeField] private GameObject chipFramePrefab;
-    [SerializeField] private Transform chipWindowTransform;
+    [SerializeField] private GameObject _selectChipWindow;
     [SerializeField] private User user;
 
     private int sceneToLoad; // Индекс загрузки сцены
@@ -43,43 +41,36 @@ public class UIManager : MonoBehaviour
 
     private bool _chipLoaded;
     private bool _loadingData;
+    private bool _confirmChoose;
+    private bool _selecting;
+
 
     private void Start()
     {
         sceneToLoad = 1;
-
-        GameNotificationChannel channel = new GameNotificationChannel("Cryptoboss", "Cryptoboss", "Just a notification");
-        _gameNotificationsManager.Initialize(channel);
     }
 
     public void PanelActivate(GameObject objectToClose) // 
     {
-        user.SelectedChipId = PlayerPrefs.GetInt("chipIndex");
+        user.SelectedChip = PlayerPrefs.GetInt("chipIndex");
         objectToClose.SetActive(!objectToClose.activeSelf);
     }
 
     public void QuitMethod() // 
     {
-        CreateNotification();
         Application.Quit();
     }
 
     public void PrepareLoadGame()
     {
-        selectChipWindow.SetActive(true);
-
-        if (!_chipLoaded)
+        if (PlayerPrefs.GetString("GameMode") == "three")
         {
-            for (int i = 0; i < user.ChipParam.Count; i++)
-            {
-                GameObject chipFrame = Instantiate(chipFramePrefab, new Vector3(0, 0, 0), Quaternion.identity);
-
-                chipFrame.transform.SetParent(chipWindowTransform.transform);
-                // chipFrame.GetComponent<ChipFrameData>().Init(user.ChipParam[i], true);
-                chipFrame.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-            }
-
-            _chipLoaded = true;
+            _selectChipWindow.GetComponent<ShowingChipsController>().Selecting = true;
+            _selectChipWindow.SetActive(true);
+        }
+        else
+        {
+            LoadGame();
         }
     }
 
@@ -131,29 +122,6 @@ public class UIManager : MonoBehaviour
 
             _loadingData = false;
         }
-    }
-
-    public void CreateNotification()
-    {
-        string title = "Cryptoboss";
-        string body = _notificationStr[0];
-        DateTime time = DateTime.Now.AddSeconds(1f);
-
-        IGameNotification notification = _gameNotificationsManager.CreateNotification();
-        if (notification != null)
-        {
-            notification.Title = title;
-            notification.Body = body;
-            notification.DeliveryTime = time;
-            _gameNotificationsManager.ScheduleNotification(notification);
-        }
-    }
-
-    private void ArenesMethod(int x, int y) // 
-    {
-        areas[x].anchoredPosition = areas[y].anchoredPosition;
-        areas[x].sizeDelta = areas[y].sizeDelta;
-        areas[x] = areas[y];
     }
 
     private class NFTs

@@ -15,7 +15,7 @@ public class PlayerNet : NetworkBehaviour
     public string Wallet;
     public string UserName;
     public string GameMode;
-    public int ChipId;
+    public int[] ChipId;
     public CardData[] CardCollection;
     public CardData[] HandCards;
     public CardData[] PreviousCards;
@@ -134,12 +134,21 @@ public class PlayerNet : NetworkBehaviour
         if (hasAuthority)
         {
             gameObject.SetActive(true);
+            GameMode = PlayerPrefs.GetString("GameMode");
+
+            if (GameMode == "three")
+            {
+                ChipId = new int[3];
+                ChipId[0] = user.chipGuid_1;  ChipId[1] = user.chipGuid_2;  ChipId[2] = user.chipGuid_3;  
+            }
+            else
+            {
+                ChipId = new int[1];
+                ChipId[0] = user.chipGuid_1;
+            }
 
             // Wallet = PlayerPrefs.GetString("Wallet");
-            ChipId = PlayerPrefs.GetInt("chipId");
-            GameMode = PlayerPrefs.GetString("GameMode");
             UserName = user.UserName;
-            Debug.Log(UserName);
             
             CmdSendWalletAndId(Wallet, ChipId, ChipReceived, UserName);
             CalculateResults(); // Локально у игроков висчитывать результаты игры
@@ -150,6 +159,7 @@ public class PlayerNet : NetworkBehaviour
 
             if (GameMode == "one")
             {
+                PrepareChip(userChipImages_1, 0, true, true);
                 PrepareChip(rivalChipImages_2, 0, false); // где bool просто скрыть объект. цифра - индекс текстуры 
                 PrepareChip(rivalChipImages_3, 0, false);
                 PrepareChip(userChipImages_2, 0, false);
@@ -157,6 +167,7 @@ public class PlayerNet : NetworkBehaviour
             }
             else if (GameMode == "two") // Скрыть лишние фишки и показать 2 текущей фишки и 2 фишки соперников 
             {
+                PrepareChip(userChipImages_1, 0, true, true);
                 PrepareChip(rivalChipImages_2, 0, false); // где bool просто скрыть объект. цифра - индекс текстуры 
                 PrepareChip(rivalChipImages_3, 0, false);
                 PrepareChip(userChipImages_2, 0, false);
@@ -165,36 +176,29 @@ public class PlayerNet : NetworkBehaviour
             }
             else if (GameMode == "three") // Показать 3 фишки соперника (т.к. 3 на 3 играют 2 игрока, то фишки игрока были изначально загружены при авторизации)
             {
-                
+                PrepareChip(userChipImages_1, 0, true, true);
+                PrepareChip(userChipImages_2, 1, true, true);
+                PrepareChip(userChipImages_3, 2, true, true);
             }
 
-            // 
-            for (int i = 0; i < user.ChipParam.Count; i++)
-            {
+            // for (int k = 0; k < ChipId.Length; k++)
+            // {
+            //     for (int i = 0; i < user.ChipParam.Count; i++)
+            //     {
+            //         if (ChipId[k] == user.ChipParam[i].Id)
+            //         {
+            //             chipTexture = user.ChipParam[i].ChipTexture;
 
-                if (ChipId == user.ChipParam[i].Id)
-                {
-                    chipTexture = user.ChipParam[i].ChipTexture;
-
-                    foreach(RawImage chipImage in userChipImages_1) //
-                    {
-                        chipImage.texture = chipTexture;
-                    }
-                    Debug.Log("Chip loaded = " + ChipId);
-                    return;
-                }
-                else    // 
-                {
-                    Debug.Log("ChipId not found. prefab id = " +  ChipId);
-
-                    chipTexture = user.ChipParam[UnityEngine.Random.Range(0, user.ChipParam.Count - 1)].ChipTexture;
-
-                    foreach(RawImage chipImage in userChipImages_1) //
-                    {
-                        chipImage.texture = chipTexture;
-                    }
-                }
-            }
+            //             foreach(RawImage chipImage in userChipImages_1) //
+            //             {
+            //                 chipImage.gameObject.SetActive(true);
+            //                 chipImage.texture = chipTexture;
+            //             }
+            //             Debug.Log("Chip loaded = " + ChipId[k]);
+            //             return;
+            //         }
+            //     }
+            // }
         }
     }
 
@@ -274,38 +278,43 @@ public class PlayerNet : NetworkBehaviour
         SceneManager.LoadScene(menuSceneIndex);
     }
     [Command]
-    public async void CmdSendGameMode(string gameMode, string wallet, int chipId)
+    public async void CmdSendGameMode(string gameMode, string wallet, int[] chipId)
     {
         bool hasEnergy = false;
-        WWWForm form = new WWWForm();
-        form.AddField("Guid", $"CryptoBoss #{chipId}");
 
-        using (UnityWebRequest request = UnityWebRequest.Post(seUrl + "checkEnergy.php", form))
+        for (int i = 0; i < chipId.Length; i++)
         {
-            await request.SendWebRequest();
-            
-            if (request.result == UnityWebRequest.Result.Success)
+            WWWForm form = new WWWForm();
+            form.AddField("Guid", $"CryptoBoss #{chipId[i]}");
+
+            using (UnityWebRequest request = UnityWebRequest.Post(seUrl + "checkEnergy.php", form))
             {
-                if (request.downloadHandler.text == "true")
+                await request.SendWebRequest();
+                
+                if (request.result == UnityWebRequest.Result.Success)
                 {
-                    hasEnergy = true;
+                    if (request.downloadHandler.text == "true")
+                    {
+                        hasEnergy = true;
+                    }
                 }
-            }
-            else
-            {
-                hasEnergy = false;
+                else
+                {
+                    hasEnergy = false;
+                    break;
+                }
             }
         }
 
         GameMode = gameMode;
         Wallet = wallet;
-        this.ChipId = chipId;
+        this.ChipId[0] = chipId[0];
         // Debug.Log(GameMode);
         FindObjectOfType<NetworkController>().SetDistribution(this, hasEnergy); // cringe
     }
 
     [Command] // 
-    public void CmdSendWalletAndId(string wallet, int chipId, bool received, string name)
+    public void CmdSendWalletAndId(string wallet, int[] chipId, bool received, string name)
     {
         Wallet = wallet;
         ChipId = chipId;
@@ -614,6 +623,18 @@ public class PlayerNet : NetworkBehaviour
                 {
                     image.texture = rivalChipTexture[index];
                 }
+                else
+                {
+                    for (int i = 0; i < user.ChipParam.Count; i++)
+                    {
+
+                        if (ChipId[index] == user.ChipParam[i].Id)
+                        {
+                            image.texture = user.ChipParam[i].ChipTexture;
+                            break;
+                        }
+                    }
+                }
             }
         }
         else
@@ -633,9 +654,9 @@ public class PlayerNet : NetworkBehaviour
         {
             string gameMode = PlayerPrefs.GetString("GameMode");
             Wallet = user.Wallet;
-            int chipId = PlayerPrefs.GetInt("chipId");
+            int[] chipIds = { user.chipGuid_1, user.chipGuid_2, user.chipGuid_3 };
             GameMode = gameMode;
-            CmdSendGameMode(gameMode, Wallet, chipId);
+            CmdSendGameMode(gameMode, Wallet, chipIds);
         }
     }
 
@@ -652,7 +673,7 @@ public class PlayerNet : NetworkBehaviour
         {
             // Поиск текущего рейтинга, bossy и награда рейтинга и bossy за игру
             WWWForm form = new WWWForm();
-            form.AddField("ChipGuid", "CryptoBoss #" + ChipId);
+            form.AddField("ChipGuid", "CryptoBoss #" + ChipId[0]);
 
             UnityWebRequest webRequest = UnityWebRequest.Post(seUrl + "/get_chipData.php", form);
             await webRequest.SendWebRequest();
@@ -697,6 +718,8 @@ public class PlayerNet : NetworkBehaviour
             // decimal bossyDef = Convert.ToDecimal(bossyParam[0].bossy_count);
 
             bossyReward = 10 + (10 * cof); // (float)bossyDef   13.5 = 10 + (10 * x)  =   3.5 = 10 * x   0.35
+
+            Debug.Log(bossyReward);
         }   
     }
 

@@ -188,8 +188,11 @@ public class UserData : MonoBehaviour
         user.Authorized = false;
         user.Balance = "";
         user.Mute = false;
-        user.SelectedChipId = 0;
+        user.SelectedChip = 0;
         user.Tutorial = false;
+        user.chipGuid_1 = 0;
+        user.chipGuid_2 = 0;
+        user.chipGuid_3 = 0;
         // user.cards = nullCards;
 
         authWindow.SetActive(true);
