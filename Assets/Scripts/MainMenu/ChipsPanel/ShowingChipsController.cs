@@ -8,6 +8,7 @@ public class ShowingChipsController : MonoBehaviour
     [SerializeField] private Tutorial tutorial;
     [SerializeField] private GameObject chipsViewportContent;
     [SerializeField] private GameObject _playBtn;
+    [SerializeField] private GameObject _descBtn;
 
     [Header("Default user")]
     public User user;
@@ -67,7 +68,7 @@ public class ShowingChipsController : MonoBehaviour
         Selecting = false;
     }
 
-    public void VisiblePlayButton(bool active)
+    public void VisiblePlayButton(bool active) // вызывается по нажатию на кнопку
     {
         _playBtn.SetActive(active);
     }
@@ -81,9 +82,12 @@ public class ShowingChipsController : MonoBehaviour
         {
             Debug.Log("Select first chip");
             chipFrameData[0].SelectFirstChip();
+            _descBtn.SetActive(true);
         }
         else
         {
+            _playBtn.SetActive(false);
+            _descBtn.SetActive(false);
             ResetChips();
 
             user.chipGuid_2 = 0;

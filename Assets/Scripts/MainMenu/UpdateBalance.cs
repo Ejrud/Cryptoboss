@@ -40,8 +40,24 @@ public class UpdateBalance : MonoBehaviour, IPointerDownHandler
         {
             UserBalance Balance = JsonConvert.DeserializeObject<UserBalance>(webRequest.downloadHandler.text);
             _user.Balance = Balance.balance;
-            _balanceText.text = _user.Balance;
-            Debug.Log($"Balance: {_user.Balance}");
+
+            string balance = _user.Balance;
+            int zIndex = 0;
+            for (int i = 0; i < balance.Length; i++)
+            {
+                if (balance[i] == '.')
+                {
+                    Debug.Log("Balance: " + balance[i]);
+                    zIndex = i+3;
+                    if (zIndex < balance.Length)
+                        balance = balance.Remove(zIndex);
+
+                    break;
+                }
+            }
+
+            _balanceText.text = balance;
+            Debug.Log($"Balance: {balance}");
         }
 
         _loading = false;

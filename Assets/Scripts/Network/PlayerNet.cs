@@ -113,9 +113,6 @@ public class PlayerNet : NetworkBehaviour
     // 
     private void Start()
     {
-        audioSource.volume = PlayerPrefs.GetFloat("musicVolume");
-        audioSource.mute = user.Mute;
-
         playersWaitingObj.SetActive(true);
         representationScreen.SetActive(false);
         LoadRewardWindow.SetActive(false);
@@ -133,6 +130,9 @@ public class PlayerNet : NetworkBehaviour
 
         if (hasAuthority)
         {
+            audioSource.volume = PlayerPrefs.GetFloat("musicVolume");
+            audioSource.mute = user.Mute;
+
             gameObject.SetActive(true);
             GameMode = PlayerPrefs.GetString("GameMode");
 
@@ -180,25 +180,6 @@ public class PlayerNet : NetworkBehaviour
                 PrepareChip(userChipImages_2, 1, true, true);
                 PrepareChip(userChipImages_3, 2, true, true);
             }
-
-            // for (int k = 0; k < ChipId.Length; k++)
-            // {
-            //     for (int i = 0; i < user.ChipParam.Count; i++)
-            //     {
-            //         if (ChipId[k] == user.ChipParam[i].Id)
-            //         {
-            //             chipTexture = user.ChipParam[i].ChipTexture;
-
-            //             foreach(RawImage chipImage in userChipImages_1) //
-            //             {
-            //                 chipImage.gameObject.SetActive(true);
-            //                 chipImage.texture = chipTexture;
-            //             }
-            //             Debug.Log("Chip loaded = " + ChipId[k]);
-            //             return;
-            //         }
-            //     }
-            // }
         }
     }
 
@@ -399,6 +380,15 @@ public class PlayerNet : NetworkBehaviour
                     FriendChipImage.color = Color.gray;
                     FriendRivalChipImage.color = Color.gray;
                 }
+                if (GameMode == "three")
+                {
+                    userChipImages_2[2].color = Color.white;
+                    userChipImages_3[2].color = Color.white;
+
+                    rivalChipImages_1[1].color = Color.gray;
+                    rivalChipImages_2[1].color = Color.gray;
+                    rivalChipImages_3[1].color = Color.gray;
+                }
             }
             else
             {
@@ -421,6 +411,15 @@ public class PlayerNet : NetworkBehaviour
                         if (rivalsRawImage.Count != 0)
                             rivalsRawImage[queueIndex].color = Color.white; // Помечать фишку соперника
                     }
+                }
+                else if (GameMode == "three")
+                {
+                    userChipImages_2[2].color = Color.gray;
+                    userChipImages_3[2].color = Color.gray;
+
+                    rivalChipImages_1[1].color = Color.white;
+                    rivalChipImages_2[1].color = Color.white;
+                    rivalChipImages_3[1].color = Color.white;
                 }
                 else
                 {
@@ -673,20 +672,25 @@ public class PlayerNet : NetworkBehaviour
         {
             // Поиск текущего рейтинга, bossy и награда рейтинга и bossy за игру
             WWWForm form = new WWWForm();
-            form.AddField("ChipGuid", "CryptoBoss #" + ChipId[0]);
+            UnityWebRequest webRequest;
 
-            UnityWebRequest webRequest = UnityWebRequest.Post(seUrl + "/get_chipData.php", form);
-            await webRequest.SendWebRequest();
-
-            if (webRequest.result == UnityWebRequest.Result.Success)
+            for (int i = 0; i < ChipId.Length; i++)
             {
-                List<ChipRating> chipRatings = JsonConvert.DeserializeObject<List<ChipRating>>(webRequest.downloadHandler.text);
-                Debug.Log(webRequest.downloadHandler.text);
-                currentRating = Convert.ToInt32(chipRatings[0].rating); // текущий рейтинг
+                form.AddField("ChipGuid", "CryptoBoss #" + ChipId[i]);
+
+                webRequest = UnityWebRequest.Post(seUrl + "/get_chipData.php", form);
+                await webRequest.SendWebRequest();
+
+                if (webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    List<ChipRating> chipRatings = JsonConvert.DeserializeObject<List<ChipRating>>(webRequest.downloadHandler.text);
+                    Debug.Log(webRequest.downloadHandler.text);
+                    currentRating = Convert.ToInt32(chipRatings[0].rating); // текущий рейтинг
+                }
             }
 
             form = new WWWForm();
-            form.AddField("Mode", PlayerPrefs.GetString("GameMode"));
+            form.AddField("Mode", GameMode);
 
             webRequest = UnityWebRequest.Post(seUrl + "/get_ratingCoefficient.php", form);
 
@@ -695,6 +699,7 @@ public class PlayerNet : NetworkBehaviour
             if (webRequest.result == UnityWebRequest.Result.Success)
             {
                 ratingReward = Convert.ToInt32(webRequest.downloadHandler.text);
+                Debug.Log(ratingReward);
             }
             else
             {
@@ -709,17 +714,15 @@ public class PlayerNet : NetworkBehaviour
                 bossyParam = JsonConvert.DeserializeObject<List<BossyRewardParams>>(webRequest.downloadHandler.text); 
             }
 
-            // Предполагаемая награза в зависимости от результата игры
-            float winRating = ratingReward;
-            float division = 1000;
-            float ratingPlus = 1;
+            // Предполагаемая награда в зависимости от результата игры
+            for (int i = 0; i < ChipId.Length; i++)
+            {
+                float division = 1000;
+                float ratingPlus = 1;
+                float cof = (currentRating + ratingReward) / (division + ratingPlus);    //    0.35 = (344 + 10) / 1001
 
-            float cof = (currentRating + winRating) / (division + ratingPlus);    //    0.35 = (344 + 10) / 1001
-            // decimal bossyDef = Convert.ToDecimal(bossyParam[0].bossy_count);
-
-            bossyReward = 10 + (10 * cof); // (float)bossyDef   13.5 = 10 + (10 * x)  =   3.5 = 10 * x   0.35
-
-            Debug.Log(bossyReward);
+                bossyReward += 10 + (10 * cof); // (float)bossyDef   13.5 = 10 + (10 * x)  =   3.5 = 10 * x   0.35
+            }
         }   
     }
 

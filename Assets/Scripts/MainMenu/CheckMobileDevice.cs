@@ -11,24 +11,24 @@ public class CheckMobileDevice : MonoBehaviour
 
     private void Start()
     {
-        #if UNITY_WEBGL
-            if (Application.isMobilePlatform)
-            {
-                Debug.Log("This is mobile platform");
-                _blockWindow.SetActive(true);
-                _isMobile = true;
-            }
-            else
-            {
-                _blockWindow.SetActive(false);
-                _isMobile = false;
-            }
-        #endif
+        // #if UNITY_WEBGL
+        //     if (Application.isMobilePlatform)
+        //     {
+        //         Debug.Log("This is mobile platform");
+        //         _blockWindow.SetActive(true);
+        //         _isMobile = true;
+        //     }
+        //     else
+        //     {
+        //         _blockWindow.SetActive(false);
+        //         _isMobile = false;
+        //     }
+        // #endif
 
-        #if !UNITY_WEBGL
-            _blockWindow.SetActive(false);
-            _isMobile = false;
-        #endif
+        // #if !UNITY_WEBGL
+        //     _blockWindow.SetActive(false);
+        //     _isMobile = false;
+        // #endif
     }
 
     public void OpenAppStore()

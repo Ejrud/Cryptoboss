@@ -54,8 +54,8 @@ public class AuthController : MonoBehaviour
             MoralisConnectObj.SetActive(false);
         #endif
         #if UNITY_ANDROID
-            ChainsafeConnectObj.SetActive(true);
-            MoralisConnectObj.SetActive(false);
+            ChainsafeConnectObj.SetActive(false);
+            MoralisConnectObj.SetActive(true);
         #endif
             
         defaultColor = alertText.color;
@@ -88,12 +88,12 @@ public class AuthController : MonoBehaviour
                 userWallet = PlayerPrefs.GetString("Account");
             #endif
             #if UNITY_ANDROID
-                // Debug.Log("Moralis connection...");
-                // MoralisUser user = await Moralis.GetUserAsync();
-                // userWallet = user.ethAddress;
+                Debug.Log("Moralis connection...");
+                MoralisUser user = await Moralis.GetUserAsync();
+                userWallet = user.ethAddress;
 
-                Debug.Log("ChainSafe connection...");
-                userWallet = PlayerPrefs.GetString("Account");
+                // Debug.Log("ChainSafe connection...");
+                // userWallet = PlayerPrefs.GetString("Account");
             #endif
         }
         else if (relog)

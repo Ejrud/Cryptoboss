@@ -51,7 +51,7 @@ public class EmotionController : MonoBehaviour
 
     public void RecieveEmotion(int index, string gameMode) // player - игрок который отправил анимацию
     {
-        if (gameMode == "one" && !_animated)
+        if (!_animated)
         {
             _rivalEmotion.sprite = emoji[index].Emotion;
 

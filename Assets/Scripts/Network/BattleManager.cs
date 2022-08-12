@@ -348,14 +348,14 @@ public class BattleManager : NetworkBehaviour
             {
                 Debug.Log($"Player {playerQueueIndex + 1} Win");
                 session.PlayerNets[playerQueueIndex].Win = true;
+                session.PlayerNets[rivalIndex].Win = false;
 
-                for (int i = 0; i < session.PlayerNets.Length; i++)
+                if (session.GameMode == "two")
                 {
-                    if (playerQueueIndex != i)
-                    {
-                        session.PlayerNets[i].Win = false;
-                    }
+                    session.PlayerNets[playerQueueIndex].Friend.Win = true;
+                    session.PlayerNets[rivalIndex].Friend.Win = false;
                 }
+            
                 session.PlayerNets[playerQueueIndex].UpdatePlayerCharacteristic(queueCapital, queueEnergy, otherCapital, otherEnergy, session.PlayerNets[playerQueueIndex].MaxEnergy);
                 session.PlayerNets[rivalIndex].UpdatePlayerCharacteristic(otherCapital, otherEnergy, queueCapital, queueEnergy, session.PlayerNets[rivalIndex].MaxEnergy);
                 session.FinishTheGame(session.PlayerNets[0].Win, session.PlayerNets[1].Win);
@@ -364,14 +364,14 @@ public class BattleManager : NetworkBehaviour
             {
                 Debug.Log($"Player {rivalIndex + 1} Win");
                 session.PlayerNets[rivalIndex].Win = true;
+                session.PlayerNets[playerQueueIndex].Win = false;
 
-                for (int i = 0; i < session.PlayerNets.Length; i++)
+                if (session.GameMode == "two")
                 {
-                    if (rivalIndex != i)
-                    {
-                        session.PlayerNets[i].Win = false;
-                    }
+                    session.PlayerNets[rivalIndex].Friend.Win = true;
+                    session.PlayerNets[playerQueueIndex].Friend.Win = false;
                 }
+                    
                 session.PlayerNets[playerQueueIndex].UpdatePlayerCharacteristic(queueCapital, queueEnergy, otherCapital, otherEnergy, session.PlayerNets[playerQueueIndex].MaxEnergy);
                 session.PlayerNets[rivalIndex].UpdatePlayerCharacteristic(otherCapital, otherEnergy, queueCapital, queueEnergy, session.PlayerNets[rivalIndex].MaxEnergy);
                 session.FinishTheGame(session.PlayerNets[0].Win, session.PlayerNets[1].Win);
@@ -379,6 +379,7 @@ public class BattleManager : NetworkBehaviour
             else if (queueCapital <= 0 && otherCapital <= 0)
             {
                 Debug.Log("Draw");
+
                 session.PlayerNets[playerQueueIndex].UpdatePlayerCharacteristic(queueCapital, queueEnergy, otherCapital, otherEnergy, session.PlayerNets[playerQueueIndex].MaxEnergy);
                 session.PlayerNets[rivalIndex].UpdatePlayerCharacteristic(otherCapital, otherEnergy, queueCapital, queueEnergy, session.PlayerNets[rivalIndex].MaxEnergy);
                 session.FinishTheGame(false, false);

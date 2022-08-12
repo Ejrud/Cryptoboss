@@ -114,10 +114,12 @@ public class UIManager : MonoBehaviour
 
                 _authControllerObj.GetComponent<AuthController>().Authorization(userWallet, true);
                 }
+                _loadingData = false;
             }
             catch
             {
             print("Error: " + response);
+            _loadingData = false;
             }
 
             _loadingData = false;

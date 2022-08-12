@@ -232,9 +232,9 @@ public class UserData : MonoBehaviour
         {
             if (balance[i] == '.')
             {
-                zIndex = i+2;
+                zIndex = i+3;
                 if (zIndex < balance.Length)
-                    balance.Remove(zIndex);
+                    balance = balance.Remove(zIndex);
 
                 break;
             }
