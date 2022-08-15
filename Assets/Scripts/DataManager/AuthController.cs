@@ -78,7 +78,7 @@ public class AuthController : MonoBehaviour
         string contract = "0x4fa6d1Fc702bD7f1607dfeE4206Db368995E1443"; // 0x4fa6d1Fc702bD7f1607dfeE4206Db368995E1443
         int first = 500;
         int skip = 0;
-        string userWallet;
+        string userWallet = "";
 
         if (!_debug && !relog)
         {
