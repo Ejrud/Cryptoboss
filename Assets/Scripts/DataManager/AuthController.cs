@@ -26,7 +26,8 @@ public class AuthController : MonoBehaviour
     [Header("Inputs")]
     [SerializeField] private InputField inputPass; // Password
     [SerializeField] private GameObject MoralisConnectObj; // android
-    [SerializeField] private GameObject ChainsafeConnectObj; // Webgl and ios
+    [SerializeField] private GameObject ChainsafeConnectObj; // ios
+    [SerializeField] private GameObject ChainsafeConnectWebObj; // Webgl
 
 
     [Header("Meta interface")]
@@ -46,15 +47,18 @@ public class AuthController : MonoBehaviour
             inputPass.gameObject.SetActive(false);
 
         #if UNITY_WEBGL
-            ChainsafeConnectObj.SetActive(true);
-            MoralisConnectObj.SetActive(false);
+            ChainsafeConnectWebObj.SetActive(false);
+            ChainsafeConnectObj.SetActive(false);
+            MoralisConnectObj.SetActive(true);
         #endif
         #if UNITY_IOS
             ChainsafeConnectObj.SetActive(true);
+            ChainsafeConnectWebObj.SetActive(false);
             MoralisConnectObj.SetActive(false);
         #endif
         #if UNITY_ANDROID
             ChainsafeConnectObj.SetActive(false);
+            ChainsafeConnectWebObj.SetActive(false);
             MoralisConnectObj.SetActive(true);
         #endif
             
@@ -80,8 +84,9 @@ public class AuthController : MonoBehaviour
         {
             StartCoroutine(SetAlert("Authenticating..."));
             #if UNITY_WEBGL
-                Debug.Log("ChainSafe connection...");
-                userWallet = PlayerPrefs.GetString("Account");
+                Debug.Log("Moralis connection...");
+                MoralisUser user = await Moralis.GetUserAsync();
+                userWallet = user.ethAddress;
             #endif
             #if UNITY_IOS
                 Debug.Log("ChainSafe connection...");

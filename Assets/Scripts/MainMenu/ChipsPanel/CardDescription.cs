@@ -39,64 +39,64 @@ public class CardDescription : MonoBehaviour, IPointerDownHandler
 
         cardParams.SetCardEffects(data, 0);
 
-        UpdateUI(value, typeIndex, data.Name, "Not found");
+        UpdateUI(value, typeIndex, data.Name, data.Description);
     }
 
     private void UpdateUI(int typeValue, int typeIndex, string cardName, string description)
     {
-        this.description.text = description;
+        this.description.text = (!string.IsNullOrEmpty(description)) ? description : "Not found";
         string name = cardName;
         cardName = name.Substring(0, 1).ToUpper() + name.Remove(0, 1).ToLower();
 
-        switch (cardName)
-        {
-            case "Turn around":
-                this.description.text = _descriptions[0];
-                break;
+        // switch (cardName)
+        // {
+        //     case "Turn around":
+        //         this.description.text = _descriptions[0];
+        //         break;
 
-            case "Liquidation":
-                this.description.text = _descriptions[1];
-                break;
+        //     case "Liquidation":
+        //         this.description.text = _descriptions[1];
+        //         break;
 
-            case "Correction":
-                this.description.text = _descriptions[2];
-                break;
+        //     case "Correction":
+        //         this.description.text = _descriptions[2];
+        //         break;
 
-            case "Pivot":
-                if(typeIndex > 0)
-                {
-                    this.description.text = _descriptions[3];
-                }
-                else
-                {
-                    this.description.text = _descriptions[4];
-                }
-                break;
+        //     case "Pivot":
+        //         if(typeIndex > 0)
+        //         {
+        //             this.description.text = _descriptions[3];
+        //         }
+        //         else
+        //         {
+        //             this.description.text = _descriptions[4];
+        //         }
+        //         break;
 
-            case "Scam":
-                this.description.text = _descriptions[5];
-                break;
+        //     case "Scam":
+        //         this.description.text = _descriptions[5];
+        //         break;
 
-            case "Hedge fund":
-                this.description.text = _descriptions[6];
-                break;
+        //     case "Hedge fund":
+        //         this.description.text = _descriptions[6];
+        //         break;
 
-            case "Audit":
-                this.description.text = _descriptions[7];
-                break;
+        //     case "Audit":
+        //         this.description.text = _descriptions[7];
+        //         break;
 
-            case "To the moon":
-                this.description.text = _descriptions[8];
-                break;
+        //     case "To the moon":
+        //         this.description.text = _descriptions[8];
+        //         break;
 
-            case "Pump":
-                this.description.text = _descriptions[9];
-                break;
+        //     case "Pump":
+        //         this.description.text = _descriptions[9];
+        //         break;
 
-            default:
-                this.description.text = "Not found";
-                break;
-        }
+        //     default:
+        //         this.description.text = "Not found";
+        //         break;
+        // }
 
         this.typeValue.text = typeValue.ToString();
     }

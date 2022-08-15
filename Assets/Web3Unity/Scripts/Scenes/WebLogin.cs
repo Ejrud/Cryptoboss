@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-#if UNITY_WEBGL
 public class WebLogin : MonoBehaviour
 {
     [DllImport("__Internal")]
@@ -14,6 +13,8 @@ public class WebLogin : MonoBehaviour
 
     [DllImport("__Internal")]
     private static extern void SetConnectAccount(string value);
+
+    [SerializeField] private AuthController _auth;
 
     private int expirationTime;
     private string account; 
@@ -36,7 +37,8 @@ public class WebLogin : MonoBehaviour
         // reset login message
         SetConnectAccount("");
         // load next scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        _auth.Authorization();
     }
 
     public void OnSkip()
@@ -44,7 +46,7 @@ public class WebLogin : MonoBehaviour
         // burner account for skipped sign in screen
         PlayerPrefs.SetString("Account", "");
         // move to next scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
-#endif
+

@@ -83,10 +83,14 @@ public class ChipFrameData : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     {
         if (selected && chipController.Selecting) return; // Если эта фишка была выбрана ренне в главном меню, то ее нельзя выбрать
 
+        if (chipController.Selecting && chipMorale == "0" || chipMorale == null) return;
+
         // Если главное меню, то показывать характеристики карт в отдельном окне
         if (startPos == eventData.position && !selectable)
         {
-            if (chipController.Selecting)
+
+
+            if (chipController.Selecting) // chipMorale != "0" || chipMorale != null
             {
                 if (chipController.user.chipGuid_2 == chipData.Id && chipController.user.chipGuid_3 != chipData.Id)
                 {

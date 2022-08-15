@@ -276,7 +276,13 @@ public class PlayerNet : NetworkBehaviour
                 {
                     if (request.downloadHandler.text == "true")
                     {
+                        Debug.Log(request.downloadHandler.text);
                         hasEnergy = true;
+                    }
+                    else
+                    {
+                        hasEnergy = false;
+                        break;
                     }
                 }
                 else
@@ -285,6 +291,8 @@ public class PlayerNet : NetworkBehaviour
                     break;
                 }
             }
+
+            if (!hasEnergy) break;
         }
 
         GameMode = gameMode;
@@ -292,6 +300,7 @@ public class PlayerNet : NetworkBehaviour
         this.ChipId[0] = chipId[0];
         // Debug.Log(GameMode);
         FindObjectOfType<NetworkController>().SetDistribution(this, hasEnergy); // cringe
+        Debug.Log("energy " + hasEnergy);
     }
 
     [Command] // 
@@ -652,8 +661,18 @@ public class PlayerNet : NetworkBehaviour
         if (hasAuthority)
         {
             string gameMode = PlayerPrefs.GetString("GameMode");
+            int[] chipIds;
             Wallet = user.Wallet;
-            int[] chipIds = { user.chipGuid_1, user.chipGuid_2, user.chipGuid_3 };
+
+            if (gameMode == "three")
+            {
+                chipIds = new int[] { user.chipGuid_1, user.chipGuid_2, user.chipGuid_3 };
+            }
+            else
+            {
+                chipIds = new int[] { user.chipGuid_1 };
+            }
+             
             GameMode = gameMode;
             CmdSendGameMode(gameMode, Wallet, chipIds);
         }

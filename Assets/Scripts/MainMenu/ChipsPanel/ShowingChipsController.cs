@@ -32,6 +32,8 @@ public class ShowingChipsController : MonoBehaviour
     private void Start()
     {
         _playBtn.SetActive(false);
+        if (chipFrameData[0] != null)
+            chipFrameData[0].SelectFirstChip();
     }
 
     public void ShowChips(User user)
