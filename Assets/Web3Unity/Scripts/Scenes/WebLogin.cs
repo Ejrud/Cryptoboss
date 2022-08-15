@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#if UNITY_WEBGL
 public class WebLogin : MonoBehaviour
 {
     [DllImport("__Internal")]
@@ -50,3 +51,4 @@ public class WebLogin : MonoBehaviour
     }
 }
 
+#endif
