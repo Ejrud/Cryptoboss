@@ -298,8 +298,8 @@ public class BattleManager : NetworkBehaviour
                     case "Pivot":
                         if (capAttack != 0) // обмен 100 жизней на 2 энергии или наоборот
                         {
-                            queueCapital -= capAttack;
-                            queueEnergy += capHealth;
+                            queueCapital -= capAttack; 
+                            queueEnergy += capHealth; // cap health = profit
                             cardCost = 0;
 
                             currentPlayer.PlayerImpact.CapitalDamage = -capAttack;
