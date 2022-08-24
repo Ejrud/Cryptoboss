@@ -51,11 +51,10 @@ public class PlayerNet : NetworkBehaviour
     public int UsedCount;
     
     private string seUrl = "https://cryptoboss.win/game/back/"; // http://a0664627.xsph.ru/cryptoboss_back/  // https://cryptoboss.win/game/back/
-
     private int currentRating;
-    private float bossyReward;
-    private int ratingReward;
-    private int ratingLose = 8;
+    public float BossyReward;
+    public int RatingReward;
+    public int RatingLose = 8;
 
     #region UI elements
     [Header("player UI")]
@@ -525,13 +524,13 @@ public class PlayerNet : NetworkBehaviour
         {
             if (win)
             {
-                bossy = (float)Math.Round(bossyReward, 2);
-                raiting = ratingReward.ToString();
+                bossy = (float)Math.Round(BossyReward, 2);
+                raiting = RatingReward.ToString();
             }
             else
             {
                 bossy = 0;
-                raiting = ratingLose.ToString();
+                raiting = RatingLose.ToString();
             }
 
             awaitPlayerTxt.gameObject.SetActive(false);
@@ -687,62 +686,67 @@ public class PlayerNet : NetworkBehaviour
 
     private async void CalculateResults() 
     {
-        if (hasAuthority)
+        // Поиск текущего рейтинга, bossy и награда рейтинга и bossy за игру
+        WWWForm form = new WWWForm();
+        UnityWebRequest webRequest;
+
+        for (int i = 0; i < ChipId.Length; i++)
         {
-            // Поиск текущего рейтинга, bossy и награда рейтинга и bossy за игру
-            WWWForm form = new WWWForm();
-            UnityWebRequest webRequest;
+            form.AddField("ChipGuid", "CryptoBoss #" + ChipId[i]);
 
-            for (int i = 0; i < ChipId.Length; i++)
-            {
-                form.AddField("ChipGuid", "CryptoBoss #" + ChipId[i]);
-
-                webRequest = UnityWebRequest.Post(seUrl + "/get_chipData.php", form);
-                await webRequest.SendWebRequest();
-
-                if (webRequest.result == UnityWebRequest.Result.Success)
-                {
-                    List<ChipRating> chipRatings = JsonConvert.DeserializeObject<List<ChipRating>>(webRequest.downloadHandler.text);
-                    Debug.Log(webRequest.downloadHandler.text);
-                    currentRating = Convert.ToInt32(chipRatings[0].rating); // текущий рейтинг
-                }
-            }
-
-            form = new WWWForm();
-            form.AddField("Mode", GameMode);
-
-            webRequest = UnityWebRequest.Post(seUrl + "/get_ratingCoefficient.php", form);
-
+            webRequest = UnityWebRequest.Post(seUrl + "/get_chipData.php", form);
             await webRequest.SendWebRequest();
 
             if (webRequest.result == UnityWebRequest.Result.Success)
             {
-                ratingReward = Convert.ToInt32(webRequest.downloadHandler.text);
-                Debug.Log(ratingReward);
+                List<ChipRating> chipRatings = JsonConvert.DeserializeObject<List<ChipRating>>(webRequest.downloadHandler.text);
+                Debug.Log(webRequest.downloadHandler.text);
+                currentRating = Convert.ToInt32(chipRatings[0].rating); // текущий рейтинг
             }
-            else
-            {
-                Debug.Log(webRequest.error);
-            }
+        }
 
-            webRequest = UnityWebRequest.Post(seUrl + "/get_bossyParams.php", form);
-            await webRequest.SendWebRequest();
+        form = new WWWForm();
+        form.AddField("Mode", GameMode);
 
-            if (webRequest.result == UnityWebRequest.Result.Success)
-            {
-                bossyParam = JsonConvert.DeserializeObject<List<BossyRewardParams>>(webRequest.downloadHandler.text); 
-            }
+        webRequest = UnityWebRequest.Post(seUrl + "/get_ratingCoefficient.php", form);
 
-            // Предполагаемая награда в зависимости от результата игры
-            for (int i = 0; i < ChipId.Length; i++)
-            {
-                float division = 1000;
-                float ratingPlus = 1;
-                float cof = (currentRating + ratingReward) / (division + ratingPlus);    //    0.35 = (344 + 10) / 1001
+        await webRequest.SendWebRequest();
 
-                bossyReward += 10 + (10 * cof); // (float)bossyDef   13.5 = 10 + (10 * x)  =   3.5 = 10 * x   0.35
-            }
-        }   
+        if (webRequest.result == UnityWebRequest.Result.Success)
+        {
+            RatingReward = Convert.ToInt32(webRequest.downloadHandler.text);
+            Debug.Log(RatingReward);
+        }
+        else
+        {
+            Debug.Log(webRequest.error);
+        }
+
+        webRequest = UnityWebRequest.Post(seUrl + "/get_bossyParams.php", form);
+        await webRequest.SendWebRequest();
+
+        if (webRequest.result == UnityWebRequest.Result.Success)
+        {
+            bossyParam = JsonConvert.DeserializeObject<List<BossyRewardParams>>(webRequest.downloadHandler.text); 
+        }
+
+        // Предполагаемая награда в зависимости от результата игры
+        for (int i = 0; i < ChipId.Length; i++)
+        {
+            float division = 1000;
+            float ratingPlus = 1;
+            float cof = (currentRating + RatingReward) / (division + ratingPlus);    //    0.35 = (344 + 10) / 1001
+
+            BossyReward += 10 + (10 * cof); // (float)bossyDef   13.5 = 10 + (10 * x)  =   3.5 = 10 * x   0.35
+        }
+
+        SendGameResults(BossyReward, RatingReward);
+    }
+    [Command]
+    public void SendGameResults(float bossyReward, int ratingReward)
+    {
+        BossyReward = bossyReward;
+        RatingReward = ratingReward;
     }
 
     private void OnApplicationQuit()

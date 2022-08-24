@@ -9,39 +9,61 @@ public class DbConnection : MonoBehaviour
 {
     private void Start()
     {
-        StartCoroutine(SendForm());
-    }
-    private IEnumerator SendForm()           // отправка формы на хостинг
-    {
-        WWWForm form = new WWWForm();
-        // form.AddField("wallet", userWallet);
-        // form.AddField("pass", userPass);
+        SessionData sessionData = new SessionData();
+        sessionData.id = "1";
+        sessionData.action = "Leave";
+        sessionData.name = "one"; // СЂРµР¶РёРј СЃРµСЃСЃРёРё
 
-        string uri = "https://cryptoboss.win/ajax/models/messages/customizers/get_nft_by_owner_q6ftved3w";
-        //Отправление запроса на сервер
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))   // https://ajax/models/users_sites/customizers/create_user_by_metamask_nm9dbu0nn?
-        { 
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
+        List<ChipData> chipData = new List<ChipData>();
 
-            string[] pages = uri.Split('/');
-            int page = pages.Length - 1;
+        for (int i = 1; i < 3; i++)
+        {
+            ChipData chip = new ChipData();
 
-            switch (webRequest.result)
-            {
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    Debug.LogError(pages[page] + ": Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
-                    break;
-                case UnityWebRequest.Result.Success:
-                    Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-                    break;
-            }
+            chip.guid = "CryptoBoss #" + i;
+            chip.rating = "123";
+            chip.bossy = "12";
+
+            chipData.Add(chip);
         }
-        
+
+        sessionData.chips = chipData;
+
+        string jsonData = JsonConvert.SerializeObject(sessionData);
+        Debug.Log(jsonData);
+
+        StartCoroutine(SendForm(jsonData));
+    }
+    private IEnumerator SendForm(string json)
+    {
+        string url = "a0664627.xsph.ru/cryptoboss_back/sessionManager.php";
+        WWWForm form = new WWWForm();
+        form.AddField("JsonData", json);
+
+        using (UnityWebRequest request = UnityWebRequest.Post(url, form))
+        {
+            yield return request.SendWebRequest();
+
+            Debug.Log(request.downloadHandler.text);
+        }
+
         yield return null;
+    }
+
+    [System.Serializable]
+    public class SessionData // id, action, name, chips (С…СЂР°РЅРёС‚ guid, СЂРµР№С‚РёРЅРі, bossy)
+    {
+        public string id; 
+        public string action; 
+        public string name; 
+        public List<ChipData> chips;
+    }
+
+    [System.Serializable]
+    public class ChipData
+    {
+        public string guid;
+        public string rating;
+        public string bossy;
     }
 }

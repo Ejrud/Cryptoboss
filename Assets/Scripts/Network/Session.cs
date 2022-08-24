@@ -13,6 +13,7 @@ public class Session : MonoBehaviour
     public bool Finished;
     public bool WalletsRecieved;
     public bool Rewarded;
+    public bool DBUpdated;
 
     public bool Correction;
     public int PlayerIndexQueue;
@@ -22,6 +23,7 @@ public class Session : MonoBehaviour
 
     private GameProcessManagement manager;
     private SessionTimer timer;
+    public string Id;
 
     public bool DataSaved;
     public bool AwaitPlayer;
@@ -37,6 +39,7 @@ public class Session : MonoBehaviour
     private string accrualUrl = "https://cryptoboss.win/game/back/";
 
     [Header("Settings")]
+    [SerializeField] private SessionDb _sessionDb;
     [SerializeField] private float energyRecovery = 0.5f;
     [SerializeField] private EmotionNet _emotions;
     
@@ -180,7 +183,7 @@ public class Session : MonoBehaviour
                     rewardProcess = true;
                     FinishTheGame(false, false);
                 }
-                if (Rewarded)
+                if (Rewarded && DBUpdated)
                     Destroy(gameObject);
             }
         }
@@ -335,6 +338,10 @@ public class Session : MonoBehaviour
         Finished = true;
         bool left = false;
 
+        List<int> chipIds = new List<int>();
+        List<float> bossyReward = new List<float>();
+        List<int> ratingReward = new List<int>();
+
         if (!playerDisconnected)
         {
             NetworkController controller = FindObjectOfType<NetworkController>();
@@ -359,12 +366,26 @@ public class Session : MonoBehaviour
         
             if (PlayerNets[0].Win)
             {
+                for (int i = 0; i < StatsHolder[0].ChipId.Length; i++) // id фишек победителя
+                {
+                    chipIds.Add(StatsHolder[0].ChipId[i]);
+                    bossyReward.Add(PlayerNets[0].BossyReward);
+                    ratingReward.Add(PlayerNets[0].RatingReward);
+                }
+
                 winnerWallet = StatsHolder[0].Wallet;
                 winnerGuid = "CryptoBoss #" + StatsHolder[0].ChipId[0];
                 looseGuid = "CryptoBoss #" + StatsHolder[1].ChipId[0];
 
                 if (GameMode == "two")
                 {
+                    for (int i = 0; i < StatsHolder[2].ChipId.Length; i++) // id фишек победителя
+                    {
+                        chipIds.Add(StatsHolder[2].ChipId[i]);
+                        bossyReward.Add(PlayerNets[2].BossyReward);
+                        ratingReward.Add(PlayerNets[2].RatingReward);
+                    }
+
                     winnerWallet_2 = StatsHolder[2].Wallet;
                     winnerGuid_2 = "CryptoBoss #" + StatsHolder[2].ChipId[0];
                     looseGuid_2 = "CryptoBoss #" + StatsHolder[3].ChipId[0];
@@ -379,15 +400,44 @@ public class Session : MonoBehaviour
                     looseGuid_3 = "CryptoBoss #" + StatsHolder[1].ChipId[2];
                 }
 
+                for (int i = 0; i < StatsHolder[1].ChipId.Length; i++) // id фишек проигравших
+                {
+                    chipIds.Add(StatsHolder[1].ChipId[i]);
+                    bossyReward.Add(0f);
+                    ratingReward.Add(PlayerNets[1].RatingLose);
+
+                    if (GameMode == "two")
+                    {
+                        chipIds.Add(StatsHolder[3].ChipId[i]);
+                        bossyReward.Add(0f);
+                        ratingReward.Add(PlayerNets[3].RatingLose);
+                    }
+                }
+
+                _sessionDb.CompleteSession(chipIds, bossyReward, ratingReward);
             }
             else if (PlayerNets[1].Win)
             {
+                for (int i = 0; i < StatsHolder[1].ChipId.Length; i++) // id фишек победителя
+                {
+                    chipIds.Add(StatsHolder[1].ChipId[i]);
+                    bossyReward.Add(PlayerNets[1].BossyReward);
+                    ratingReward.Add(PlayerNets[1].RatingReward);
+                }
+
                 winnerWallet = StatsHolder[1].Wallet;
                 winnerGuid = "CryptoBoss #" + StatsHolder[1].ChipId[0];
                 looseGuid = "CryptoBoss #" + StatsHolder[0].ChipId[0];
 
                 if (GameMode == "two")
                 {
+                    for (int i = 0; i < StatsHolder[3].ChipId.Length; i++) // id фишек победителя
+                    {
+                        chipIds.Add(StatsHolder[3].ChipId[i]);
+                        bossyReward.Add(PlayerNets[3].BossyReward);
+                        ratingReward.Add(PlayerNets[3].RatingReward);
+                    }
+
                     winnerWallet_2 = StatsHolder[3].Wallet;
                     winnerGuid_2 = "CryptoBoss #" + StatsHolder[3].ChipId[0];
                     looseGuid_2 = "CryptoBoss #" + StatsHolder[2].ChipId[0];
@@ -401,6 +451,22 @@ public class Session : MonoBehaviour
                     looseGuid_2 = "CryptoBoss #" + StatsHolder[0].ChipId[1];
                     looseGuid_3 = "CryptoBoss #" + StatsHolder[0].ChipId[2];
                 }
+
+                for (int i = 0; i < StatsHolder[0].ChipId.Length; i++) // id фишек проигравших
+                {
+                    chipIds.Add(StatsHolder[0].ChipId[i]);
+                    bossyReward.Add(0f);
+                    ratingReward.Add(PlayerNets[0].RatingLose);
+
+                    if (GameMode == "two")
+                    {
+                        chipIds.Add(StatsHolder[2].ChipId[i]);
+                        bossyReward.Add(0f);
+                        ratingReward.Add(PlayerNets[2].RatingLose);
+                    }
+                }
+
+                _sessionDb.CompleteSession(chipIds, bossyReward, ratingReward);
             }
             else
             {
@@ -495,11 +561,6 @@ public class Session : MonoBehaviour
             form.AddField("LooseGuid_3", looseGuid_3);
         }
 
-        if(left)
-        {
-            Debug.Log("Leave");
-            form.AddField("Leave", "true");
-        }
 
         if (PlayerNets[0].Win && !PlayerNets[1].Win)
         {
@@ -546,24 +607,31 @@ public class Session : MonoBehaviour
             }
         }
 
-        // 
-        using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form)) // accrualUrl // a0664627.xsph.ru/cryptoboss_back/  // 
-        { 
-            yield return www.SendWebRequest();
-
-            if (www.result == UnityWebRequest.Result.Success)
-            {
-                // Debug.Log(www.downloadHandler.text);
-                Debug.Log("Success");
-            }
-            else
-            { 
-                // PlayerNets[0].StopGame("Server error", "", 0f, "0", false, false);
-                // PlayerNets[1].StopGame("Server error", "", 0f, "0", false, false);
-                Debug.Log("Incorrect data");
-                Debug.Log(www.error);
-            }
+        if(left)
+        {
+            Debug.Log("Leave");
+            form.AddField("Leave", "true");
+            _sessionDb.LeaveSession();
         }
+
+        // 
+        // using (UnityWebRequest www = UnityWebRequest.Post(accrualUrl + "accrual.php", form)) // accrualUrl // a0664627.xsph.ru/cryptoboss_back/  // 
+        // { 
+        //     yield return www.SendWebRequest();
+
+        //     if (www.result == UnityWebRequest.Result.Success)
+        //     {
+        //         // Debug.Log(www.downloadHandler.text);
+        //         Debug.Log("Success");
+        //     }
+        //     else
+        //     { 
+        //         // PlayerNets[0].StopGame("Server error", "", 0f, "0", false, false);
+        //         // PlayerNets[1].StopGame("Server error", "", 0f, "0", false, false);
+        //         Debug.Log("Incorrect data");
+        //         Debug.Log(www.error);
+        //     }
+        // }
 
         Rewarded = true;
 
@@ -790,6 +858,7 @@ public class Session : MonoBehaviour
         }
         
         timer.StartTimer();
+
         yield return null;
     }
 
@@ -851,9 +920,9 @@ public class Session : MonoBehaviour
             yield return null; 
         }
 
-        WWWForm emptyForm = new WWWForm(); // Загрузка длительности сессии
+        WWWForm formJson = new WWWForm(); // Загрузка длительности сессии
 
-        using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "game_params.php", emptyForm)) // "a0664627.xsph.ru/cryptoboss_back/"
+        using (UnityWebRequest www = UnityWebRequest.Post(seUrl + "game_params.php", formJson)) // "a0664627.xsph.ru/cryptoboss_back/"
         { 
             yield return www.SendWebRequest();
 

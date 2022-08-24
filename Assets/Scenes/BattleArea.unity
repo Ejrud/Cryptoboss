@@ -2167,6 +2167,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1003836843645912285, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
+      propertyPath: NonAlloc
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1003836843645912285, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
+      propertyPath: MaximizeSendReceiveBuffersToOSLimit
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092320, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: src
       value: 
@@ -2181,7 +2189,7 @@ PrefabInstance:
       objectReference: {fileID: 706183018}
     - target: {fileID: 2729208454843092320, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: hostMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092320, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: msgField
@@ -2197,7 +2205,7 @@ PrefabInstance:
       objectReference: {fileID: 798378997}
     - target: {fileID: 2729208454843092320, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: serverMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092320, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: fieldObject
@@ -2237,7 +2245,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092326, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: sslEnabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092326, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: sslCertJson
@@ -2245,7 +2253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092326, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: clientUseWss
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2729208454843092327, guid: 00f9b6821124d15408ef29be16b210dc, type: 3}
       propertyPath: m_RootOrder

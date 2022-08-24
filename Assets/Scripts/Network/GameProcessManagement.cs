@@ -38,6 +38,7 @@ public class GameProcessManagement : NetworkBehaviour
             if(!oldSession)
             {
                 Session session = Instantiate(sessionObject, Vector3.zero, Quaternion.identity).GetComponent<Session>();
+                SessionDb sessionDb = session.GetComponent<SessionDb>();
                 session.transform.SetParent(allSessions);
 
                 PlayerNet[] playerNets = new PlayerNet[players.Count];
@@ -48,6 +49,7 @@ public class GameProcessManagement : NetworkBehaviour
                 }
 
                 session.Init(playerNets, this, false);
+                sessionDb.CreateSession(session);
                 sessions.Add(session);
             }
             else

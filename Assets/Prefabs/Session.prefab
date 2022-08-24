@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2271084160852354511}
   - component: {fileID: 5253637135719586527}
   - component: {fileID: 8403926677479697577}
+  - component: {fileID: -8795246475035415362}
   - component: {fileID: 8839565124155329378}
   m_Layer: 0
   m_Name: Session
@@ -54,8 +55,10 @@ MonoBehaviour:
   PlayerIndexQueue: 0
   PlayerNets: []
   GameMode: 
+  Id: 
   DataSaved: 0
   AwaitPlayer: 0
+  _sessionDb: {fileID: -8795246475035415362}
   energyRecovery: 0.5
   _emotions: {fileID: 8403926677479697577}
 --- !u!114 &5253637135719586527
@@ -94,6 +97,18 @@ MonoBehaviour:
   syncInterval: 0.1
   _session: {fileID: 2271084160852354511}
   _cooldown: 4
+--- !u!114 &-8795246475035415362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 811711018392014507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b937be5adbc133548812f68d7f9246f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8839565124155329378
 MonoBehaviour:
   m_ObjectHideFlags: 0
